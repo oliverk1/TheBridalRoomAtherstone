@@ -1,0 +1,28 @@
+/* src/styles/global.css */
+@import "tailwindcss";
+
+@theme {
+  --color-sage-50: #F4F7F5;
+  --color-sage-100: #E4ECE8;
+  --color-sage-200: #D5E2DC;
+  --color-sage-300: #B8CEC5;
+  --color-sage-800: #233831;
+  --color-sage-900: #172520;
+
+  --color-ivory-50: #FCFAF7;
+  --color-ivory-100: #F7F4EE;
+  --color-ivory-200: #EFECE4;
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-ivory-50);
+  color: #292524;
+}
