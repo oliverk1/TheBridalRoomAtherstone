@@ -1,0 +1,44 @@
+---
+// src/pages/404.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found | The Bridal Room Atherstone"
+  description="We could not find the page you were looking for. Explore our designer wedding dress collection or book a private fitting at The Bridal Room Atherstone."
+>
+  <section class="py-24 sm:py-36 px-6 text-center max-w-3xl mx-auto">
+    <div class="w-16 h-16 mx-auto mb-6 bg-sage-100 rounded-full flex items-center justify-center text-sage-900">
+      <svg class="w-8 h-8 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+    </div>
+
+    <span class="text-[10px] tracking-[0.35em] uppercase text-stone-500 block mb-3 font-medium">Boutique Directory Update</span>
+    <h1 class="font-serif text-4xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-4">
+      Looking For Your Dress?
+    </h1>
+    <p class="text-xs sm:text-sm text-stone-600 font-light leading-relaxed max-w-md mx-auto mb-8">
+      We recently redesigned our showroom website to make finding your gown seamless. The vintage page you followed may have moved into our consolidated lookbook.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href="/dresses"
+        class="w-full sm:w-auto bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-800 transition-colors"
+      >
+        Browse Dress Lookbook &rarr;
+      </a>
+      <a
+        href="/the-experience#book"
+        class="w-full sm:w-auto border border-stone-700 bg-white text-stone-900 text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-stone-900 hover:text-white transition-colors"
+      >
+        Book Private Suite
+      </a>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-stone-200 text-xs text-stone-500 font-light">
+      Need quick assistance? Call Vicky & Sam directly on <a href="tel:01827946098" class="underline text-stone-800 font-normal">01827 946 098</a>.
+    </div>
+  </section>
+</BaseLayout>

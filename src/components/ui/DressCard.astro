@@ -1,0 +1,212 @@
+---
+// src/components/ui/DressCard.astro
+interface Props {
+  id: string;
+  title: string;
+  designer: string;
+  category: string;
+  price: string;
+  sampleSize?: string;
+  silhouette: string;
+  image: string;
+  imageDetail?: string;
+}
+
+const {
+  id,
+  title,
+  designer,
+  category,
+  price,
+  sampleSize = "14",
+  silhouette,
+  image,
+  imageDetail
+} = Astro.props;
+
+const isSampleSale = category.toLowerCase().includes("sample");
+---
+
+<div
+  class="dress-card group relative bg-ivory-50 border border-stone-200/70 p-4 sm:p-5 flex flex-col shadow-xs hover:border-stone-400 hover:shadow-md transition-all duration-300"
+  data-id={id}
+  data-designer={designer}
+  data-category={category}
+  data-silhouette={silhouette}
+  data-sample-size={sampleSize}
+  data-title={title}
+  data-price={price}
+  data-image={image}
+  data-image-detail={imageDetail || ""}
+>
+  <!-- Image Container (Click opens Lightbox) -->
+  <div
+    class="dress-card-trigger relative aspect-4/5 overflow-hidden bg-stone-200 mb-4 sm:mb-5 cursor-zoom-in group/img"
+    title="Click to enlarge dress"
+  >
+    <img
+      src={image}
+      alt={`${title} wedding dress by ${designer} at The Bridal Room Atherstone`}
+      width="700"
+      height="875"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-700 primary-image"
+    />
+
+    {imageDetail && (
+      <img
+        src={imageDetail}
+        alt={`${title} detail view`}
+        width="700"
+        height="875"
+        loading="lazy"
+        decoding="async"
+        class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500 hidden sm:block"
+      />
+    )}
+
+    <!-- Hover Zoom Pill -->
+    <div class="absolute inset-0 bg-stone-900/15 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+      <span class="bg-white/90 backdrop-blur-xs text-stone-900 text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 shadow-sm font-medium flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+        Maximise
+      </span>
+    </div>
+
+    <!-- Category Pill -->
+    {isSampleSale ? (
+      <span class="absolute top-3 left-3 bg-red-900/90 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium z-10 pointer-events-none">
+        Sample Sale
+      </span>
+    ) : (
+      <span class="absolute top-3 left-3 bg-sage-900/80 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs z-10 pointer-events-none">
+        Made to Order
+      </span>
+    )}
+
+    <!-- Heart Wishlist Toggle Button (Isolated from Lightbox Trigger) -->
+    <button
+      type="button"
+      class="wishlist-btn absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-stone-700 hover:text-red-700 hover:bg-white transition-all shadow-xs cursor-pointer"
+      data-id={id}
+      aria-label={`Save ${title} to your favourites`}
+    >
+      <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Content & Details (Title also triggers Lightbox) -->
+  <div class="mt-auto text-center">
+    <p class="text-[10px] tracking-[0.25em] uppercase text-stone-500 mb-1">{designer}</p>
+    <h3
+      class="dress-card-trigger font-serif text-base uppercase text-stone-900 font-light mb-1.5 cursor-pointer hover:text-sage-800 transition-colors"
+      title="Click to enlarge"
+    >
+      {title}
+    </h3>
+    <div class="flex items-center justify-center gap-2 text-xs text-stone-700 mb-3.5">
+      <span class="font-medium text-sage-900">{price}</span>
+      <span class="text-stone-300">•</span>
+      <span class="text-stone-500 text-[11px]">Sample Size {sampleSize}</span>
+    </div>
+
+    <!-- Direct Booking CTA (Isolated from Lightbox Trigger) -->
+    <a
+      href={`/the-experience#book?dress=${encodeURIComponent(title + " by " + designer)}`}
+      class="try-on-btn inline-block w-full py-2.5 border border-stone-300 text-[10px] uppercase tracking-[0.2em] text-stone-800 hover:bg-stone-900 hover:text-white hover:border-stone-900 transition-colors shadow-2xs"
+    >
+      Try This On
+    </a>
+  </div>
+</div>
+
+<script>
+  // 1. Sync Wishlist Heart Icons
+  function syncHeartIcons() {
+    const saved = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+    const savedIds = new Set(saved.map((item: any) => item.id));
+
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+      const id = btn.getAttribute('data-id');
+      const svg = btn.querySelector('svg');
+      if (id && savedIds.has(id)) {
+        svg?.classList.remove('fill-none');
+        svg?.classList.add('fill-red-700', 'text-red-700');
+      } else {
+        svg?.classList.add('fill-none');
+        svg?.classList.remove('fill-red-700', 'text-red-700');
+      }
+    });
+  }
+
+  // 2. Wishlist Heart Click Event (Stops Propagation to Lightbox)
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const card = btn.closest('.dress-card') as HTMLElement;
+      if (!card) return;
+
+      const dress = {
+        id: card.dataset.id,
+        title: card.dataset.title,
+        designer: card.dataset.designer,
+        price: card.dataset.price,
+        image: card.dataset.image,
+        category: card.dataset.category
+      };
+
+      let saved = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+      const index = saved.findIndex((item: any) => item.id === dress.id);
+
+      if (index > -1) {
+        saved.splice(index, 1);
+      } else {
+        saved.push(dress);
+      }
+
+      localStorage.setItem('tbr_wishlist', JSON.stringify(saved));
+      window.dispatchEvent(new Event('wishlist-updated'));
+      syncHeartIcons();
+    });
+  });
+
+  // 3. Try On Button Click Event (Stops Propagation to Lightbox)
+  document.querySelectorAll('.try-on-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  });
+
+  // 4. Card / Image Click Triggers Lightbox Modal
+  document.querySelectorAll('.dress-card-trigger').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = trigger.closest('.dress-card') as HTMLElement;
+      if (!card) return;
+
+      const dress = {
+        id: card.dataset.id,
+        title: card.dataset.title,
+        designer: card.dataset.designer,
+        price: card.dataset.price,
+        sampleSize: card.dataset.sampleSize,
+        silhouette: card.dataset.silhouette,
+        category: card.dataset.category,
+        image: card.dataset.image,
+        imageDetail: card.dataset.imageDetail
+      };
+
+      if ((window as any).tbrOpenDressLightbox) {
+        (window as any).tbrOpenDressLightbox(dress);
+      }
+    });
+  });
+
+  window.addEventListener('wishlist-updated', syncHeartIcons);
+  document.addEventListener('DOMContentLoaded', syncHeartIcons);
+</script>

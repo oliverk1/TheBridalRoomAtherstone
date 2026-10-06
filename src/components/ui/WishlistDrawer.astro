@@ -1,0 +1,314 @@
+---
+// src/components/ui/WishlistDrawer.astro
+---
+
+<!-- 1. Drawer Backdrop Overlay -->
+<div id="wishlist-overlay" class="fixed inset-0 bg-stone-900/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+<!-- 2. Main Shortlist Slide-Out Drawer -->
+<aside
+  id="wishlist-drawer"
+  class="fixed top-0 right-0 h-full w-full max-w-md bg-ivory-50 z-50 shadow-2xl translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
+  aria-label="Your Saved Shortlist"
+>
+  <!-- Drawer Header -->
+  <div class="p-6 border-b border-stone-200 flex items-center justify-between bg-sage-100">
+    <div>
+      <h3 class="font-serif text-xl tracking-wider uppercase text-stone-900 font-light">Your Saved Dresses</h3>
+      <p class="text-xs text-stone-500 font-light mt-0.5">Tap any gown to view full details</p>
+    </div>
+    <button id="close-wishlist-btn" class="p-2 text-stone-600 hover:text-stone-900 cursor-pointer" aria-label="Close Wishlist">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Shortlist Items Scroll Area -->
+  <div id="wishlist-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+    <!-- Populated Dynamically via Client-Side JavaScript -->
+    <div id="wishlist-empty-msg" class="text-center py-16 text-stone-500 font-light text-xs">
+      <svg class="w-10 h-10 mx-auto mb-3 stroke-stone-300 fill-none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+      </svg>
+      Your appointment shortlist is empty.<br />Tap the heart on any gown in our collection to save it.
+    </div>
+  </div>
+
+  <!-- Drawer Footer with Booking Action -->
+  <div class="p-6 border-t border-stone-200 bg-white">
+    <a
+      id="wishlist-book-btn"
+      href="/the-experience#book"
+      class="w-full text-center block bg-stone-900 text-white py-3.5 px-4 text-xs uppercase tracking-[0.2em] hover:bg-sage-800 transition-colors shadow-xs"
+    >
+      Book Appointment With My Shortlist
+    </a>
+  </div>
+</aside>
+
+<!-- 3. Maximised Dress Preview Lightbox Modal (z-60 to sit above drawer) -->
+<div
+  id="dress-preview-modal"
+  class="fixed inset-0 z-60 bg-stone-950/85 backdrop-blur-xs hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 sm:p-6"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Dress Preview"
+>
+  <div
+    id="dress-preview-dialog"
+    class="relative w-full max-w-lg bg-ivory-50 border border-stone-300 shadow-2xl scale-95 transition-transform duration-300 overflow-hidden flex flex-col max-h-[90vh]"
+  >
+    <!-- Modal Close Button -->
+    <button
+      id="close-preview-btn"
+      type="button"
+      class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-stone-800 hover:text-black hover:bg-white shadow-md cursor-pointer transition-transform hover:scale-105"
+      aria-label="Close Preview"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Maximised Image Area -->
+    <div class="relative bg-stone-200 overflow-hidden flex-1 min-h-[300px] max-h-[58vh]">
+      <img
+        id="preview-dress-img"
+        src=""
+        alt="Wedding Dress Preview"
+        class="w-full h-full object-cover object-top"
+      />
+      <span id="preview-dress-badge" class="absolute top-4 left-4 bg-stone-900/80 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium">
+        Made to Order
+      </span>
+    </div>
+
+    <!-- Details & Decision Bar -->
+    <div class="p-5 sm:p-6 bg-white border-t border-stone-200 flex flex-col gap-4">
+      <div>
+        <p id="preview-dress-designer" class="text-[10px] tracking-[0.25em] uppercase text-stone-500 mb-1">Justin Alexander</p>
+        <h4 id="preview-dress-title" class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light leading-snug">Dress Title</h4>
+        <div class="flex items-center gap-3 mt-1.5 text-xs text-stone-700">
+          <span id="preview-dress-price" class="font-medium text-sage-900">£1,650</span>
+          <span class="text-stone-300">•</span>
+          <span class="text-stone-500 text-[11px]">Private Atherstone Suite Fitting</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3 pt-2 border-t border-stone-100">
+        <button
+          id="preview-remove-btn"
+          type="button"
+          class="flex-1 py-2.5 px-3 border border-red-200 text-red-800 hover:bg-red-50 text-[10px] uppercase tracking-[0.18em] transition-colors cursor-pointer text-center"
+        >
+          Remove From Shortlist
+        </button>
+        <button
+          id="preview-keep-btn"
+          type="button"
+          class="flex-1 py-2.5 px-3 bg-stone-900 text-white hover:bg-sage-800 text-[10px] uppercase tracking-[0.18em] transition-colors cursor-pointer text-center"
+        >
+          Keep In Shortlist
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface SavedDress {
+    id: string;
+    title: string;
+    designer: string;
+    price: string;
+    image: string;
+    category?: string;
+  }
+
+  // DOM Elements
+  const drawer = document.getElementById('wishlist-drawer');
+  const overlay = document.getElementById('wishlist-overlay');
+  const closeBtn = document.getElementById('close-wishlist-btn');
+  const itemsContainer = document.getElementById('wishlist-items-container');
+  const emptyMsg = document.getElementById('wishlist-empty-msg');
+  const bookBtn = document.getElementById('wishlist-book-btn') as HTMLAnchorElement;
+
+  // Preview Modal Elements
+  const previewModal = document.getElementById('dress-preview-modal');
+  const previewDialog = document.getElementById('dress-preview-dialog');
+  const previewImg = document.getElementById('preview-dress-img') as HTMLImageElement;
+  const previewTitle = document.getElementById('preview-dress-title');
+  const previewDesigner = document.getElementById('preview-dress-designer');
+  const previewPrice = document.getElementById('preview-dress-price');
+  const previewBadge = document.getElementById('preview-dress-badge');
+  const previewRemoveBtn = document.getElementById('preview-remove-btn');
+  const previewKeepBtn = document.getElementById('preview-keep-btn');
+  const closePreviewBtn = document.getElementById('close-preview-btn');
+
+  let activePreviewDressId = '';
+
+  // Open / Close Drawer
+  function openDrawer() {
+    renderWishlist();
+    drawer?.classList.remove('translate-x-full');
+    overlay?.classList.remove('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer?.classList.add('translate-x-full');
+    overlay?.classList.add('opacity-0', 'pointer-events-none');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('wishlist-trigger-desktop')?.addEventListener('click', openDrawer);
+  document.getElementById('wishlist-trigger-mobile')?.addEventListener('click', openDrawer);
+  closeBtn?.addEventListener('click', closeDrawer);
+  overlay?.addEventListener('click', closeDrawer);
+
+  function getWishlist(): SavedDress[] {
+    return JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+  }
+
+  // Remove Dress Handler
+  function removeDress(id: string) {
+    const list = getWishlist().filter(item => item.id !== id);
+    localStorage.setItem('tbr_wishlist', JSON.stringify(list));
+    window.dispatchEvent(new Event('wishlist-updated'));
+    renderWishlist();
+  }
+
+  // Open Maximised Dress Preview
+  function openDressPreview(id: string) {
+    const dress = getWishlist().find(item => item.id === id);
+    if (!dress || !previewModal || !previewImg) return;
+
+    activePreviewDressId = dress.id;
+    previewImg.src = dress.image;
+    previewImg.alt = `${dress.title} by ${dress.designer}`;
+
+    if (previewTitle) previewTitle.textContent = dress.title;
+    if (previewDesigner) previewDesigner.textContent = dress.designer;
+    if (previewPrice) previewPrice.textContent = dress.price;
+
+    if (previewBadge) {
+      const isSample = (dress.price && dress.price.toLowerCase().includes('sample')) ||
+                       (dress.title && dress.title.toLowerCase().includes('sample'));
+      previewBadge.textContent = isSample ? 'Sample Sale' : 'Made to Order';
+      previewBadge.className = isSample
+        ? 'absolute top-4 left-4 bg-red-900/90 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium'
+        : 'absolute top-4 left-4 bg-stone-900/80 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium';
+    }
+
+    previewModal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      previewModal.classList.remove('opacity-0');
+      previewDialog?.classList.remove('scale-95');
+      previewDialog?.classList.add('scale-100');
+    });
+  }
+
+  // Close Maximised Dress Preview
+  function closeDressPreview() {
+    if (!previewModal) return;
+    previewModal.classList.add('opacity-0');
+    previewDialog?.classList.remove('scale-100');
+    previewDialog?.classList.add('scale-95');
+    setTimeout(() => {
+      previewModal.classList.add('hidden');
+      activePreviewDressId = '';
+    }, 250);
+  }
+
+  // Render Wishlist items inside Drawer
+  function renderWishlist() {
+    const list = getWishlist();
+    if (!itemsContainer) return;
+
+    // Update query params on the booking CTA button
+    if (bookBtn) {
+      if (list.length > 0) {
+        const dressNames = encodeURIComponent(list.map(d => `${d.title} (${d.designer})`).join(', '));
+        bookBtn.href = `/the-experience#book?dresses=${dressNames}`;
+      } else {
+        bookBtn.href = `/the-experience#book`;
+      }
+    }
+
+    if (list.length === 0) {
+      itemsContainer.innerHTML = '';
+      if (emptyMsg) itemsContainer.appendChild(emptyMsg);
+      return;
+    }
+
+    // Render cards with click-to-preview triggers
+    itemsContainer.innerHTML = list.map(dress => `
+      <div class="flex items-center gap-3.5 bg-white p-3 border border-stone-200 shadow-xs hover:border-stone-400 transition-colors group">
+        <!-- Thumbnail click opens preview -->
+        <button
+          type="button"
+          onclick="window.tbrOpenPreview('${dress.id}')"
+          class="relative w-16 h-20 shrink-0 overflow-hidden bg-stone-100 cursor-zoom-in group/img"
+          title="Click to enlarge"
+        >
+          <img src="${dress.image}" alt="${dress.title}" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-stone-900/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center text-white">
+            <svg class="w-4 h-4 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </div>
+        </button>
+
+        <!-- Details click opens preview -->
+        <div
+          class="flex-1 min-w-0 cursor-pointer"
+          onclick="window.tbrOpenPreview('${dress.id}')"
+          title="Click to view full dress"
+        >
+          <p class="text-[9px] tracking-widest uppercase text-stone-500 font-medium">${dress.designer}</p>
+          <h4 class="font-serif text-sm uppercase text-stone-900 truncate group-hover:text-sage-800 transition-colors">${dress.title}</h4>
+          <p class="text-xs text-stone-700 font-light mt-0.5">${dress.price}</p>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase mt-1 inline-block group-hover:underline">View Photo &rarr;</span>
+        </div>
+
+        <!-- Quick Remove cross -->
+        <button
+          type="button"
+          onclick="window.tbrRemoveDress('${dress.id}')"
+          class="text-stone-300 hover:text-red-700 p-2 transition-colors cursor-pointer text-lg leading-none"
+          title="Remove from shortlist"
+          aria-label="Remove ${dress.title}"
+        >
+          &times;
+        </button>
+      </div>
+    `).join('');
+  }
+
+  // Modal event listeners
+  closePreviewBtn?.addEventListener('click', closeDressPreview);
+  previewKeepBtn?.addEventListener('click', closeDressPreview);
+
+  previewRemoveBtn?.addEventListener('click', () => {
+    if (activePreviewDressId) {
+      removeDress(activePreviewDressId);
+      closeDressPreview();
+    }
+  });
+
+  previewModal?.addEventListener('click', (e) => {
+    if (e.target === previewModal) {
+      closeDressPreview();
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (previewModal && !previewModal.classList.contains('hidden')) {
+        closeDressPreview();
+      } else {
+        closeDrawer();
+      }
+    }
+  });
+
+  // Expose global helpers to DOM onclick handlers
+  (window as any).tbrRemoveDress = removeDress;
+  (window as any).tbrOpenPreview = openDressPreview;
+</script>

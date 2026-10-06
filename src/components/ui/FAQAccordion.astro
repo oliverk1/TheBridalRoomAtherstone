@@ -1,0 +1,49 @@
+---
+// src/components/ui/FAQAccordion.astro
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FAQItem[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="divide-y divide-stone-200 border-y border-stone-200" id="faq-accordion-group">
+  {faqs.map((faq, index) => (
+    <div class="faq-item py-4">
+      <button
+        type="button"
+        class="faq-toggle w-full flex items-center justify-between text-left gap-4 py-2 text-stone-900 hover:text-sage-900 transition-colors cursor-pointer"
+        aria-expanded="false"
+        aria-controls={`faq-answer-${index}`}
+      >
+        <span class="font-serif text-lg sm:text-xl font-light">{faq.question}</span>
+        <span class="faq-icon text-xl text-stone-400 font-light shrink-0 transition-transform duration-300">+</span>
+      </button>
+      <div
+        id={`faq-answer-${index}`}
+        class="faq-body hidden pt-2 pb-4 text-xs sm:text-sm text-stone-600 font-light leading-relaxed max-w-3xl"
+      >
+        <p>{faq.answer}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll('.faq-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      const body = btn.nextElementSibling as HTMLElement;
+      const icon = btn.querySelector('.faq-icon');
+
+      btn.setAttribute('aria-expanded', String(!isExpanded));
+      body?.classList.toggle('hidden', isExpanded);
+      if (icon) icon.textContent = isExpanded ? '+' : '−';
+    });
+  });
+</script>

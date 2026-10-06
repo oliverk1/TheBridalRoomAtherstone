@@ -1,0 +1,253 @@
+---
+// src/components/ui/BookingEngine.astro
+---
+
+<div id="book" class="scroll-mt-24 bg-white border border-stone-300 shadow-lg p-6 sm:p-10 max-w-3xl mx-auto">
+  <!-- Progress Header -->
+  <div class="flex items-center justify-between border-b border-stone-200 pb-6 mb-8 text-[11px] uppercase tracking-[0.2em]">
+    <div class="step-indicator font-medium text-stone-900" id="step-label-1">1. Consultation</div>
+    <span class="text-stone-300">&bull;</span>
+    <div class="step-indicator text-stone-400" id="step-label-2">2. Date & Time</div>
+    <span class="text-stone-300">&bull;</span>
+    <div class="step-indicator text-stone-400" id="step-label-3">3. Bride Details</div>
+  </div>
+
+  <form id="native-booking-form">
+    <!-- STEP 1: CONSULTATION TIERS -->
+    <div id="booking-step-1" class="space-y-4">
+      <h3 class="font-serif text-xl sm:text-2xl text-stone-900 mb-2 font-light">Select Your Appointment Experience</h3>
+      
+      <label class="block border border-stone-200 p-4 cursor-pointer hover:border-stone-800 transition-colors has-checked:border-stone-900 has-checked:bg-sage-50">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="experience" value="Signature Bridal Styling" checked class="accent-stone-900" />
+            <div>
+              <strong class="text-xs uppercase tracking-wider text-stone-900 block">Signature Bridal Styling</strong>
+              <span class="text-xs text-stone-500 font-light">1.5 hours &bull; Exclusive boutique suite &bull; Up to 3 guests</span>
+            </div>
+          </div>
+          <span class="text-xs font-medium text-stone-800">£0 Consultation</span>
+        </div>
+      </label>
+
+      <label class="block border border-stone-200 p-4 cursor-pointer hover:border-stone-800 transition-colors has-checked:border-stone-900 has-checked:bg-sage-50">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="experience" value="VIB Afternoon Tea Experience" class="accent-stone-900" />
+            <div>
+              <strong class="text-xs uppercase tracking-wider text-stone-900 block">VIB Afternoon Tea Suite</strong>
+              <span class="text-xs text-stone-500 font-light">2 hours &bull; Prosecco & artisan cakes &bull; £75 gown credit</span>
+            </div>
+          </div>
+          <span class="text-xs font-medium text-stone-800">£50</span>
+        </div>
+      </label>
+
+      <label class="block border border-stone-200 p-4 cursor-pointer hover:border-stone-800 transition-colors has-checked:border-stone-900 has-checked:bg-sage-50">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="experience" value="Accessories & Veil Styling" class="accent-stone-900" />
+            <div>
+              <strong class="text-xs uppercase tracking-wider text-stone-900 block">Veil & Accessory Styling</strong>
+              <span class="text-xs text-stone-500 font-light">45 mins &bull; Tiaras, headpieces, and custom veils</span>
+            </div>
+          </div>
+          <span class="text-xs font-medium text-stone-800">Complimentary</span>
+        </div>
+      </label>
+
+      <div class="pt-6 flex justify-end">
+        <button type="button" id="btn-to-step-2" class="bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-800 transition-colors">
+          Continue to Calendar &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: DATE & TIME PICKER -->
+    <div id="booking-step-2" class="hidden space-y-4">
+      <h3 class="font-serif text-xl sm:text-2xl text-stone-900 mb-2 font-light">Choose Date & Preferred Time</h3>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Preferred Date *</label>
+          <input
+            type="date"
+            id="book-date"
+            name="appointmentDate"
+            required
+            class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900"
+          />
+          <p class="text-[10px] text-stone-500 mt-1">Wednesdays offer late fittings up to 9:00pm.</p>
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Preferred Time Slot *</label>
+          <select
+            name="appointmentTime"
+            id="book-time"
+            required
+            class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900"
+          >
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="2:00 PM">2:00 PM</option>
+            <option value="4:00 PM">4:00 PM</option>
+            <option value="6:00 PM (Wednesday Late Night)">6:00 PM (Wednesdays)</option>
+            <option value="7:30 PM (Wednesday Late Night)">7:30 PM (Wednesdays)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-6 flex justify-between items-center">
+        <button type="button" id="btn-back-to-1" class="text-xs uppercase tracking-wider text-stone-600 hover:text-stone-900">&larr; Back</button>
+        <button type="button" id="btn-to-step-3" class="bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-800 transition-colors">
+          Continue to Details &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: BRIDE PROFILE & ATTACHED WISHLIST -->
+    <div id="booking-step-3" class="hidden space-y-4">
+      <h3 class="font-serif text-xl sm:text-2xl text-stone-900 mb-2 font-light">Your Wedding Details</h3>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Bride's Full Name *</label>
+          <input type="text" name="name" required class="w-full border border-stone-300 p-3 text-xs bg-white focus:border-stone-900" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Email Address *</label>
+          <input type="email" name="email" required class="w-full border border-stone-300 p-3 text-xs bg-white focus:border-stone-900" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Mobile Telephone *</label>
+          <input type="tel" name="phone" required placeholder="07123 456789" class="w-full border border-stone-300 p-3 text-xs bg-white focus:border-stone-900" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Wedding Date (Approx)</label>
+          <input type="date" name="weddingDate" class="w-full border border-stone-300 p-3 text-xs bg-white focus:border-stone-900" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-stone-700 mb-1">Shortlisted Gowns / Styling Notes</label>
+        <textarea
+          id="booking-wishlist-input"
+          name="shortlist"
+          rows="3"
+          class="w-full border border-stone-300 p-3 text-xs bg-white focus:border-stone-900"
+          placeholder="Include any specific gowns you wish to try on during your appointment..."
+        ></textarea>
+        <p class="text-[10px] text-stone-500 mt-1">Saved dresses from your session are automatically added here.</p>
+      </div>
+
+      <div class="pt-6 flex justify-between items-center">
+        <button type="button" id="btn-back-to-2" class="text-xs uppercase tracking-wider text-stone-600 hover:text-stone-900">&larr; Back</button>
+        <button
+          type="submit"
+          id="btn-submit-booking"
+          class="bg-sage-900 text-white text-xs uppercase tracking-[0.2em] px-10 py-4 hover:bg-stone-900 transition-colors"
+        >
+          Confirm My Appointment Request
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Success Notification Box -->
+  <div id="booking-success" class="hidden text-center py-10">
+    <div class="w-12 h-12 bg-sage-100 text-sage-900 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-6 h-6 stroke-current fill-none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h3 class="font-serif text-3xl uppercase font-light text-stone-900 mb-2">Thank You, We Look Forward to Meeting You</h3>
+    <p class="text-xs sm:text-sm text-stone-600 font-light max-w-md mx-auto leading-relaxed">
+      Your appointment request has been submitted to Vicky & Samantha. A boutique confirmation has been sent to your email with car parking directions.
+    </p>
+  </div>
+</div>
+
+<script>
+  const s1 = document.getElementById('booking-step-1');
+  const s2 = document.getElementById('booking-step-2');
+  const s3 = document.getElementById('booking-step-3');
+
+  const l1 = document.getElementById('step-label-1');
+  const l2 = document.getElementById('step-label-2');
+  const l3 = document.getElementById('step-label-3');
+
+  // Step Navigators
+  document.getElementById('btn-to-step-2')?.addEventListener('click', () => {
+    s1?.classList.add('hidden');
+    s2?.classList.remove('hidden');
+    l1?.classList.replace('text-stone-900', 'text-stone-400');
+    l2?.classList.replace('text-stone-400', 'text-stone-900');
+  });
+
+  document.getElementById('btn-back-to-1')?.addEventListener('click', () => {
+    s2?.classList.add('hidden');
+    s1?.classList.remove('hidden');
+    l2?.classList.replace('text-stone-900', 'text-stone-400');
+    l1?.classList.replace('text-stone-400', 'text-stone-900');
+  });
+
+  document.getElementById('btn-to-step-3')?.addEventListener('click', () => {
+    const dateInput = document.getElementById('book-date') as HTMLInputElement;
+    if (!dateInput.value) {
+      alert("Please choose a preferred appointment date.");
+      return;
+    }
+    s2?.classList.add('hidden');
+    s3?.classList.remove('hidden');
+    l2?.classList.replace('text-stone-900', 'text-stone-400');
+    l3?.classList.replace('text-stone-400', 'text-stone-900');
+
+    // Pre-populate shortlisted dresses
+    const wishlist = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+    const textarea = document.getElementById('booking-wishlist-input') as HTMLTextAreaElement;
+    if (textarea && wishlist.length > 0 && !textarea.value) {
+      textarea.value = "Shortlisted Gowns:\n" + wishlist.map((d: any) => `• ${d.title} (${d.designer} - ${d.price})`).join('\n');
+    }
+  });
+
+  document.getElementById('btn-back-to-2')?.addEventListener('click', () => {
+    s3?.classList.add('hidden');
+    s2?.classList.remove('hidden');
+    l3?.classList.replace('text-stone-900', 'text-stone-400');
+    l2?.classList.replace('text-stone-400', 'text-stone-900');
+  });
+
+  // Handle Form Submission
+  const form = document.getElementById('native-booking-form') as HTMLFormElement;
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit-booking') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = "Scheduling Your Suite...";
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await fetch('/api/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        document.getElementById('booking-success')?.classList.remove('hidden');
+      } else {
+        alert("There was an issue submitting your booking. Please phone us directly on 01827 946 098.");
+        btn.disabled = false;
+        btn.textContent = "Confirm My Appointment Request";
+      }
+    } catch {
+      alert("Network error. Please call the boutique on 01827 946 098.");
+      btn.disabled = false;
+      btn.textContent = "Confirm My Appointment Request";
+    }
+  });
+</script>

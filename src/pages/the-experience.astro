@@ -1,0 +1,279 @@
+---
+// src/pages/the-experience.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingEngine from '../components/ui/BookingEngine.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.astro';
+
+const experienceFaqs = [
+  {
+    question: "What underwear should I wear to my bridal fitting?",
+    answer: "We strongly recommend wearing seamless, nude-toned underwear. A nude strapless bra is helpful, though many of our Justin Alexander and Sincerity gowns feature built-in boning and inner corsetry, meaning most brides find they don't need a bra at all. We provide pedestals, so feel free to bring heels of a similar height to what you plan to wear on your wedding day."
+  },
+  {
+    question: "Can I wear fake tan to my appointment?",
+    answer: "To preserve our pristine sample gowns and delicate silks, we kindly ask that you do not wear fresh fake tan, heavy bronzers, or freshly applied body oils on the day of your appointment."
+  },
+  {
+    question: "Why do you recommend a maximum of 3 guests?",
+    answer: "Our boudoir styling suites are intimate, luxurious spaces designed to keep you relaxed. Over 15 years in bridal styling, we've found that having 2 to 3 trusted VIPs (mothers, sisters, maids of honour) provides loving, constructive support without overwhelming you with competing opinions."
+  },
+  {
+    question: "Can I bring young children to the boutique?",
+    answer: "We want your appointment to be entirely about you. Bridal boutiques contain pins, delicate laces, and high pedestals, which can be stressful for toddlers. While babies in prams are welcome, we generally suggest leaving young children with loved ones so you can sip tea, relax, and fully enjoy the moment."
+  },
+  {
+    question: "What is your cancellation or rescheduling policy?",
+    answer: "We understand plans change. For our complimentary Signature styling appointments, we kindly request at least 48 hours notice so we can offer the private suite to another bride on our waiting list. For VIB Afternoon Tea appointments, rescheduling is available with 72 hours notice."
+  }
+];
+---
+
+<BaseLayout
+  title="The Private Bridal Experience & Fittings | The Bridal Room Atherstone"
+  description="Experience an intimate 1-to-1 bridal styling appointment in Warwickshire. Private boudoir suite, VIB afternoon tea options, and bespoke styling advice from Vicky & Sam."
+  faqs={experienceFaqs}
+>
+  <!-- Page Hero Header -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-24 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        1-to-1 Private Boutique Hire
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-4">
+        The Boutique Experience
+      </h1>
+      <p class="font-serif italic text-base sm:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
+        Uninterrupted time, French Louis chairs, crystal chandeliers, and an unhurried space tailored entirely to finding your dream dress.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1-to-1 Philosophy Narrative -->
+  <section class="py-16 sm:py-24 px-6 lg:px-12 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div>
+        <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-3">Our Fitting Philosophy</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase leading-tight mb-6">
+          No Crowds. No Shared Mirrors.<br />
+          <span class="italic font-light">Just You and Your Loved Ones.</span>
+        </h2>
+        <div class="space-y-4 text-xs sm:text-sm text-stone-600 font-light leading-relaxed">
+          <p>
+            Many bridal shops seat multiple brides side-by-side on shared podiums. At The Bridal Room on Station Street, we do things differently.
+          </p>
+          <p>
+            When you book an appointment with us, our boutique suite is locked to the outside world. You receive 100% exclusive access to our mirrors, our pedestal, and over 29 years of fashion styling expertise. 
+          </p>
+          <p>
+            We begin each session with a relaxed conversation about your venue, your personal style, and how you want to feel walking down the aisle. Whether you have fallen in love with a sleek Mikado ballgown or a romantic boho lace train, we guide you through every cut, neckline, and silhouette at your own pace.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature Highlight Box -->
+      <div class="bg-ivory-100 border border-stone-200 p-8 sm:p-10 shadow-xs relative">
+        <h3 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 mb-6">What Every Appointment Includes</h3>
+        <ul class="space-y-4 text-xs sm:text-sm text-stone-600 font-light">
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-sage-800 mt-1.5 shrink-0"></span>
+            <span><strong>Private Suite Hire:</strong> Complete exclusivity of our boudoir styling lounge.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-sage-800 mt-1.5 shrink-0"></span>
+            <span><strong>Full Rail Access:</strong> Browse both made-to-order designer collections and our off-the-peg sample sale rails.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-sage-800 mt-1.5 shrink-0"></span>
+            <span><strong>Expert Fitting & Clipping:</strong> We expertly pin and shape sample dresses to show you exactly how the gown fits your body.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-sage-800 mt-1.5 shrink-0"></span>
+            <span><strong>Veil & Accessory Pairing:</strong> Complete the vision with hand-embroidered cathedral veils, combs, and jewellery.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consultation Tiers Breakdown -->
+  <section class="bg-sage-100 border-y border-sage-200 py-20 px-6 lg:px-12">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Consultation Options</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Select Your Appointment Style</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Tier 1: Signature -->
+        <div class="bg-white border border-stone-200 p-8 flex flex-col justify-between shadow-xs">
+          <div>
+            <span class="text-[10px] tracking-[0.25em] uppercase text-stone-500 block mb-2">Our Classic Styling</span>
+            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-1 font-light">Signature Suite</h3>
+            <p class="text-xs text-sage-900 font-medium mb-4">1.5 Hours &bull; Complimentary / £0</p>
+            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
+              Our traditional 1-to-1 appointment. Explore our curated rails with honest, dedicated advice from Vicky and Samantha. Bring up to 3 guests.
+            </p>
+            <ul class="space-y-2 text-xs text-stone-500 font-light border-t border-stone-100 pt-4 mb-6">
+              <li>&bull; Exclusive private boutique access</li>
+              <li>&bull; Up to 3 guests welcome</li>
+              <li>&bull; Hot tea, coffee & refreshments</li>
+            </ul>
+          </div>
+          <a
+            href="#book"
+            data-select-tier="Signature Bridal Styling"
+            class="tier-select-btn block w-full text-center border border-stone-800 py-3 text-[10px] uppercase tracking-[0.2em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors"
+          >
+            Select Signature &rarr;
+          </a>
+        </div>
+
+        <!-- Tier 2: VIB Afternoon Tea -->
+        <div class="bg-sage-50 border-2 border-sage-800 p-8 flex flex-col justify-between shadow-md relative">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-sage-800 text-white text-[9px] uppercase tracking-[0.2em] px-3.5 py-1 font-medium shadow-sm">
+            Most Popular Experience
+          </span>
+          <div>
+            <div class="flex justify-between items-baseline mb-2">
+              <span class="text-[10px] tracking-[0.25em] uppercase text-stone-500 block">The Luxury Upgrade</span>
+              <span class="text-[10px] tracking-wider uppercase text-stone-600 font-medium">2.0 Hours</span>
+            </div>
+            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-1 font-light">VIB Afternoon Tea</h3>
+            <p class="text-xs text-sage-900 font-medium mb-4">£50 &bull; Includes £75 Gown Credit</p>
+            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
+              Turn finding the dress into a celebration. Includes chilled prosecco, artisan sweet treats, 2 unhurried hours of styling, and a £75 voucher toward your gown.
+            </p>
+            <ul class="space-y-2 text-xs text-stone-500 font-light border-t border-stone-200/80 pt-4 mb-6">
+              <li>&bull; <strong>£75 credit</strong> voucher toward your gown</li>
+              <li>&bull; Chilled prosecco & artisan cakes</li>
+              <li>&bull; Extended 2-hour appointment</li>
+              <li>&bull; Up to 4 guests welcome</li>
+            </ul>
+          </div>
+          <a
+            href="#book"
+            data-select-tier="VIB Afternoon Tea Experience"
+            class="tier-select-btn block w-full text-center bg-sage-800 text-white py-3 text-[10px] uppercase tracking-[0.2em] hover:bg-stone-900 transition-colors shadow-xs"
+          >
+            Select VIB Suite &rarr;
+          </a>
+        </div>
+
+        <!-- Tier 3: Accessories -->
+        <div class="bg-white border border-stone-200 p-8 flex flex-col justify-between shadow-xs">
+          <div>
+            <span class="text-[10px] tracking-[0.25em] uppercase text-stone-500 block mb-2">Finishing Touches</span>
+            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-1 font-light">Veils & Accessories</h3>
+            <p class="text-xs text-sage-900 font-medium mb-4">45 Minutes &bull; Complimentary</p>
+            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
+              Already found your gown and looking for the perfect veil or crown? Bring your dress with you or pair accessories alongside our floor samples.
+            </p>
+            <ul class="space-y-2 text-xs text-stone-500 font-light border-t border-stone-100 pt-4 mb-6">
+              <li>&bull; Bespoke veil length matching</li>
+              <li>&bull; Tiaras, combs, and pins</li>
+              <li>&bull; Up to 2 guests welcome</li>
+            </ul>
+          </div>
+          <a
+            href="#book"
+            data-select-tier="Accessories & Veil Styling"
+            class="tier-select-btn block w-full text-center border border-stone-800 py-3 text-[10px] uppercase tracking-[0.2em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors"
+          >
+            Select Accessories &rarr;
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Boutique Etiquette & Guidance Grid -->
+  <section class="py-20 px-6 lg:px-12 max-w-6xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Preparation Guide</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Boutique Etiquette & Advice</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="border border-stone-200 p-6 bg-white">
+        <h4 class="font-serif text-lg uppercase text-stone-900 mb-2">Underwear</h4>
+        <p class="text-xs text-stone-600 font-light leading-relaxed">
+          Nude, seamless underwear is best. Don't worry about special strapless bras—most gowns feature built-in support.
+        </p>
+      </div>
+
+      <div class="border border-stone-200 p-6 bg-white">
+        <h4 class="font-serif text-lg uppercase text-stone-900 mb-2">Fake Tan Policy</h4>
+        <p class="text-xs text-stone-600 font-light leading-relaxed">
+          Please avoid fresh fake tan, bronzers, or heavy body oils on the day of your fitting to keep sample gowns pristine.
+        </p>
+      </div>
+
+      <div class="border border-stone-200 p-6 bg-white">
+        <h4 class="font-serif text-lg uppercase text-stone-900 mb-2">Shoes & Pedestals</h4>
+        <p class="text-xs text-stone-600 font-light leading-relaxed">
+          Pedestals are provided. We ask that outdoor shoes stay off the podiums to protect delicate trailing laces and silks.
+        </p>
+      </div>
+
+      <div class="border border-stone-200 p-6 bg-white">
+        <h4 class="font-serif text-lg uppercase text-stone-900 mb-2">Guest Numbers</h4>
+        <p class="text-xs text-stone-600 font-light leading-relaxed">
+          We comfortably host up to 3 guests for Signature appointments and up to 4 for VIB Afternoon Tea sessions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Embedded Native Booking Engine -->
+  <section class="bg-sage-100 py-16 sm:py-24 px-6 border-y border-sage-200">
+    <div class="max-w-4xl mx-auto text-center mb-10">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Online Scheduler</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Reserve Your Private Suite</h2>
+      <p class="text-xs text-stone-600 font-light mt-2">Wednesday evenings available up to 9:00pm.</p>
+    </div>
+
+    <!-- The 3-Step Native Booking Engine Component -->
+    <BookingEngine />
+  </section>
+
+  <!-- Contextual Experience FAQs -->
+  <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Helpful Guidance</p>
+      <h2 class="font-serif text-2xl sm:text-3xl text-stone-900 font-light uppercase">Appointment Questions</h2>
+    </div>
+    <FAQAccordion faqs={experienceFaqs} />
+  </section>
+</BaseLayout>
+
+<script>
+  // Auto-Select Tier Radio Button when clicking "Select Tier" or arriving with ?tier= query param
+  function applyTierSelection(tierName: string) {
+    const radio = document.querySelector(`input[name="experience"][value="${tierName}"]`) as HTMLInputElement;
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  // Handle URL Query Params on Load (e.g., ?tier=VIB+Afternoon+Tea+Experience)
+  const urlParams = new URLSearchParams(window.location.search);
+  const tierParam = urlParams.get('tier');
+  if (tierParam) {
+    applyTierSelection(tierParam);
+  }
+
+  // Handle On-Page "Select Tier" Button Clicks
+  document.querySelectorAll('.tier-select-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const targetTier = (btn as HTMLElement).dataset.selectTier;
+      if (targetTier) {
+        applyTierSelection(targetTier);
+      }
+    });
+  });
+</script>

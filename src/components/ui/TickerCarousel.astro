@@ -1,0 +1,291 @@
+---
+// src/components/ui/TickerCarousel.astro
+interface Props {
+  items?: string[];
+}
+
+const defaultItems = [
+  "100% Private 1-to-1 Suites",
+  "Curated Made to Order Gowns £1,200 – £2,500",
+  "Designer Ex-Sample Rail from £250 – £900",
+  "Discontinued Designer Styles with 20% Off RRP",
+  "Personal & Unhurried Appointments",
+  "Intimate Warwickshire Boutique Setting"
+];
+
+const { items = defaultItems } = Astro.props;
+
+// Group items for desktop (3 per slide)
+const desktopGroup1 = items.slice(0, 3);
+const desktopGroup2 = items.slice(3, 6);
+---
+
+<div
+  id="carousel-wrapper"
+  class="bg-sage-100 border-b border-sage-200 py-5 sm:py-6 px-4 relative overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y"
+>
+  <div class="max-w-6xl mx-auto overflow-hidden">
+    
+    <!-- DESKTOP TRACK (3 items per view) -->
+    <div id="desktop-carousel-track" class="hidden lg:flex w-full will-change-transform">
+      <!-- Clone of Group 2 (Index 0) -->
+      <div class="w-full shrink-0 flex items-center justify-between gap-8 px-6" aria-hidden="true">
+        {desktopGroup2.map((pt, i) => (
+          <>
+            <div class="flex-1 text-center"><span class="text-xs tracking-[0.22em] uppercase text-stone-700 font-light block">{pt}</span></div>
+            {i < 2 && <div class="w-px h-4 bg-stone-300"></div>}
+          </>
+        ))}
+      </div>
+
+      <!-- Group 1 (Index 1) -->
+      <div class="w-full shrink-0 flex items-center justify-between gap-8 px-6">
+        {desktopGroup1.map((pt, i) => (
+          <>
+            <div class="flex-1 text-center"><span class="text-xs tracking-[0.22em] uppercase text-stone-700 font-light block">{pt}</span></div>
+            {i < 2 && <div class="w-px h-4 bg-stone-300"></div>}
+          </>
+        ))}
+      </div>
+
+      <!-- Group 2 (Index 2) -->
+      <div class="w-full shrink-0 flex items-center justify-between gap-8 px-6">
+        {desktopGroup2.map((pt, i) => (
+          <>
+            <div class="flex-1 text-center"><span class="text-xs tracking-[0.22em] uppercase text-stone-700 font-light block">{pt}</span></div>
+            {i < 2 && <div class="w-px h-4 bg-stone-300"></div>}
+          </>
+        ))}
+      </div>
+
+      <!-- Clone of Group 1 (Index 3) -->
+      <div class="w-full shrink-0 flex items-center justify-between gap-8 px-6" aria-hidden="true">
+        {desktopGroup1.map((pt, i) => (
+          <>
+            <div class="flex-1 text-center"><span class="text-xs tracking-[0.22em] uppercase text-stone-700 font-light block">{pt}</span></div>
+            {i < 2 && <div class="w-px h-4 bg-stone-300"></div>}
+          </>
+        ))}
+      </div>
+    </div>
+
+    <!-- MOBILE TRACK (1 item per view) -->
+    <div id="mobile-carousel-track" class="flex lg:hidden w-full will-change-transform">
+      <!-- Clone of Last Item (Index 0) -->
+      <div class="w-full shrink-0 text-center px-4" aria-hidden="true">
+        <span class="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-stone-700 font-light block">
+          {items[items.length - 1]}
+        </span>
+      </div>
+
+      <!-- Real Items (Indices 1..N) -->
+      {items.map((point) => (
+        <div class="w-full shrink-0 text-center px-4">
+          <span class="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-stone-700 font-light block">
+            {point}
+          </span>
+        </div>
+      ))}
+
+      <!-- Clone of First Item (Index N+1) -->
+      <div class="w-full shrink-0 text-center px-4" aria-hidden="true">
+        <span class="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-stone-700 font-light block">
+          {items[0]}
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DESKTOP DOTS -->
+  <div class="hidden lg:flex justify-center items-center gap-2.5 mt-3.5" id="desktop-carousel-dots">
+    <button class="w-2.5 h-2.5 rounded-full bg-stone-800 transition-all duration-300 hover:scale-125" aria-label="Slide 1"></button>
+    <button class="w-2.5 h-2.5 rounded-full bg-stone-300 transition-all duration-300 hover:scale-125" aria-label="Slide 2"></button>
+  </div>
+
+  <!-- MOBILE DOTS -->
+  <div class="flex lg:hidden justify-center items-center gap-2 mt-3.5" id="mobile-carousel-dots">
+    {items.map((_, i) => (
+      <button class={`w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-stone-800' : 'bg-stone-300'}`} aria-label={`Slide ${i + 1}`}></button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const wrapper = document.getElementById('carousel-wrapper');
+  const desktopTrack = document.getElementById('desktop-carousel-track');
+  const mobileTrack = document.getElementById('mobile-carousel-track');
+  const desktopDots = document.querySelectorAll('#desktop-carousel-dots button');
+  const mobileDots = document.querySelectorAll('#mobile-carousel-dots button');
+
+  let isMobile = window.innerWidth < 1024;
+  let currentIndex = 1;
+  let isDragging = false;
+  let startX = 0;
+  let slideTimer: number;
+
+  function getActiveTrack() {
+    return isMobile ? mobileTrack : desktopTrack;
+  }
+
+  function getTotalUnique() {
+    return isMobile ? 6 : 2;
+  }
+
+  function getTotalSlides() {
+    return isMobile ? 8 : 4;
+  }
+
+  function updateDots(activeDot: number) {
+    const dots = isMobile ? mobileDots : desktopDots;
+    dots.forEach((dot, i) => {
+      if (i === activeDot) {
+        dot.classList.remove('bg-stone-300');
+        dot.classList.add('bg-stone-800');
+      } else {
+        dot.classList.remove('bg-stone-800');
+        dot.classList.add('bg-stone-300');
+      }
+    });
+  }
+
+  function setPositionByIndex(animate = true) {
+    const track = getActiveTrack();
+    if (!track) return;
+    track.style.transition = animate ? 'transform 700ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    const totalUnique = getTotalUnique();
+    let normalized = (currentIndex - 1 + totalUnique) % totalUnique;
+    updateDots(normalized);
+  }
+
+  function slideNext() {
+    const total = getTotalSlides();
+    const totalUnique = getTotalUnique();
+    if (currentIndex >= total - 1) {
+      currentIndex = 1;
+      setPositionByIndex(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex++;
+    setPositionByIndex(true);
+  }
+
+  function slidePrev() {
+    const totalUnique = getTotalUnique();
+    if (currentIndex <= 0) {
+      currentIndex = totalUnique;
+      setPositionByIndex(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex--;
+    setPositionByIndex(true);
+  }
+
+  function resetTimer() {
+    clearInterval(slideTimer);
+    if (!document.hidden) {
+      slideTimer = window.setInterval(slideNext, 8000);
+    }
+  }
+
+  function attachTrackEvents(track: HTMLElement | null) {
+    if (!track) return;
+    track.addEventListener('transitionend', () => {
+      const total = getTotalSlides();
+      const totalUnique = getTotalUnique();
+      if (currentIndex >= total - 1) {
+        currentIndex = 1;
+        setPositionByIndex(false);
+      } else if (currentIndex <= 0) {
+        currentIndex = totalUnique;
+        setPositionByIndex(false);
+      }
+    });
+  }
+
+  attachTrackEvents(desktopTrack);
+  attachTrackEvents(mobileTrack);
+
+  if (wrapper) {
+    setPositionByIndex(false);
+    resetTimer();
+
+    desktopDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPositionByIndex(true);
+        resetTimer();
+      });
+    });
+
+    mobileDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPositionByIndex(true);
+        resetTimer();
+      });
+    });
+
+    // POINTER DRAG & SWIPE EVENTS (Mobile & Desktop Touch)
+    wrapper.addEventListener('pointerdown', (e: PointerEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      clearInterval(slideTimer);
+      const track = getActiveTrack();
+      if (track) track.style.transition = 'none';
+      try { wrapper.setPointerCapture(e.pointerId); } catch {}
+    });
+
+    wrapper.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging) return;
+      const track = getActiveTrack();
+      if (!track) return;
+      const diffX = e.clientX - startX;
+      const w = wrapper.offsetWidth;
+      const movePercent = (diffX / w) * 100;
+      track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${movePercent}%))`;
+    });
+
+    const handlePointerEnd = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch {}
+
+      const diffX = e.clientX - startX;
+      const threshold = 35;
+
+      if (diffX < -threshold) {
+        slideNext();
+      } else if (diffX > threshold) {
+        slidePrev();
+      } else {
+        setPositionByIndex(true);
+      }
+      resetTimer();
+    };
+
+    wrapper.addEventListener('pointerup', handlePointerEnd);
+    wrapper.addEventListener('pointercancel', handlePointerEnd);
+
+    window.addEventListener('resize', () => {
+      const nowMobile = window.innerWidth < 1024;
+      if (nowMobile !== isMobile) {
+        isMobile = nowMobile;
+        currentIndex = 1;
+      }
+      setPositionByIndex(false);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(slideTimer);
+      } else {
+        resetTimer();
+      }
+    });
+  }
+</script>

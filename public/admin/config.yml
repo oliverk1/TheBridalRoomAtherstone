@@ -1,0 +1,64 @@
+# public/admin/config.yml
+backend:
+  name: git-gateway
+  branch: main
+
+# Auto uploads directly into the source assets folder
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  # 1. INDIVIDUAL DRESSES COLLECTION
+  - name: "dresses"
+    label: "Dresses & Gowns"
+    folder: "src/content/dresses"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Dress Title", name: "title", widget: "string" }
+      - { label: "Designer", name: "designer", widget: "select", options: ["Justin Alexander", "Sincerity Bridal", "Adore by Justin Alexander", "Phoenix Gowns", "Danielle Couture"] }
+      - { label: "Rail / Category", name: "category", widget: "select", options: ["Made to Order (£1,200 - £2,500)", "Sample Sale Rail (£250 - £900)", "Accessories"] }
+      - { label: "Price / Price Range", name: "price", widget: "string", hint: "e.g. £1,450 or Sample £650 (RRP £1,400)" }
+      - { label: "Sample Size Available in Store", name: "sampleSize", widget: "string", default: "14" }
+      - { label: "Silhouette / Style", name: "silhouette", widget: "select", options: ["A-Line", "Fit and Flare / Mermaid", "Ballgown", "Clean & Modern", "Boho & Lace"] }
+      - { label: "Featured on Homepage", name: "featured", widget: "boolean", default: false }
+      - { label: "Hero Gown Image", name: "image", widget: "image" }
+      - { label: "Back View / Detail Image (Optional)", name: "imageDetail", widget: "image", required: false }
+      - { label: "Editorial Description", name: "body", widget: "markdown" }
+
+  # 2. SITE-WIDE ANNOUNCEMENTS, TICKER & BANNER (SINGLETON)
+  - name: "settings"
+    label: "Site Announcements & Tickers"
+    files:
+      - label: "Reassurance Ticker Points"
+        name: "ticker"
+        file: "src/content/settings/ticker.json"
+        fields:
+          - label: "Active Ticker Items"
+            name: "items"
+            widget: "list"
+            field: { label: "Point", name: "point", widget: "string" }
+
+      - label: "Homepage Hero Notice"
+        name: "hero_notice"
+        file: "src/content/settings/notice.json"
+        fields:
+          - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
+          - { label: "Banner Text", name: "text", widget: "string" }
+          - { label: "Link URL (Optional)", name: "link", widget: "string", required: false }
+
+  # 3. FREQUENTLY ASKED QUESTIONS (SINGLETON)
+  - name: "faqs"
+    label: "Contextual FAQs"
+    files:
+      - label: "Dress & Appointment FAQs"
+        name: "all_faqs"
+        file: "src/content/settings/faqs.json"
+        fields:
+          - label: "Questions & Answers"
+            name: "questions"
+            widget: "list"
+            fields:
+              - { label: "Category", name: "category", widget: "select", options: ["Dresses & Ordering", "Fittings & Etiquette", "Alterations & Payments"] }
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }

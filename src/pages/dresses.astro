@@ -1,0 +1,135 @@
+---
+// src/pages/dresses.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DressCard from '../components/ui/DressCard.astro';
+import DressFilter from '../components/ui/DressFilter.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.astro';
+
+// Collection FAQs for rich snippet search results
+const dressFaqs = [
+  {
+    question: "How far in advance should I order my wedding dress?",
+    answer: "Made-to-order gowns typically take between 6 to 9 months to be cut, beaded, and delivered by our international designers (Justin Alexander, Sincerity, Phoenix Gowns). We recommend shopping 9 to 12 months before your wedding date to allow comfortable time for our in-house seamstress fitting appointments."
+  },
+  {
+    question: "Can I take home a dress immediately if my wedding is soon?",
+    answer: "Yes! Our Designer Ex-Sample Rail features genuine runway and showroom gowns available off-the-peg at £250 to £900 (up to 70% off RRP). These dresses can be purchased and taken home the very same day."
+  },
+  {
+    question: "What sample sizes do you keep in the Atherstone showroom?",
+    answer: "Our in-store sample gowns range from UK size 12 to 20, expertly clipped and pinned during your 1-to-1 styling session to fit your exact shape. When ordering new made-to-order styles, gowns can be ordered from UK size 2 through to size 32."
+  }
+];
+
+// Curated starter collection (synced with Decap CMS folder collection)
+const sampleDresses = [
+  {
+    id: "ja-88250",
+    title: "Romantic Beaded Bodice",
+    designer: "Justin Alexander",
+    category: "Made to Order (£1,200 - £2,500)",
+    price: "£1,650",
+    sampleSize: "14",
+    silhouette: "A-Line",
+    image: "/images/dress-1.webp"
+  },
+  {
+    id: "sinc-44320",
+    title: "Clean Mikado Ballgown",
+    designer: "Sincerity Bridal",
+    category: "Made to Order (£1,200 - £2,500)",
+    price: "£1,395",
+    sampleSize: "12",
+    silhouette: "Clean & Modern",
+    image: "/images/dress-2.webp"
+  },
+  {
+    id: "sample-adore-01",
+    title: "Floral Applique Mermaid",
+    designer: "Adore by Justin Alexander",
+    category: "Sample Sale Rail (£250 - £900)",
+    price: "£695 (Was £1,450)",
+    sampleSize: "14",
+    silhouette: "Fit and Flare / Mermaid",
+    image: "/images/dress-3.webp"
+  },
+  {
+    id: "phx-ivy",
+    title: "Bohemian Chiffon & Lace",
+    designer: "Phoenix Gowns",
+    category: "Made to Order (£1,200 - £2,500)",
+    price: "£1,250",
+    sampleSize: "16",
+    silhouette: "Boho & Lace",
+    image: "/images/dress-1.webp"
+  }
+];
+---
+
+<BaseLayout
+  title="Designer Wedding Dresses Atherstone | Justin Alexander, Sincerity & Samples"
+  description="Explore curated bridal gowns at The Bridal Room Atherstone. Made to order luxury £1,200–£2,500, ex-sample rail £250–£900, sizes 12–20 in store. Book your private suite."
+  faqs={dressFaqs}
+>
+  <!-- Page Header -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        Curated Bridal Collections
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-4">
+        The Dress Lookbook
+      </h1>
+      <p class="font-serif italic text-base sm:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
+        Featuring authentic creations from Justin Alexander, Sincerity Bridal, Adore, and our immediate take-home ex-sample rails.
+      </p>
+    </div>
+  </section>
+
+  <!-- Lookbook Core -->
+  <section class="py-14 sm:py-20 px-6 lg:px-12 max-w-6xl mx-auto">
+    <DressFilter />
+
+    <!-- Dress Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="lookbook-grid">
+      {sampleDresses.map(dress => (
+        <DressCard {...dress} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Editorial Designer Authority Block -->
+  <section class="bg-ivory-100 border-y border-stone-200 py-16 px-6 lg:px-12">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+      <div>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Justin Alexander</h3>
+        <p class="text-xs text-stone-600 leading-relaxed font-light">
+          World-renowned for vintage-inspired silhouettes, opulent hand-beading, and couture inner corsetry that flatters every curve.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Sincerity Bridal</h3>
+        <p class="text-xs text-stone-600 leading-relaxed font-light">
+          Graceful, fairytale dresses pairing soft tulles and romantic sweetheart necklines for the timeless, classic bride.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Ex-Sample Rail</h3>
+        <p class="text-xs text-stone-600 leading-relaxed font-light">
+          Discontinued runway designs and pristine floor samples discounted from £250–£900. Ready to take home immediately.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contextual FAQ Pillar -->
+  <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Helpful Guidance</p>
+      <h2 class="font-serif text-2xl sm:text-3xl text-stone-900 font-light uppercase">Frequently Asked Questions</h2>
+    </div>
+    <FAQAccordion faqs={dressFaqs} />
+  </section>
+</BaseLayout>

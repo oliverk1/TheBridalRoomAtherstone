@@ -1,0 +1,273 @@
+---
+// src/pages/contact.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.astro';
+
+const PHONE_NUMBER = "01827 946 098";
+const PHONE_HREF = "tel:01827946098";
+const EMAIL_ADDRESS = "thebridalroomatherstone@gmail.com";
+
+const contactFaqs = [
+  {
+    question: "Where is the best place to park when visiting the boutique?",
+    answer: "The easiest and closest parking is at the Cattle Market Car Park on Station Street (postcode CV9 1DD for sat navs). It offers up to 2 hours of free parking (RingGo / parking location code 3611082) and is just a 1-minute level walk to our front door."
+  },
+  {
+    question: "Can I reach the boutique easily by train?",
+    answer: "Yes, Atherstone Railway Station is located directly on Station Street, just a 2 to 3-minute stroll from our boutique. There are direct West Midlands Railway and London Northwestern services connecting Atherstone with Tamworth, Nuneaton, Crewe, and Rugby."
+  },
+  {
+    question: "Can I just pop in to browse the dresses without an appointment?",
+    answer: "Because we dedicate our entire boutique exclusively to one bride at a time, our doors are often locked to the general public during private fittings. We always recommend booking ahead or calling ahead on 01827 946 098 before traveling to ensure we can welcome you inside."
+  },
+  {
+    question: "Is the boutique wheelchair accessible?",
+    answer: "Our ground-floor boutique showroom and private fitting lounge are accessible. If you or any of your guests have specific mobility requirements, please let us know when booking so we can arrange the pedestal and suite for maximum comfort."
+  }
+];
+---
+
+<BaseLayout
+  title="Contact & Visit The Boutique | The Bridal Room Atherstone, Warwickshire"
+  description="Visit The Bridal Room at 65 Station Street, Atherstone CV9 1DB. 1-minute from Cattle Market Car Park. Wed late nights until 9pm. Regional travel guide from Tamworth, Coventry & Birmingham."
+  faqs={contactFaqs}
+>
+  <!-- Page Hero Header -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-24 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        Warwickshire Bridal Haven
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-4">
+        Contact & Visit Us
+      </h1>
+      <p class="font-serif italic text-base sm:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
+        Located on historic Station Street in Atherstone. Free local parking, direct rail links, and Wednesday late-night fittings.
+      </p>
+    </div>
+  </section>
+
+  <!-- Core Contact & Visit Hub Grid -->
+  <section class="py-16 sm:py-24 px-6 lg:px-12 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      
+      <!-- Left Column: Contact Details, Hours & Parking -->
+      <div>
+        <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-2">Location & Appointments</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase leading-tight mb-8">
+          The Flagship Showroom
+        </h2>
+
+        <!-- Address & Telephone Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div class="border border-stone-200 p-6 bg-white shadow-2xs">
+            <h3 class="font-serif text-base uppercase text-stone-900 font-normal mb-2">Boutique Address</h3>
+            <address class="not-italic text-xs text-stone-600 font-light leading-relaxed mb-4">
+              The Bridal Room<br />
+              65 Station Street<br />
+              Atherstone, Warwickshire<br />
+              CV9 1DB
+            </address>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=65+Station+Street+Atherstone+CV9+1DB"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[10px] uppercase tracking-wider text-sage-900 font-medium underline underline-offset-4 hover:text-stone-900"
+            >
+              Get Google Map Directions &rarr;
+            </a>
+          </div>
+
+          <div class="border border-stone-200 p-6 bg-white shadow-2xs">
+            <h3 class="font-serif text-base uppercase text-stone-900 font-normal mb-2">Direct Contact</h3>
+            <p class="text-xs text-stone-600 font-light leading-relaxed mb-1">
+              Tel: <a href={PHONE_HREF} class="font-normal text-stone-900 underline underline-offset-2">{PHONE_NUMBER}</a>
+            </p>
+            <p class="text-xs text-stone-600 font-light leading-relaxed mb-4 truncate">
+              Email: <a href={`mailto:${EMAIL_ADDRESS}`} class="hover:underline">{EMAIL_ADDRESS}</a>
+            </p>
+            <a
+              href="/the-experience#book"
+              class="text-[10px] uppercase tracking-wider text-sage-900 font-medium underline underline-offset-4 hover:text-stone-900"
+            >
+              Book 1-to-1 Fitting Suite &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Opening & Appointment Hours Table -->
+        <div class="border border-stone-200 p-6 sm:p-7 bg-ivory-100 shadow-2xs mb-8">
+          <h3 class="font-serif text-lg uppercase text-stone-900 font-light mb-4">Showroom & Fitting Hours</h3>
+          <ul class="space-y-2 text-xs text-stone-600 font-light divide-y divide-stone-200/60">
+            <li class="flex justify-between pt-2"><span>Monday & Tuesday:</span> <span class="text-stone-900 font-normal">9:30am – 5:30pm</span></li>
+            <li class="flex justify-between pt-2 text-sage-900 font-medium"><span>Wednesday (Late Night):</span> <span>9:30am – 9:00pm</span></li>
+            <li class="flex justify-between pt-2"><span>Thursday – Saturday:</span> <span class="text-stone-900 font-normal">9:30am – 5:30pm</span></li>
+            <li class="flex justify-between pt-2 text-stone-500"><span>Sunday:</span> <span>Special Request Appointments</span></li>
+          </ul>
+          <p class="text-[11px] text-stone-500 font-light mt-4 pt-3 border-t border-stone-200">
+            * <em>All styling sessions require prior booking to guarantee private use of our boutique boudoir suite.</em>
+          </p>
+        </div>
+
+        <!-- Cattle Market Car Park Feature Callout -->
+        <div class="border-2 border-sage-800 bg-sage-50 p-6 sm:p-7 shadow-xs">
+          <div class="flex items-center gap-3 mb-2">
+            <svg class="w-5 h-5 text-sage-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7h8m-8 5h8m-8 5h8M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+            <h4 class="font-serif text-base uppercase text-stone-900 font-medium tracking-wide">Stress-Free Parking Solved</h4>
+          </div>
+          <p class="text-xs text-stone-600 font-light leading-relaxed mb-3">
+            <strong>Cattle Market Car Park</strong> is situated just a 1-minute walk from our door (approx. 80 metres).
+          </p>
+          <ul class="text-[11px] text-stone-600 space-y-1 mb-3">
+            <li>&bull; <strong>Sat Nav Postcode:</strong> <span class="font-mono text-stone-900 font-medium">CV9 1DD</span></li>
+            <li>&bull; <strong>Free Parking:</strong> First 2 hours free of charge (ticket or app registration required)</li>
+            <li>&bull; <strong>Location Code:</strong> <span class="font-mono text-stone-900 font-medium">3611082</span> (RingGo / APCOA Connect)</li>
+            <li>&bull; <strong>Capacity:</strong> 108 car spaces with 9 designated disabled bays</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: General Enquiry Form & Regional Transit -->
+      <div>
+        <div class="bg-white border border-stone-200 p-8 sm:p-10 shadow-xs mb-8">
+          <h3 class="font-serif text-2xl uppercase text-stone-900 font-light mb-2">Send Us a Message</h3>
+          <p class="text-xs text-stone-500 font-light mb-6 leading-relaxed">
+            Have a question about a specific dress, lead times, or alteration services? Drop us a note below and Vicky or Sam will be in touch.
+          </p>
+
+          <form id="contact-enquiry-form" class="space-y-4">
+            <div>
+              <label class="block text-[11px] uppercase tracking-wider text-stone-700 mb-1">Your Name *</label>
+              <input type="text" name="name" required class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider text-stone-700 mb-1">Email Address *</label>
+                <input type="email" name="email" required class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900" />
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider text-stone-700 mb-1">Phone Number</label>
+                <input type="tel" name="phone" class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] uppercase tracking-wider text-stone-700 mb-1">How Can We Help? *</label>
+              <textarea
+                name="message"
+                rows="4"
+                required
+                placeholder="Ask about sample sales, ordering timelines, or booking a consultation..."
+                class="w-full border border-stone-300 p-3 text-xs bg-white focus:outline-none focus:border-stone-900"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              id="contact-submit-btn"
+              class="w-full bg-stone-900 text-white text-xs uppercase tracking-[0.2em] py-3.5 hover:bg-sage-800 transition-colors cursor-pointer"
+            >
+              Send Enquiry &rarr;
+            </button>
+          </form>
+
+          <div id="contact-form-success" class="hidden text-center py-8">
+            <h4 class="font-serif text-xl uppercase text-stone-900 mb-1">Message Received</h4>
+            <p class="text-xs text-stone-600 font-light">Thank you. Vicky or Samantha will get back to you shortly.</p>
+          </div>
+        </div>
+
+        <!-- Regional Driving Times Box (SEO Anchor for Midlands Brides) -->
+        <div class="bg-ivory-100 border border-stone-200 p-6 sm:p-7 shadow-2xs">
+          <h4 class="font-serif text-lg uppercase text-stone-900 font-light mb-3">Travelling to The Boutique</h4>
+          <p class="text-xs text-stone-600 font-light leading-relaxed mb-4">
+            Brides travel to us from across Warwickshire, Staffordshire, and the West Midlands for our exclusive 1-to-1 appointments:
+          </p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-xs">
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Tamworth</span>
+              <span class="text-[10px] text-stone-500 font-light">12 mins (A5)</span>
+            </div>
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Nuneaton</span>
+              <span class="text-[10px] text-stone-500 font-light">15 mins (A444)</span>
+            </div>
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Hinckley</span>
+              <span class="text-[10px] text-stone-500 font-light">18 mins (A5)</span>
+            </div>
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Sutton Coldfield</span>
+              <span class="text-[10px] text-stone-500 font-light">25 mins (A5/M42)</span>
+            </div>
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Coventry</span>
+              <span class="text-[10px] text-stone-500 font-light">30 mins (A444)</span>
+            </div>
+            <div class="bg-white p-3 border border-stone-200">
+              <span class="block font-medium text-stone-900">Birmingham</span>
+              <span class="text-[10px] text-stone-500 font-light">35 mins (M42)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Map Section -->
+  <section class="bg-sage-100 border-t border-sage-200 py-16 px-6 lg:px-12">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-8">
+        <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Find Us On Station Street</p>
+        <h2 class="font-serif text-2xl sm:text-3xl text-stone-900 font-light uppercase">Boutique Map Location</h2>
+      </div>
+
+      <div class="relative w-full h-[400px] border border-stone-300 shadow-md bg-stone-200 overflow-hidden">
+        <iframe
+          title="The Bridal Room Atherstone Location Map"
+          width="100%"
+          height="100%"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2424.320491038676!2d-1.548489!3d52.5746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487754b2d12e6945%3A0x6b447604bce3dfb2!2s65%20Station%20St%2C%20Atherstone%20CV9%201DB!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contextual Contact FAQs -->
+  <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Travel & Visiting</p>
+      <h2 class="font-serif text-2xl sm:text-3xl text-stone-900 font-light uppercase">Frequently Asked Questions</h2>
+    </div>
+    <FAQAccordion faqs={contactFaqs} />
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-enquiry-form') as HTMLFormElement;
+  const successBox = document.getElementById('contact-form-success');
+  const submitBtn = document.getElementById('contact-submit-btn') as HTMLButtonElement;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    // Simulate clean dispatch or hook into /api/contact
+    setTimeout(() => {
+      form.classList.add('hidden');
+      successBox?.classList.remove('hidden');
+    }, 700);
+  });
+</script>

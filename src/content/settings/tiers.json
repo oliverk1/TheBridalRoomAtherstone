@@ -1,0 +1,43 @@
+{
+  "tiers": [
+    {
+      "id": "signature",
+      "name": "Signature Suite",
+      "title": "1-to-1 Styling Consultation",
+      "duration": "1.5 Hours",
+      "price": "Complimentary / £0",
+      "priceNote": "Free consultation",
+      "isPopular": false,
+      "description": "1.5 hours of dedicated styling with exclusive boutique use. Bring up to 3 guests to explore our full made-to-order and sample collections.",
+      "perks": ["Exclusive private suite", "Up to 3 guests", "Full rail access"],
+      "buttonText": "Select Consultation",
+      "bookingParam": "Signature Bridal Styling"
+    },
+    {
+      "id": "vib",
+      "name": "VIB Suite",
+      "title": "Afternoon Tea Experience",
+      "duration": "2.0 Hours",
+      "price": "£50",
+      "priceNote": "Includes £75 gown credit voucher",
+      "isPopular": true,
+      "description": "Two luxurious hours of private boutique hire with chilled prosecco, artisan sweet treats, and a £75 credit toward your chosen wedding dress.",
+      "perks": ["Prosecco & cakes", "£75 gown voucher included", "Up to 4 guests"],
+      "buttonText": "Book VIB Suite",
+      "bookingParam": "VIB Afternoon Tea Experience"
+    },
+    {
+      "id": "accessories",
+      "name": "Finishing Touches",
+      "title": "Veils & Accessory Styling",
+      "duration": "45 Mins",
+      "price": "Complimentary",
+      "priceNote": "Free accessory styling",
+      "isPopular": false,
+      "description": "Bring your dress or try accessories alongside our floor gowns. We style custom-cut cathedral veils, tiaras, bridal combs, and jewellery.",
+      "perks": ["Bespoke veil matching", "Headpieces & jewellery", "Bring your own gown"],
+      "buttonText": "Book Accessories",
+      "bookingParam": "Accessories & Veil Styling"
+    }
+  ]
+}

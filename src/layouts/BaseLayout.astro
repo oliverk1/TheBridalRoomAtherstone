@@ -1,0 +1,47 @@
+---
+// src/layouts/BaseLayout.astro
+import '../styles/global.css';
+import MetaTags from '../components/seo/MetaTags.astro';
+import SchemaOrg from '../components/seo/SchemaOrg.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import WishlistDrawer from '../components/ui/WishlistDrawer.astro';
+import DressLightbox from '../components/ui/DressLightbox.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  faqs?: Array<{ question: string; answer: string }>;
+}
+
+const { title, description, image, faqs } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-GB" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <MetaTags {title} {description} {image} />
+    <SchemaOrg {faqs} />
+  </head>
+  <body class="bg-ivory-50 text-stone-800 font-sans antialiased selection:bg-sage-200">
+    <Header />
+    
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+    
+    <!-- Global Interactive Overlays -->
+    <WishlistDrawer />
+    <DressLightbox />
+  </body>
+</html>

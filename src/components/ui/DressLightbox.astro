@@ -1,0 +1,270 @@
+---
+// src/components/ui/DressLightbox.astro
+---
+
+<div
+  id="global-dress-lightbox"
+  class="fixed inset-0 z-60 bg-stone-950/85 backdrop-blur-xs hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Maximised Dress View"
+>
+  <div
+    id="lightbox-dialog"
+    class="relative w-full max-w-4xl bg-ivory-50 border border-stone-300 shadow-2xl scale-95 transition-transform duration-300 overflow-hidden flex flex-col md:flex-row max-h-[92vh]"
+  >
+    <!-- Close Button -->
+    <button
+      id="lightbox-close-btn"
+      type="button"
+      class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-stone-800 hover:text-black hover:bg-white shadow-md cursor-pointer transition-transform hover:scale-105"
+      aria-label="Close Maximised View"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Left: Large Image Stage -->
+    <div class="relative md:w-3/5 bg-stone-200 overflow-hidden flex items-center justify-center min-h-[340px] md:min-h-[580px] max-h-[52vh] md:max-h-[92vh]">
+      <img
+        id="lightbox-main-img"
+        src=""
+        alt="Maximised Wedding Dress"
+        class="w-full h-full object-cover object-top transition-opacity duration-300"
+      />
+
+      <!-- Category Pill -->
+      <span id="lightbox-badge" class="absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium">
+        Made to Order
+      </span>
+
+      <!-- Detail Image Toggle (If back view exists) -->
+      <div id="lightbox-view-toggle" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden items-center gap-2 bg-stone-900/80 backdrop-blur-xs p-1 rounded-full shadow-md">
+        <button id="view-front-btn" type="button" class="text-[9px] uppercase tracking-wider text-white px-3 py-1 rounded-full bg-white/25 font-medium cursor-pointer">Front</button>
+        <button id="view-back-btn" type="button" class="text-[9px] uppercase tracking-wider text-stone-300 px-3 py-1 rounded-full hover:text-white cursor-pointer">Back View</button>
+      </div>
+    </div>
+
+    <!-- Right: Editorial Details & Action Suite -->
+    <div class="md:w-2/5 p-6 sm:p-8 bg-white flex flex-col justify-between overflow-y-auto">
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <p id="lightbox-designer" class="text-[10px] tracking-[0.28em] uppercase text-stone-500 font-medium">Designer</p>
+          <span id="lightbox-silhouette" class="text-[10px] tracking-wider uppercase text-stone-400">Silhouette</span>
+        </div>
+        
+        <h3 id="lightbox-title" class="font-serif text-2xl sm:text-3xl uppercase text-stone-900 font-light leading-snug mb-3">
+          Dress Title
+        </h3>
+
+        <div class="flex items-baseline gap-3 pb-4 mb-4 border-b border-stone-200">
+          <span id="lightbox-price" class="font-serif text-xl text-sage-900 font-medium">£1,650</span>
+          <span id="lightbox-sample-size" class="text-xs text-stone-500 font-light">Sample Size 14 in Boutique</span>
+        </div>
+
+        <div class="space-y-3 text-xs text-stone-600 font-light leading-relaxed mb-6">
+          <p>
+            Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.
+          </p>
+          <ul class="space-y-1.5 text-[11px] text-stone-500">
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
+              1-to-1 unhurried styling session with Vicky & Sam
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
+              Orderable in UK sizes 2 through 32
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
+              In-house bespoke seamstress fittings
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-4 border-t border-stone-100 flex flex-col gap-2.5">
+        <a
+          id="lightbox-book-btn"
+          href="/the-experience#book"
+          class="w-full text-center bg-stone-900 text-white py-3.5 px-4 text-xs uppercase tracking-[0.2em] hover:bg-sage-800 transition-colors shadow-xs"
+        >
+          Try This On in Boutique &rarr;
+        </a>
+
+        <button
+          id="lightbox-wishlist-btn"
+          type="button"
+          class="w-full text-center border border-stone-300 py-3 px-4 text-xs uppercase tracking-[0.18em] text-stone-800 hover:border-stone-900 transition-colors cursor-pointer flex items-center justify-center gap-2"
+        >
+          <svg id="lightbox-heart-icon" class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          </svg>
+          <span id="lightbox-wishlist-text">Add to My Shortlist</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let activeDress: any = null;
+  let frontImgSrc = '';
+  let backImgSrc = '';
+
+  const modal = document.getElementById('global-dress-lightbox');
+  const dialog = document.getElementById('lightbox-dialog');
+  const closeBtn = document.getElementById('lightbox-close-btn');
+  const mainImg = document.getElementById('lightbox-main-img') as HTMLImageElement;
+  const badge = document.getElementById('lightbox-badge');
+  const designerEl = document.getElementById('lightbox-designer');
+  const silhouetteEl = document.getElementById('lightbox-silhouette');
+  const titleEl = document.getElementById('lightbox-title');
+  const priceEl = document.getElementById('lightbox-price');
+  const sampleSizeEl = document.getElementById('lightbox-sample-size');
+  const bookBtn = document.getElementById('lightbox-book-btn') as HTMLAnchorElement;
+  const wishlistBtn = document.getElementById('lightbox-wishlist-btn');
+  const heartIcon = document.getElementById('lightbox-heart-icon');
+  const wishlistText = document.getElementById('lightbox-wishlist-text');
+
+  const viewToggle = document.getElementById('lightbox-view-toggle');
+  const viewFrontBtn = document.getElementById('view-front-btn');
+  const viewBackBtn = document.getElementById('view-back-btn');
+
+  function openLightbox(dress: any) {
+    if (!modal || !mainImg) return;
+    activeDress = dress;
+
+    frontImgSrc = dress.image;
+    backImgSrc = dress.imageDetail || '';
+
+    mainImg.src = frontImgSrc;
+    mainImg.alt = `${dress.title} by ${dress.designer}`;
+
+    if (designerEl) designerEl.textContent = dress.designer;
+    if (silhouetteEl) silhouetteEl.textContent = dress.silhouette || 'Bridal Gown';
+    if (titleEl) titleEl.textContent = dress.title;
+    if (priceEl) priceEl.textContent = dress.price;
+    if (sampleSizeEl) sampleSizeEl.textContent = `In-Store Sample Size ${dress.sampleSize || '14'}`;
+
+    if (badge) {
+      const isSample = (dress.category && dress.category.toLowerCase().includes('sample')) ||
+                       (dress.price && dress.price.toLowerCase().includes('sample'));
+      badge.textContent = isSample ? 'Sample Sale' : 'Made to Order';
+      badge.className = isSample
+        ? 'absolute top-4 left-4 z-20 bg-red-900/90 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium'
+        : 'absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium';
+    }
+
+    if (bookBtn) {
+      bookBtn.href = `/the-experience#book?dress=${encodeURIComponent(dress.title + ' by ' + dress.designer)}`;
+    }
+
+    // Toggle Back View button if detail image is available
+    if (viewToggle) {
+      if (backImgSrc && backImgSrc !== frontImgSrc) {
+        viewToggle.classList.remove('hidden');
+        viewToggle.classList.add('flex');
+        setActiveView(true);
+      } else {
+        viewToggle.classList.add('hidden');
+        viewToggle.classList.remove('flex');
+      }
+    }
+
+    syncLightboxWishlistBtn();
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      modal.classList.remove('opacity-0');
+      dialog?.classList.remove('scale-95');
+      dialog?.classList.add('scale-100');
+    });
+  }
+
+  function closeLightbox() {
+    if (!modal) return;
+    modal.classList.add('opacity-0');
+    dialog?.classList.remove('scale-100');
+    dialog?.classList.add('scale-95');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      activeDress = null;
+    }, 250);
+  }
+
+  function setActiveView(isFront: boolean) {
+    if (!mainImg) return;
+    mainImg.src = isFront ? frontImgSrc : backImgSrc;
+
+    if (isFront) {
+      viewFrontBtn?.classList.add('bg-white/25', 'text-white');
+      viewFrontBtn?.classList.remove('text-stone-300');
+      viewBackBtn?.classList.remove('bg-white/25', 'text-white');
+      viewBackBtn?.classList.add('text-stone-300');
+    } else {
+      viewBackBtn?.classList.add('bg-white/25', 'text-white');
+      viewBackBtn?.classList.remove('text-stone-300');
+      viewFrontBtn?.classList.remove('bg-white/25', 'text-white');
+      viewFrontBtn?.classList.add('text-stone-300');
+    }
+  }
+
+  viewFrontBtn?.addEventListener('click', () => setActiveView(true));
+  viewBackBtn?.addEventListener('click', () => setActiveView(false));
+
+  function syncLightboxWishlistBtn() {
+    if (!activeDress) return;
+    const saved = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+    const isSaved = saved.some((item: any) => item.id === activeDress.id);
+
+    if (isSaved) {
+      heartIcon?.classList.add('fill-red-700', 'text-red-700');
+      heartIcon?.classList.remove('fill-none');
+      if (wishlistText) wishlistText.textContent = 'Saved in Your Shortlist';
+    } else {
+      heartIcon?.classList.remove('fill-red-700', 'text-red-700');
+      heartIcon?.classList.add('fill-none');
+      if (wishlistText) wishlistText.textContent = 'Add to My Shortlist';
+    }
+  }
+
+  wishlistBtn?.addEventListener('click', () => {
+    if (!activeDress) return;
+    let saved = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
+    const index = saved.findIndex((item: any) => item.id === activeDress.id);
+
+    if (index > -1) {
+      saved.splice(index, 1);
+    } else {
+      saved.push({
+        id: activeDress.id,
+        title: activeDress.title,
+        designer: activeDress.designer,
+        price: activeDress.price,
+        image: activeDress.image,
+        category: activeDress.category
+      });
+    }
+
+    localStorage.setItem('tbr_wishlist', JSON.stringify(saved));
+    window.dispatchEvent(new Event('wishlist-updated'));
+    syncLightboxWishlistBtn();
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeLightbox();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeLightbox();
+    }
+  });
+
+  // Global listener for card clicks
+  (window as any).tbrOpenDressLightbox = openLightbox;
+</script>
