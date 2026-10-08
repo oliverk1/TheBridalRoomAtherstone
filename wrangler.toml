@@ -1,0 +1,8 @@
+# wrangler.toml
+name = "thebridalroomatherstone"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "TBR_BOOKING_HOLDS"
+id = "TBR_BOOKING_HOLDS_ID" # Replace with real ID from Cloudflare dashboard in production

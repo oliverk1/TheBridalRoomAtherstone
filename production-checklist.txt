@@ -1,0 +1,6 @@
+Set Cloudflare ID in wrangler.toml
+Set .env variables
+Set Google Cloud Project with Google Calendar API
+Create service account and add to Google Calendar
+Create Resend account
+Go to Domains inside Resend, add thebridalroomatherstone.co.uk, and copy the 3 DNS records (DKIM, SPF, MX) into your Cloudflare DNS table. Once verified, you can send emails from appointments@thebridalroomatherstone.co.uk to any bride.
