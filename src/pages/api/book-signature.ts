@@ -81,10 +81,13 @@ ${shortlist || 'None'}
       `.trim();
     }
 
-    // 3. Google Calendar Insert
+    // 3. Google Calendar Insert with Colors: 9 = Blue (Signature), 5 = Yellow (Accessories)
     const CAL_ID = import.meta.env.GOOGLE_CALENDAR_ID;
     const CLIENT_EMAIL = import.meta.env.GOOGLE_CLIENT_EMAIL;
     const PRIVATE_KEY = import.meta.env.GOOGLE_PRIVATE_KEY;
+
+    // Blue (9) for Signature; Yellow (5) for Accessories
+    const calendarColor = isAccessory ? '5' : '9';
 
     if (CAL_ID && CLIENT_EMAIL && PRIVATE_KEY && !PRIVATE_KEY.includes('...')) {
       try {
@@ -94,7 +97,8 @@ ${shortlist || 'None'}
           startISO,
           endISO,
           attendeeEmail: email,
-          phone
+          phone,
+          colorId: calendarColor
         });
       } catch (calErr) {
         console.error('[Book Signature] Calendar event creation failed:', calErr);

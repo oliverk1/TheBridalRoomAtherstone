@@ -67,7 +67,7 @@ WISHLIST SHORTLIST:
 ${meta.shortlist || 'None'}
     `.trim();
 
-    // 4. Insert into Google Calendar
+    // 4. Insert into Google Calendar with Color 10 = Basil (Green for VIB)
     const CAL_ID = import.meta.env.GOOGLE_CALENDAR_ID;
     const CLIENT_EMAIL = import.meta.env.GOOGLE_CLIENT_EMAIL;
     const PRIVATE_KEY = import.meta.env.GOOGLE_PRIVATE_KEY;
@@ -80,9 +80,10 @@ ${meta.shortlist || 'None'}
           startISO,
           endISO,
           attendeeEmail: meta.email,
-          phone: meta.phone
+          phone: meta.phone,
+          colorId: '10' // 10 = Green
         });
-        console.log(`[Stripe Verification] Google Calendar 2-hour event created for ${meta.name}`);
+        console.log(`[Stripe Verification] Google Calendar 2-hour green event created for ${meta.name}`);
       } catch (calErr) {
         console.error('[Stripe Verification] Calendar insert failed:', calErr);
       }

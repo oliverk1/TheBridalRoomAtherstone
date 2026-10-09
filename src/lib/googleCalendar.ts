@@ -50,24 +50,30 @@ export async function insertCalendarEvent(
     endISO: string;
     attendeeEmail: string;
     phone: string;
+    colorId?: string; // Google Calendar Event Color: 9=Blue, 10=Green, 5=Yellow
   }
 ) {
   const token = await getGoogleAccessToken(clientEmail, privateKey);
 
-  // NOTE: 'attendees' is omitted to avoid Google Service Account 403 forbidden error.
+  const payload: Record<string, any> = {
+    summary: event.summary,
+    description: `${event.description}\n\nBride Email: ${event.attendeeEmail}\nTelephone: ${event.phone}`,
+    start: { dateTime: event.startISO, timeZone: 'Europe/London' },
+    end: { dateTime: event.endISO, timeZone: 'Europe/London' },
+    location: '65 Station Street, Atherstone, Warwickshire CV9 1DB'
+  };
+
+  if (event.colorId) {
+    payload.colorId = event.colorId;
+  }
+
   const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      summary: event.summary,
-      description: `${event.description}\n\nBride Email: ${event.attendeeEmail}\nTelephone: ${event.phone}`,
-      start: { dateTime: event.startISO, timeZone: 'Europe/London' },
-      end: { dateTime: event.endISO, timeZone: 'Europe/London' },
-      location: '65 Station Street, Atherstone, Warwickshire CV9 1DB'
-    })
+    body: JSON.stringify(payload)
   });
 
   if (!res.ok) {

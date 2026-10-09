@@ -269,11 +269,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
           <div>
             <label class="block text-[10px] uppercase tracking-wider text-stone-700 mb-1">Guests Attending *</label>
             <select name="guestCount" id="guest-count-select" required class="w-full border border-stone-300 p-2.5 text-xs bg-white rounded-xs focus:border-stone-900 focus:outline-none">
-              <option value="Just the bride">Just the bride</option>
-              <option value="Bride +1">Bride + 1 guest</option>
-              <option value="Bride +2">Bride + 2 guests</option>
-              <option value="Bride +3 (MAX allowed)" id="guest-opt-3">Bride + 3 guests (Max allowed)</option>
+              <!-- Populated dynamically based on selected tier -->
             </select>
+            <span id="guest-count-hint" class="text-[9px] text-stone-400 block mt-0.5"></span>
           </div>
         </div>
       </div>
@@ -407,10 +405,26 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     </div>
   </div>
 
+  <!-- Payment Failure Notice -->
+  <div id="booking-failed" class="hidden text-center p-8 sm:p-12 bg-red-50 border border-red-200 rounded-xs">
+    <div class="w-12 h-12 bg-red-100 text-red-800 rounded-full flex items-center justify-center mx-auto mb-3">
+      <svg class="w-6 h-6 stroke-current fill-none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </div>
+    <h3 class="font-serif text-2xl uppercase font-light text-stone-900 mb-2">Deposit Payment Unsuccessful</h3>
+    <p id="booking-failed-message" class="text-xs text-stone-600 font-light max-w-md mx-auto leading-relaxed mb-5">
+      Your card was not charged and your slot has been released. You may choose a time slot and try again whenever you are ready.
+    </p>
+    <button type="button" id="btn-retry-booking" class="bg-stone-900 text-white text-xs uppercase tracking-widest px-6 py-3 hover:bg-stone-800 transition-colors">
+      Return to Calendar
+    </button>
+  </div>
+
 </div>
 
 <script>
-  // DOM References
+  // ==========================================
+  // DOM ELEMENT REFERENCES
+  // ==========================================
   const s1 = document.getElementById('booking-step-1');
   const s2 = document.getElementById('booking-step-2');
   const s3 = document.getElementById('booking-step-3');
@@ -421,7 +435,6 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
 
   const sectionDress = document.getElementById('section-dress-styling');
   const sectionAccessory = document.getElementById('section-accessory-styling');
-  const guestOpt3 = document.getElementById('guest-opt-3') as HTMLOptionElement;
 
   const bookDateInput = document.getElementById('book-date') as HTMLInputElement;
   const timeInput = document.getElementById('selected-time-input') as HTMLInputElement;
@@ -440,6 +453,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
   const emailError = document.getElementById('email-error');
   const phoneError = document.getElementById('phone-error');
 
+  const monthLabel = document.getElementById('calendar-month-label');
+  const daysGrid = document.getElementById('calendar-days-grid');
+
   if (inputWeddingDate) {
     inputWeddingDate.min = new Date().toISOString().split('T')[0];
   }
@@ -448,13 +464,13 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
   let selectedIsoDate = '';
   let countdownTimer: number;
 
-  // Header-Aware Smooth Scrolling Helper
+  // Header-Aware Precision Scrolling
   function scrollToWidget() {
     const widget = document.getElementById('book');
     if (!widget) return;
     const header = document.querySelector('header');
-    const headerHeight = header ? header.offsetHeight : 80;
-    const targetTop = widget.getBoundingClientRect().top + window.scrollY - (headerHeight + 24);
+    const headerOffset = header ? header.offsetHeight : 80;
+    const targetTop = widget.getBoundingClientRect().top + window.scrollY - (headerOffset + 24);
     window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
   }
 
@@ -467,7 +483,44 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     return getSelectedTier().includes('Accessory') || getSelectedTier().includes('Veil');
   }
 
-  // Step 1 -> Step 2
+  // Dynamic Guest Count Updater (VIB = up to 4; Signature = up to 3; Accessories = up to 2)
+  function updateGuestOptions() {
+    const guestSelect = document.getElementById('guest-count-select') as HTMLSelectElement;
+    const guestHint = document.getElementById('guest-count-hint');
+    if (!guestSelect) return;
+
+    const tier = getSelectedTier();
+
+    if (tier.includes('VIB')) {
+      guestSelect.innerHTML = `
+        <option value="Just the bride">Just the bride</option>
+        <option value="Bride +1">Bride + 1 guest</option>
+        <option value="Bride +2">Bride + 2 guests</option>
+        <option value="Bride +3">Bride + 3 guests</option>
+        <option value="Bride +4 (MAX allowed for VIB)">Bride + 4 guests (MAX allowed for VIB)</option>
+      `;
+      if (guestHint) guestHint.textContent = 'VIB Suite comfortably hosts up to 4 guests';
+    } else if (isAccessoryTier()) {
+      guestSelect.innerHTML = `
+        <option value="Just the bride">Just the bride</option>
+        <option value="Bride +1">Bride + 1 guest</option>
+        <option value="Bride +2 (MAX allowed)">Bride + 2 guests (MAX allowed)</option>
+      `;
+      if (guestHint) guestHint.textContent = 'Accessory fittings comfortably host up to 2 guests';
+    } else {
+      guestSelect.innerHTML = `
+        <option value="Just the bride">Just the bride</option>
+        <option value="Bride +1">Bride + 1 guest</option>
+        <option value="Bride +2">Bride + 2 guests</option>
+        <option value="Bride +3 (MAX allowed)">Bride + 3 guests (MAX allowed)</option>
+      `;
+      if (guestHint) guestHint.textContent = 'Signature suite comfortably hosts up to 3 guests';
+    }
+  }
+
+  // ==========================================
+  // STEP 1 -> STEP 2 NAVIGATION
+  // ==========================================
   document.getElementById('btn-to-step-2')?.addEventListener('click', () => {
     s1?.classList.add('hidden');
     s2?.classList.remove('hidden');
@@ -485,10 +538,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     scrollToWidget();
   });
 
-  // Calendar Renderer
-  const monthLabel = document.getElementById('calendar-month-label');
-  const daysGrid = document.getElementById('calendar-days-grid');
-
+  // ==========================================
+  // CALENDAR RENDERER
+  // ==========================================
   function renderCalendar() {
     if (!daysGrid || !monthLabel) return;
     daysGrid.innerHTML = '';
@@ -552,7 +604,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     renderCalendar();
   });
 
-  // Slot Fetcher
+  // ==========================================
+  // FETCH SLOTS FOR SELECTED DATE
+  // ==========================================
   async function fetchSlotsForDate(dateStr: string, dateObj: Date) {
     if (!slotsContainer || !selectedDateDisplay) return;
 
@@ -613,7 +667,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     }
   }
 
-  // Step 2 -> Step 3
+  // ==========================================
+  // STEP 2 -> STEP 3 (LOCK SLOT FOR 10 MINS)
+  // ==========================================
   btnToStep3?.addEventListener('click', async () => {
     btnToStep3.disabled = true;
     btnToStep3.textContent = 'Locking...';
@@ -637,15 +693,17 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       }
     } catch {}
 
+    // Adapt Questionnaire View
     if (isAccessoryTier()) {
       sectionDress?.classList.add('hidden');
       sectionAccessory?.classList.remove('hidden');
-      if (guestOpt3) guestOpt3.disabled = true;
     } else {
       sectionDress?.classList.remove('hidden');
       sectionAccessory?.classList.add('hidden');
-      if (guestOpt3) guestOpt3.disabled = false;
     }
+
+    // Populate dynamic guest count
+    updateGuestOptions();
 
     s2?.classList.add('hidden');
     s3?.classList.remove('hidden');
@@ -656,6 +714,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     const summaryLabel = document.getElementById('summary-slot-label');
     if (summaryLabel) summaryLabel.textContent = `${date} at ${time}`;
 
+    // 10-Minute Countdown Clock
     let remainingSeconds = 600;
     const countdownEl = document.getElementById('hold-countdown');
     clearInterval(countdownTimer);
@@ -672,6 +731,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       if (countdownEl) countdownEl.textContent = `${mins}:${secs}`;
     }, 1000);
 
+    // Attached Wishlist
     const wishlist = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
     const textarea = document.getElementById('booking-wishlist-input') as HTMLTextAreaElement;
     if (textarea) {
@@ -686,7 +746,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     }
   });
 
-  // Step 3 -> Step 2 (Release Hold Immediately)
+  // ==========================================
+  // STEP 3 -> STEP 2 (RELEASE HOLD IMMEDIATELY)
+  // ==========================================
   document.getElementById('btn-back-to-2')?.addEventListener('click', async () => {
     clearInterval(countdownTimer);
     const date = bookDateInput.value;
@@ -709,6 +771,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     if (date) fetchSlotsForDate(date, new Date(date));
   });
 
+  // Toggle Styles Drawer
   const toggleStylesBtn = document.getElementById('toggle-styles-btn');
   const stylesDrawer = document.getElementById('styles-drawer');
   const stylesToggleIcon = document.getElementById('styles-toggle-icon');
@@ -727,7 +790,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     return /^(?:0|\+44)[1-9]\d{8,10}$/.test(cleaned);
   }
 
-  // Final Form Submission
+  // ==========================================
+  // FINAL SUBMISSION HANDLER
+  // ==========================================
   const form = document.getElementById('native-booking-form') as HTMLFormElement;
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -827,32 +892,42 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     const bookingStatus = urlParams.get('booking');
     const sessionId = urlParams.get('session_id');
 
-    if (bookingStatus === 'success') {
+    if (bookingStatus === 'success' && sessionId) {
       const formEl = document.getElementById('native-booking-form');
       const successBox = document.getElementById('booking-success');
-      
+      const failedBox = document.getElementById('booking-failed');
+
       formEl?.classList.add('hidden');
-      successBox?.classList.remove('hidden');
+      scrollToWidget();
 
-      // Scroll comfortably below the sticky header
-      setTimeout(scrollToWidget, 150);
+      try {
+        const res = await fetch(`/api/verify-checkout?session_id=${sessionId}`);
+        const data = await res.json();
 
-      if (sessionId) {
-        try {
-          const res = await fetch(`/api/verify-checkout?session_id=${sessionId}`);
-          const data = await res.json();
-          if (data.success) {
-            console.log('[Stripe Verification] Payment confirmed, calendar synced, and branded email delivered.');
-          }
-        } catch (e) {
-          console.error('[Stripe Verification] Fetch error:', e);
+        if (data.success) {
+          successBox?.classList.remove('hidden');
+        } else {
+          failedBox?.classList.remove('hidden');
         }
+      } catch (e) {
+        failedBox?.classList.remove('hidden');
       }
     } else if (bookingStatus === 'cancelled') {
-      alert('Your payment was cancelled and the slot has been released back to the calendar.');
-      window.history.replaceState({}, document.title, window.location.pathname);
+      const formEl = document.getElementById('native-booking-form');
+      const failedBox = document.getElementById('booking-failed');
+      const failedMsg = document.getElementById('booking-failed-message');
+
+      formEl?.classList.add('hidden');
+      failedBox?.classList.remove('hidden');
+      if (failedMsg) {
+        failedMsg.textContent = 'Your checkout was cancelled before payment was completed. The slot has been released back to the calendar.';
+      }
       scrollToWidget();
     }
+
+    document.getElementById('btn-retry-booking')?.addEventListener('click', () => {
+      window.location.href = '/the-experience#book';
+    });
   }
 
   // Execute on page load
