@@ -1,0 +1,48 @@
+# public/_redirects
+# 301 Permanent Redirects for The Bridal Room Atherstone SEO Migration
+
+# 1. Dress & Collection Pages -> /dresses
+/dresses/*                      /dresses                301
+/designers                      /dresses                301
+/justinalexander                /dresses                301
+/justin-alexander               /dresses                301
+/sincerity                      /dresses                301
+/sinceritybridal                /dresses                301
+/adorebyja                      /dresses                301
+/adore                          /dresses                301
+/phoenixdaniellecouture         /dresses                301
+/phoenix-gowns                  /dresses                301
+/sample-sale                    /dresses                301
+/samplesale                     /dresses                301
+/sale                           /dresses                301
+/accessories                    /dresses                301
+/veils                          /dresses                301
+
+# 2. Appointments & Booking Pages -> /the-experience
+/book-online                    /the-experience#book    301
+/bookingpage                    /the-experience#book    301
+/appointment-notes              /the-experience         301
+/appointments                   /the-experience         301
+/vib-appointment                /the-experience         301
+/vib                            /the-experience         301
+/styling-appointments           /the-experience         301
+/when-should-i-start-looking    /the-experience         301
+/fitting-guidance               /the-experience         301
+
+# 3. Location, Parking & Contact -> /contact
+/contact-us                     /contact                301
+/find-us                        /contact                301
+/visit                          /contact                301
+/location                       /contact                301
+/parking                        /contact                301
+/opening-hours                  /contact                301
+
+# 4. Old Blog / Jobs / Archive -> /about or /
+/about-us                       /about                  301
+/our-story                      /about                  301
+/meet-the-team                  /about                  301
+/jobs                           /about                  301
+/vacancies                      /about                  301
+/blog                           /                       301
+/news                           /                       301
+/shop                           /dresses                301
