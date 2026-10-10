@@ -12,5 +12,27 @@
       "question": "Where can I park when visiting the boutique?",
       "answer": "Free 2-hour parking is located at Cattle Market Car Park, just a 1-minute walk from 65 Station Street (RingGo location code 3611082)."
     }
+  ],
+  "experienceFaqs": [
+    {
+      "question": "What underwear should I wear to my bridal fitting?",
+      "answer": "We strongly recommend wearing seamless, nude-toned underwear. A nude strapless bra is helpful, though many of our Justin Alexander and Sincerity gowns feature built-in boning and inner corsetry, meaning most brides find they don't need a bra at all. We provide pedestals, so feel free to bring heels of a similar height to what you plan to wear on your wedding day."
+    },
+    {
+      "question": "Can I wear fake tan to my appointment?",
+      "answer": "To preserve our pristine sample gowns and delicate silks, we kindly ask that you do not wear fresh fake tan, heavy bronzers, or freshly applied body oils on the day of your appointment."
+    },
+    {
+      "question": "Why do you recommend a maximum of 3 guests?",
+      "answer": "Our boudoir styling suites are intimate, luxurious spaces designed to keep you relaxed. Over 15 years in bridal styling, we've found that having 2 to 3 trusted VIPs (mothers, sisters, maids of honour) provides loving, constructive support without overwhelming you with competing opinions."
+    },
+    {
+      "question": "Can I bring young children to the boutique?",
+      "answer": "We want your appointment to be entirely about you. Bridal boutiques contain pins, delicate laces, and high pedestals, which can be stressful for toddlers. While babies in prams are welcome, we generally suggest leaving young children with loved ones so you can sip tea, relax, and fully enjoy the moment."
+    },
+    {
+      "question": "What is your cancellation or rescheduling policy?",
+      "answer": "We understand plans change. For our complimentary Signature styling appointments, we kindly request at least 48 hours notice so we can offer the private suite to another bride on our waiting list. For VIB Afternoon Tea appointments, rescheduling is available with 72 hours notice."
+    }
   ]
 }

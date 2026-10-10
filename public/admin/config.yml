@@ -62,16 +62,21 @@ collections:
 
   # 3. FREQUENTLY ASKED QUESTIONS (SINGLETON)
   - name: "faqs"
-    label: "Contextual FAQs"
+    label: "Website FAQs"
     files:
-      - label: "Dress & Appointment FAQs"
+      - label: "Frequently Asked Questions"
         name: "all_faqs"
         file: "src/content/settings/faqs.json"
         fields:
-          - label: "Questions & Answers"
-            name: "questions"
+          - label: "Homepage FAQs"
+            name: "homepageFaqs"
             widget: "list"
             fields:
-              - { label: "Category", name: "category", widget: "select", options: ["Dresses & Ordering", "Fittings & Etiquette", "Alterations & Payments"] }
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }
+          - label: "The Experience & Fitting FAQs"
+            name: "experienceFaqs"
+            widget: "list"
+            fields:
               - { label: "Question", name: "question", widget: "string" }
               - { label: "Answer", name: "answer", widget: "text" }
