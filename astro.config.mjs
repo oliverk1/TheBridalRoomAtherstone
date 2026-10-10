@@ -4,10 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  trailingSlash: 'never',
-  build: {
-    format: 'file',
-  },
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
