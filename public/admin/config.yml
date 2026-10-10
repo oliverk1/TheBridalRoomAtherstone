@@ -46,6 +46,19 @@ collections:
           - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
           - { label: "Banner Text", name: "text", widget: "string" }
           - { label: "Link URL (Optional)", name: "link", widget: "string", required: false }
+      
+      - label: "Bride Testimonials & Quotes"
+        name: "quotes"
+        file: "src/content/settings/quotes.json"
+        fields:
+          - label: "Bride Quotes"
+            name: "quotes"
+            widget: "list"
+            fields:
+              - { label: "Quote Text", name: "quote", widget: "text" }
+              - { label: "Bride Name", name: "bride", widget: "string" }
+              - { label: "Designer / Gown", name: "designer", widget: "string" }
+              - { label: "Wedding Location", name: "location", widget: "string" }
 
   # 3. FREQUENTLY ASKED QUESTIONS (SINGLETON)
   - name: "faqs"

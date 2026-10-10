@@ -2,6 +2,7 @@
 // src/pages/the-experience.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookingEngine from '../components/ui/BookingEngine.astro';
+import QuoteTicker from '../components/ui/QuoteTicker.astro';
 import FAQAccordion from '../components/ui/FAQAccordion.astro';
 
 const experienceFaqs = [
@@ -54,27 +55,6 @@ const specialFeatures = [
     alt: "Chilled prosecco and sweet treats afternoon tea bridal appointment",
     description: "Turn your search into an unforgettable celebration. Enjoy 2 full hours of styling with chilled prosecco, artisan sweet treats, and a £75 voucher credited to your dress.",
     footerHighlight: "Includes £75 Gown Voucher"
-  }
-];
-
-const brideStories = [
-  {
-    id: "story-card-0",
-    quote: "Having the entire shop locked just for my mum, sister and me made all the difference. No other brides watching, no rush. Vicky knew exactly what suited my figure within ten minutes.",
-    bride: "Charlotte &bull; Justin Alexander Bride",
-    date: "Warwickshire Wedding"
-  },
-  {
-    id: "story-card-1",
-    quote: "The VIB Afternoon Tea was the highlight of our wedding planning! The prosecco and cakes were delicious, and having the £75 credited straight to my dream dress was an amazing touch.",
-    bride: "Sophie &bull; Sincerity Bridal Bride",
-    date: "Staffordshire Wedding"
-  },
-  {
-    id: "story-card-2",
-    quote: "I was so nervous before my appointment as a size 16. Vicky and Sam made me feel so calm and beautiful. The pedestals and lighting showed off the train perfectly.",
-    bride: "Eleanor &bull; Phoenix Gowns Bride",
-    date: "Cotswolds Wedding"
   }
 ];
 
@@ -191,8 +171,11 @@ const etiquetteGuidelines = [
     </div>
   </section>
 
-  <!-- 3. CONSULTATION TIERS -->
-  <section id="tiers" class="scroll-mt-28 py-20 sm:py-28 px-6 lg:px-12 bg-ivory-100/70 border-y border-stone-200 overflow-hidden">
+  <!-- 3. REAL BRIDE QUOTES TICKER (Directly Below Picture Cards) -->
+  <QuoteTicker />
+
+  <!-- 4. CONSULTATION TIERS -->
+  <section id="tiers" class="scroll-mt-28 py-20 sm:py-28 px-6 lg:px-12 bg-ivory-100/70 border-b border-stone-200 overflow-hidden">
     <div class="max-w-6xl mx-auto">
       
       <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
@@ -322,47 +305,8 @@ const etiquetteGuidelines = [
     </div>
   </section>
 
-  <!-- 4. REAL BRIDE PROOF -->
-  <section class="py-20 sm:py-24 px-6 lg:px-12 bg-ivory-50 overflow-hidden">
-    <div class="max-w-6xl mx-auto">
-      
-      <div class="text-center max-w-xl mx-auto mb-12 sm:mb-16">
-        <p class="text-[10px] tracking-[0.3em] uppercase text-stone-500 font-light mb-1">Loved by Warwickshire Brides</p>
-        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Real Brides &bull; Real Memories</h2>
-      </div>
-
-      <div
-        id="stories-track"
-        class="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pt-2 pb-6 -mx-6 px-8 md:mx-0 md:px-0 items-stretch"
-      >
-        {brideStories.map((item) => (
-          <div
-            id={item.id}
-            class="w-[82vw] max-w-[320px] xs:w-[290px] md:w-auto md:max-w-none snap-center shrink-0 md:shrink bg-white p-7 sm:p-8 border border-stone-200/90 shadow-xs flex flex-col justify-between rounded-xs relative"
-          >
-            <svg class="w-6 h-6 text-sage-800 mb-4 fill-current opacity-30" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-            <p class="font-serif text-sm sm:text-[15px] text-stone-800 font-light leading-relaxed italic mb-6">
-              "{item.quote}"
-            </p>
-            <div class="pt-4 border-t border-stone-100">
-              <strong class="text-xs uppercase tracking-wider text-stone-900 block font-medium" set:html={item.bride}></strong>
-              <span class="text-[10px] text-stone-400 font-light block mt-0.5">{item.date}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div class="flex md:hidden justify-center items-center gap-2 mt-2" id="stories-dots">
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="0" aria-label="Quote 1"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-sage-800 w-4" data-index="1" aria-label="Quote 2"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="2" aria-label="Quote 3"></button>
-      </div>
-
-    </div>
-  </section>
-
   <!-- 5. EMBEDDED NATIVE BOOKING ENGINE -->
-  <section class="relative bg-sage-200 py-16 sm:py-24 px-6 border-y border-sage-300 overflow-hidden">
+  <section class="relative bg-sage-200 py-16 sm:py-24 px-6 border-b border-sage-300 overflow-hidden">
     
     <img
       src="/images/leaf.svg"
@@ -424,7 +368,9 @@ const etiquetteGuidelines = [
 
                 {item.id === "etiquette-card-1" && (
                   <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93M12 6a6 6 0 100 12 6 6 0 000-12z" />
+                    <path d="M12 3a6 6 0 0 0-6 6c0 4 6 11 6 11s6-7 6-11a6 6 0 0 0-6-6z" />
+                    <circle cx="12" cy="9" r="2.5" />
+                    <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.8" />
                   </svg>
                 )}
 
@@ -467,7 +413,7 @@ const etiquetteGuidelines = [
         <button class="h-2 rounded-full transition-all duration-300 bg-sage-800 w-4" data-index="0" aria-label="Guideline 1"></button>
         <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="1" aria-label="Guideline 2"></button>
         <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="2" aria-label="Guideline 3"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="3" aria-label="Guideline 4"></button>
+        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="4" aria-label="Guideline 4"></button>
       </div>
 
     </div>
@@ -534,10 +480,8 @@ const etiquetteGuidelines = [
 
   setupMobileCarousel('special-track', 'special-dots', 1);
   setupMobileCarousel('tiers-track-exp', 'tiers-dots-exp', 1);
-  setupMobileCarousel('stories-track', 'stories-dots', 1);
   setupMobileCarousel('etiquette-track', 'etiquette-dots', 0);
 
-  // Dynamic Scroll Helper taking into account the sticky header
   function scrollToScheduler() {
     const bookTarget = document.getElementById('book');
     if (!bookTarget) return;
@@ -547,37 +491,33 @@ const etiquetteGuidelines = [
     window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
   }
 
-  // Selects Tier AND advances directly to Step 2 (Calendar)
-  function selectTierAndOpenCalendar(tierName: string) {
+  function selectTierInScheduler(tierName: string) {
     const radio = document.querySelector(`input[name="experience"][value="${tierName}"]`) as HTMLInputElement;
     if (radio) {
       radio.checked = true;
       radio.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    // Trigger Step 2 (Calendar) directly inside BookingEngine
     const btnToStep2 = document.getElementById('btn-to-step-2') as HTMLButtonElement;
     if (btnToStep2) {
       btnToStep2.click();
     }
   }
 
-  // Handle URL Query Params on Load (e.g. ?tier=VIB+Afternoon+Tea+Experience)
   const urlParams = new URLSearchParams(window.location.search);
   const tierParam = urlParams.get('tier');
   if (tierParam && !urlParams.get('booking')) {
     setTimeout(() => {
-      selectTierAndOpenCalendar(tierParam);
+      selectTierInScheduler(tierParam);
       scrollToScheduler();
     }, 150);
   }
 
-  // Handle On-Page Tier Card Button Clicks
   document.querySelectorAll('.tier-trigger-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const targetTier = (btn as HTMLElement).dataset.selectTier;
       if (targetTier) {
-        selectTierAndOpenCalendar(targetTier);
+        selectTierInScheduler(targetTier);
         setTimeout(scrollToScheduler, 50);
       }
     });

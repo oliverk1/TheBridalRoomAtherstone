@@ -1,0 +1,224 @@
+---
+// src/components/ui/QuoteTicker.astro
+import defaultQuotesData from '../../content/settings/quotes.json';
+
+interface QuoteItem {
+  quote: string;
+  bride: string;
+  designer: string;
+  location: string;
+}
+
+interface Props {
+  quotes?: QuoteItem[];
+}
+
+const { quotes = defaultQuotesData.quotes } = Astro.props;
+---
+
+<div
+  id="quote-ticker-wrapper"
+  class="bg-sage-100 border-y border-sage-200 py-8 sm:py-12 px-6 relative overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y"
+>
+  <div class="max-w-4xl mx-auto overflow-hidden text-center">
+    
+    <!-- Decorative Quote Mark -->
+    <svg class="w-7 h-7 mx-auto mb-3 text-sage-800 opacity-30 fill-current" viewBox="0 0 24 24">
+      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+    </svg>
+
+    <!-- Carousel Track -->
+    <div id="quote-ticker-track" class="flex w-full will-change-transform">
+      <!-- Clone of Last Item (Index 0) -->
+      <div class="w-full shrink-0 px-4 sm:px-8" aria-hidden="true">
+        <p class="font-serif italic text-sm sm:text-base md:text-lg text-stone-800 font-light leading-relaxed max-w-2xl mx-auto">
+          "{quotes[quotes.length - 1].quote}"
+        </p>
+        <div class="mt-3.5">
+          <span class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-stone-700 font-medium block">
+            {quotes[quotes.length - 1].bride} &bull; {quotes[quotes.length - 1].designer}
+          </span>
+          <span class="text-[9px] text-stone-500 uppercase tracking-widest font-light block mt-0.5">
+            {quotes[quotes.length - 1].location}
+          </span>
+        </div>
+      </div>
+
+      <!-- Real Items (Indices 1..N) -->
+      {quotes.map((q) => (
+        <div class="w-full shrink-0 px-4 sm:px-8">
+          <p class="font-serif italic text-sm sm:text-base md:text-lg text-stone-800 font-light leading-relaxed max-w-2xl mx-auto">
+            "{q.quote}"
+          </p>
+          <div class="mt-3.5">
+            <span class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-stone-700 font-medium block">
+              {q.bride} &bull; {q.designer}
+            </span>
+            <span class="text-[9px] text-stone-500 uppercase tracking-widest font-light block mt-0.5">
+              {q.location}
+            </span>
+          </div>
+        </div>
+      ))}
+
+      <!-- Clone of First Item (Index N+1) -->
+      <div class="w-full shrink-0 px-4 sm:px-8" aria-hidden="true">
+        <p class="font-serif italic text-sm sm:text-base md:text-lg text-stone-800 font-light leading-relaxed max-w-2xl mx-auto">
+          "{quotes[0].quote}"
+        </p>
+        <div class="mt-3.5">
+          <span class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-stone-700 font-medium block">
+            {quotes[0].bride} &bull; {quotes[0].designer}
+          </span>
+          <span class="text-[9px] text-stone-500 uppercase tracking-widest font-light block mt-0.5">
+            {quotes[0].location}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Indicator Dots -->
+  <div class="flex justify-center items-center gap-2 mt-5" id="quote-ticker-dots">
+    {quotes.map((_, i) => (
+      <button
+        class={`h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-sage-800 w-4' : 'bg-stone-300 w-2'}`}
+        data-index={i}
+        aria-label={`View quote ${i + 1}`}
+      ></button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const wrapper = document.getElementById('quote-ticker-wrapper');
+  const track = document.getElementById('quote-ticker-track');
+  const dots = document.querySelectorAll('#quote-ticker-dots button');
+
+  const totalUnique = dots.length;
+  const totalSlides = totalUnique + 2;
+
+  let currentIndex = 1;
+  let isDragging = false;
+  let startX = 0;
+  let slideTimer: number;
+
+  function updateDots(activeDot: number) {
+    dots.forEach((dot, i) => {
+      if (i === activeDot) {
+        dot.classList.add('bg-sage-800', 'w-4');
+        dot.classList.remove('bg-stone-300', 'w-2');
+      } else {
+        dot.classList.remove('bg-sage-800', 'w-4');
+        dot.classList.add('bg-stone-300', 'w-2');
+      }
+    });
+  }
+
+  function setPosition(animate = true) {
+    if (!track) return;
+    track.style.transition = animate ? 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    const normalized = (currentIndex - 1 + totalUnique) % totalUnique;
+    updateDots(normalized);
+  }
+
+  function nextSlide() {
+    if (currentIndex >= totalSlides - 1) {
+      currentIndex = 1;
+      setPosition(false);
+      if (track) void track.offsetHeight;
+    }
+    currentIndex++;
+    setPosition(true);
+  }
+
+  function prevSlide() {
+    if (currentIndex <= 0) {
+      currentIndex = totalUnique;
+      setPosition(false);
+      if (track) void track.offsetHeight;
+    }
+    currentIndex--;
+    setPosition(true);
+  }
+
+  function resetTimer() {
+    clearInterval(slideTimer);
+    if (!document.hidden) {
+      slideTimer = window.setInterval(nextSlide, 7500);
+    }
+  }
+
+  if (track) {
+    track.addEventListener('transitionend', () => {
+      if (currentIndex >= totalSlides - 1) {
+        currentIndex = 1;
+        setPosition(false);
+      } else if (currentIndex <= 0) {
+        currentIndex = totalUnique;
+        setPosition(false);
+      }
+    });
+  }
+
+  if (wrapper) {
+    setPosition(false);
+    resetTimer();
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPosition(true);
+        resetTimer();
+      });
+    });
+
+    // Pointer Drag / Swipe Physics (Touch + Desktop Mouse)
+    wrapper.addEventListener('pointerdown', (e: PointerEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      clearInterval(slideTimer);
+      if (track) track.style.transition = 'none';
+      try { wrapper.setPointerCapture(e.pointerId); } catch {}
+    });
+
+    wrapper.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging || !track) return;
+      const diffX = e.clientX - startX;
+      const movePercent = (diffX / wrapper.offsetWidth) * 100;
+      track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${movePercent}%))`;
+    });
+
+    const handlePointerEnd = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch {}
+
+      const diffX = e.clientX - startX;
+      const threshold = 40;
+
+      if (diffX < -threshold) {
+        nextSlide();
+      } else if (diffX > threshold) {
+        prevSlide();
+      } else {
+        setPosition(true);
+      }
+      resetTimer();
+    };
+
+    wrapper.addEventListener('pointerup', handlePointerEnd);
+    wrapper.addEventListener('pointercancel', handlePointerEnd);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(slideTimer);
+      } else {
+        resetTimer();
+      }
+    });
+  }
+</script>
