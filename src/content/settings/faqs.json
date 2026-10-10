@@ -34,5 +34,41 @@
       "question": "What is your cancellation or rescheduling policy?",
       "answer": "We understand plans change. For our complimentary Signature styling appointments, we kindly request at least 48 hours notice so we can offer the private suite to another bride on our waiting list. For VIB Afternoon Tea appointments, rescheduling is available with 72 hours notice."
     }
+  ],
+  "aboutFaqs": [
+    {
+      "question": "How long has The Bridal Room been open in Atherstone?",
+      "answer": "The Bridal Room has welcomed brides to our Station Street boutique since 2013. Vicky brings over 29 years of fashion retail and 15 years of dedicated bridal experience, giving brides exceptional technical expertise on cut, sizing, and corsetry."
+    },
+    {
+      "question": "Why does Vicky's wedding photography background matter?",
+      "answer": "Before dedicating herself full-time to bridal styling, Vicky worked extensively as a wedding photographer. She understands how fabrics react to camera flash, how Mikado catches natural golden hour light, and how lace trains spread across venue steps—giving you practical, camera-ready styling advice."
+    },
+    {
+      "question": "What is Samantha's role at the boutique?",
+      "answer": "Samantha has grown up in the boutique, trying on veils and tiaras as a little girl. Having pursued formal studies in Fashion & Design, she curates our mannequin styling, forecasts modern bridal trends, and brings fresh, contemporary styling perspectives to our collections."
+    },
+    {
+      "question": "Do you offer in-house alteration fittings?",
+      "answer": "Yes. We work closely with trusted, professional seamstresses who know our designer gowns inside and out. From shortening hems and lifting shoulders to adding custom sleeves and bustle points, we guide your alteration journey right through to your final collection."
+    }
+  ],
+  "contactFaqs": [
+    {
+      "question": "Where is the best place to park when visiting the boutique?",
+      "answer": "The closest and easiest parking is at the Cattle Market Car Park on Station Street (Sat Nav postcode: CV9 1DD). It offers up to 2 hours of free parking (RingGo location code 3611082) and is just a 1-minute level walk to our front door."
+    },
+    {
+      "question": "Can I reach the boutique easily by public transport?",
+      "answer": "Yes, Atherstone Railway Station is located directly on Station Street, just a 2 to 3-minute stroll from our boutique. There are direct train services connecting Atherstone with Tamworth, Nuneaton, Crewe, and Rugby."
+    },
+    {
+      "question": "Can I pop in to browse the dresses without an appointment?",
+      "answer": "Because we dedicate our entire boutique exclusively to one bride at a time, our doors are locked to the public during private fittings. We always recommend booking ahead or calling 01827 946 098 before traveling to ensure we can welcome you inside."
+    },
+    {
+      "question": "Is the boutique wheelchair accessible?",
+      "answer": "Our ground-floor boutique showroom and private fitting suite are accessible. If you or any of your guests have mobility requirements, please let us know when booking so we can arrange the pedestal and suite for maximum comfort."
+    }
   ]
 }

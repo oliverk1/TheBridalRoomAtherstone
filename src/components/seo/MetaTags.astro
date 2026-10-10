@@ -1,52 +1,57 @@
 ---
+// src/components/seo/MetaTags.astro
 interface Props {
   title?: string;
   description?: string;
-  canonicalURL?: URL | string;
   image?: string;
   type?: 'website' | 'article';
 }
 
 const {
-  title = "The Bridal Room | Luxury Bridal Boutique Atherstone, Warwickshire",
-  description = "The Bridal Room Atherstone is an intimate Warwickshire bridal boutique offering exclusive private appointments, Made to Order gowns £1,200–£2,500, and designer sample sales.",
-  canonicalURL = Astro.url.href,
-  image = "/images/hero.webp",
+  title = "The Bridal Room Atherstone | Luxury Bridal Boutique Warwickshire",
+  description = "Private 1-to-1 bridal appointments in Atherstone, Warwickshire. Made to order luxury wedding dresses £1,200–£2,500, ex-sample rails, and VIB afternoon tea suites.",
+  image = "/images/og-image.jpg", // Single site-wide default Open Graph image (1200x630)
   type = "website"
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.origin : "https://thebridalroomatherstone.co.uk";
-const fullImageURL = new URL(image, siteUrl).href;
+const siteOrigin = "https://thebridalroomatherstone.co.uk";
+
+// Sanitize Canonical: Strip query parameters and trailing slashes so Google indexes clean URLs
+const rawPath = Astro.url.pathname.replace(/\/$/, '') || '';
+const canonicalURL = `${siteOrigin}${rawPath}`;
+const ogImageURL = image.startsWith('http') ? image : `${siteOrigin}${image}`;
 ---
 
-<!-- Core Meta -->
+<!-- Core Crawl & Indexing Tags -->
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="canonical" href={canonicalURL} />
-<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
-<!-- Geo & Local SEO Signals -->
+<!-- Local SEO Geo-Targeting (Warwickshire / West Midlands) -->
 <meta name="geo.region" content="GB-WAR" />
 <meta name="geo.placename" content="Atherstone" />
 <meta name="geo.position" content="52.5746;-1.5463" />
 <meta name="ICBM" content="52.5746, -1.5463" />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph / WhatsApp / Facebook / iMessage -->
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content="The Bridal Room Atherstone" />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={fullImageURL} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="The Bridal Room Atherstone boutique showroom in Warwickshire" />
 <meta property="og:locale" content="en_GB" />
 
-<!-- Twitter Cards -->
+<!-- Twitter / X Cards -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={fullImageURL} />
+<meta name="twitter:image" content={ogImageURL} />
 
-<!-- Favicon & Touch Icons -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<!-- Theme Branding -->
+<meta name="theme-color" content="#2D4A3E" />

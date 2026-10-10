@@ -3,6 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookingEngine from '../components/ui/BookingEngine.astro';
 import QuoteTicker from '../components/ui/QuoteTicker.astro';
+import EtiquetteTicker from '../components/ui/EtiquetteTicker.astro';
 import FAQAccordion from '../components/ui/FAQAccordion.astro';
 
 // Pull FAQs dynamically from settings JSON (managed via Decap CMS)
@@ -38,37 +39,10 @@ const specialFeatures = [
     footerHighlight: "Includes £75 Gown Voucher"
   }
 ];
-
-const etiquetteGuidelines = [
-  {
-    id: "etiquette-card-0",
-    title: "Underwear",
-    subtitle: "Nude & Seamless",
-    description: "Nude, seamless underwear is best. Don't worry about special strapless bras—most gowns feature built-in inner corsetry and supportive boning."
-  },
-  {
-    id: "etiquette-card-1",
-    title: "Tan Policy",
-    subtitle: "Protect The Gowns",
-    description: "Please avoid freshly applied fake tan, tinted bronzers, or heavy body oils on appointment day to keep our designer sample gowns immaculate."
-  },
-  {
-    id: "etiquette-card-2",
-    title: "Pedestals & Heels",
-    subtitle: "360° Viewing",
-    description: "Raised pedestals are provided. Bring heels of a similar height to your wedding shoes to test the train drape. Outdoor shoes stay off the podiums."
-  },
-  {
-    id: "etiquette-card-3",
-    title: "Guest Numbers",
-    subtitle: "Intimate Circle",
-    description: "We comfortably host up to 3 guests for Signature consultations and up to 4 for VIB Afternoon Tea sessions to ensure the focus remains on you."
-  }
-];
 ---
 
 <BaseLayout
-  title="The Private Bridal Experience & Fittings | The Bridal Room Atherstone"
+  title="Private Bridal Appointments & Fittings | The Bridal Room Atherstone"
   description="Experience an intimate 1-to-1 bridal styling appointment in Warwickshire. 100% private boudoir suites, VIB afternoon tea with prosecco, and bespoke styling advice from Vicky & Sam."
   faqs={experienceFaqs}
 >
@@ -155,138 +129,7 @@ const etiquetteGuidelines = [
   <!-- 3. REAL BRIDE QUOTES TICKER (Directly Below Picture Cards) -->
   <QuoteTicker />
 
-  <!-- 4. CONSULTATION TIERS -->
-  <section id="tiers" class="scroll-mt-28 py-20 sm:py-28 px-6 lg:px-12 bg-ivory-100/70 border-b border-stone-200 overflow-hidden">
-    <div class="max-w-6xl mx-auto">
-      
-      <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-        <p class="text-[10px] tracking-[0.3em] uppercase text-stone-500 font-light mb-2">Private Appointments</p>
-        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-900 font-light uppercase">Select Your Appointment Style</h2>
-        <p class="text-xs sm:text-sm text-stone-600 font-light mt-2">
-          Click any consultation tier below to jump directly to our real-time calendar scheduler.
-        </p>
-      </div>
-
-      <div
-        id="tiers-track-exp"
-        class="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pt-7 pb-6 -mx-6 px-8 md:mx-0 md:px-0 items-stretch"
-      >
-        
-        <!-- Tier 1: Signature -->
-        <div
-          id="exp-tier-0"
-          class="w-[82vw] max-w-[320px] xs:w-[290px] md:w-auto md:max-w-none snap-center shrink-0 md:shrink bg-white border border-stone-200 p-7 sm:p-8 flex flex-col justify-between shadow-xs hover:border-stone-400 transition-all rounded-xs"
-        >
-          <div>
-            <div class="flex justify-between items-baseline mb-2">
-              <span class="text-[10px] tracking-[0.25em] uppercase text-stone-500 block">Classic Consultation</span>
-              <span class="text-[10px] uppercase text-stone-400 font-light">1.5 Hours</span>
-            </div>
-            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-2 font-light">Signature Suite</h3>
-            <div class="mb-4">
-              <span class="text-base font-medium text-stone-900">Complimentary / £0</span>
-              <span class="text-[10px] text-stone-500 block">Free 1-to-1 styling session</span>
-            </div>
-            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
-              Our traditional 1-to-1 appointment. Explore our curated rails with honest, dedicated advice from Vicky and Samantha. Bring up to 3 guests.
-            </p>
-            <ul class="space-y-2 text-xs text-stone-500 font-light border-t border-stone-100 pt-4 mb-6">
-              <li class="flex items-center gap-2">&bull; Exclusive boutique hire</li>
-              <li class="flex items-center gap-2">&bull; Up to 3 guests welcome</li>
-              <li class="flex items-center gap-2">&bull; Hot tea &amp; refreshments</li>
-            </ul>
-          </div>
-          <button
-            type="button"
-            data-select-tier="Signature Bridal Styling"
-            class="tier-trigger-btn block w-full text-center border border-stone-800 py-3 text-[10px] uppercase tracking-[0.2em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors cursor-pointer"
-          >
-            Select Signature &rarr;
-          </button>
-        </div>
-
-        <!-- Tier 2: VIB Afternoon Tea -->
-        <div
-          id="exp-tier-1"
-          class="w-[82vw] max-w-[320px] xs:w-[290px] md:w-auto md:max-w-none snap-center shrink-0 md:shrink bg-sage-50 border-2 border-sage-800 p-7 sm:p-8 flex flex-col justify-between shadow-md relative rounded-xs"
-        >
-          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-sage-800 text-white text-[9px] uppercase tracking-[0.2em] px-3.5 py-1 font-medium shadow-sm whitespace-nowrap z-10">
-            Most Popular Experience
-          </span>
-          <div>
-            <div class="flex justify-between items-baseline mb-2">
-              <span class="text-[10px] tracking-[0.25em] uppercase text-stone-600 block">Luxury Upgrade</span>
-              <span class="text-[10px] uppercase text-stone-600 font-semibold">2.0 Hours</span>
-            </div>
-            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-2 font-light">VIB Afternoon Tea</h3>
-            <div class="mb-4">
-              <span class="text-base font-semibold text-sage-900">£50 Deposit</span>
-              <span class="text-[10px] text-sage-800 block font-medium">Includes £75 Gown Voucher Credited</span>
-            </div>
-            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
-              Turn finding the dress into a celebration. Includes chilled prosecco, artisan sweet treats, 2 unhurried hours of styling, and a £75 voucher toward your gown.
-            </p>
-            <ul class="space-y-2 text-xs text-stone-600 font-light border-t border-stone-200/80 pt-4 mb-6">
-              <li class="flex items-center gap-2">&bull; <strong>£75 voucher</strong> credited to your gown</li>
-              <li class="flex items-center gap-2">&bull; Chilled prosecco &amp; sweet treats</li>
-              <li class="flex items-center gap-2">&bull; Extended 2-hour styling</li>
-              <li class="flex items-center gap-2">&bull; Up to 4 guests welcome</li>
-            </ul>
-          </div>
-          <button
-            type="button"
-            data-select-tier="VIB Afternoon Tea Experience"
-            class="tier-trigger-btn block w-full text-center bg-sage-800 text-white py-3 text-[10px] uppercase tracking-[0.2em] hover:bg-stone-900 transition-colors shadow-xs cursor-pointer font-medium"
-          >
-            Select VIB Suite &rarr;
-          </button>
-        </div>
-
-        <!-- Tier 3: Accessories -->
-        <div
-          id="exp-tier-2"
-          class="w-[82vw] max-w-[320px] xs:w-[290px] md:w-auto md:max-w-none snap-center shrink-0 md:shrink bg-white border border-stone-200 p-7 sm:p-8 flex flex-col justify-between shadow-xs hover:border-stone-400 transition-all rounded-xs"
-        >
-          <div>
-            <div class="flex justify-between items-baseline mb-2">
-              <span class="text-[10px] tracking-[0.25em] uppercase text-stone-500 block">Finishing Touches</span>
-              <span class="text-[10px] uppercase text-stone-400 font-light">45 Minutes</span>
-            </div>
-            <h3 class="font-serif text-2xl uppercase text-stone-900 mb-2 font-light">Veils &amp; Accessories</h3>
-            <div class="mb-4">
-              <span class="text-base font-medium text-stone-900">Complimentary</span>
-              <span class="text-[10px] text-stone-500 block">Free accessory styling session</span>
-            </div>
-            <p class="text-xs text-stone-600 font-light leading-relaxed mb-6">
-              Already found your gown and looking for the perfect veil or crown? Bring your dress with you or pair accessories alongside our showroom samples.
-            </p>
-            <ul class="space-y-2 text-xs text-stone-500 font-light border-t border-stone-100 pt-4 mb-6">
-              <li class="flex items-center gap-2">&bull; Cathedral &amp; bespoke veil matching</li>
-              <li class="flex items-center gap-2">&bull; Tiaras, combs, and jewellery</li>
-              <li class="flex items-center gap-2">&bull; Up to 2 guests welcome</li>
-            </ul>
-          </div>
-          <button
-            type="button"
-            data-select-tier="Accessories & Veil Styling"
-            class="tier-trigger-btn block w-full text-center border border-stone-800 py-3 text-[10px] uppercase tracking-[0.2em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors cursor-pointer"
-          >
-            Select Accessories &rarr;
-          </button>
-        </div>
-
-      </div>
-
-      <div class="flex md:hidden justify-center items-center gap-2 mt-2" id="tiers-dots-exp">
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="0" aria-label="Tier 1"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-sage-800 w-4" data-index="1" aria-label="Tier 2"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="2" aria-label="Tier 3"></button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 5. EMBEDDED NATIVE BOOKING ENGINE -->
+  <!-- 4. EMBEDDED NATIVE BOOKING ENGINE (Decorated with Leaf SVGs) -->
   <section class="relative bg-sage-200 py-16 sm:py-24 px-6 border-b border-sage-300 overflow-hidden">
     
     <img
@@ -315,92 +158,10 @@ const etiquetteGuidelines = [
     </div>
   </section>
 
-  <!-- 6. BOUTIQUE ETIQUETTE & VISITING ADVICE -->
-  <section class="py-20 sm:py-28 px-6 lg:px-12 bg-ivory-100/70 border-b border-stone-200 overflow-hidden">
-    <div class="max-w-6xl mx-auto">
-      
-      <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-        <p class="text-[10px] tracking-[0.3em] uppercase text-stone-500 font-light mb-2">Visiting Preparation</p>
-        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Boutique Etiquette &amp; Advice</h2>
-        <p class="text-xs sm:text-sm text-stone-600 font-light mt-2">
-          Helpful guidance to ensure you and your loved ones have the most serene, memorable experience.
-        </p>
-      </div>
+  <!-- 5. BOUTIQUE ETIQUETTE & VISITING ADVICE: BLENDED TICKER (No White Cards) -->
+  <EtiquetteTicker />
 
-      <div
-        id="etiquette-track"
-        class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pt-2 pb-6 -mx-6 px-8 md:mx-0 md:px-0 items-stretch"
-      >
-        {etiquetteGuidelines.map((item) => (
-          <div
-            id={item.id}
-            class="w-[78vw] max-w-[290px] xs:w-[260px] md:w-auto md:max-w-none snap-center shrink-0 md:shrink bg-white p-6 sm:p-7 border border-stone-200/90 shadow-2xs rounded-xs flex flex-col justify-between hover:border-stone-400 transition-all"
-          >
-            <div>
-              <div class="w-11 h-11 rounded-full bg-sage-100 flex items-center justify-center text-sage-900 mb-5 shadow-2xs">
-                {item.id === "etiquette-card-0" && (
-                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 4c1.5 2 3.5 2.5 5 1 1.5 1.5 3.5 1 5-1l1 6c-.5 3-2 5-2 9H8c0-4-1.5-6-2-9l1-6z" />
-                    <path d="M12 5.5V20" />
-                    <path d="M9.5 8c.5 3 1 6.5 1 12" />
-                    <path d="M14.5 8c-.5 3-1 6.5-1 12" />
-                  </svg>
-                )}
-
-                {item.id === "etiquette-card-1" && (
-                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3a6 6 0 0 0-6 6c0 4 6 11 6 11s6-7 6-11a6 6 0 0 0-6-6z" />
-                    <circle cx="12" cy="9" r="2.5" />
-                    <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.8" />
-                  </svg>
-                )}
-
-                {item.id === "etiquette-card-2" && (
-                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 16h2.5c2 0 3.5-1 5-3.5L14 9c.8-1.3 2-2 3.5-2H20v3.5c0 1.5-.8 3-2.2 3.8L15 16" />
-                    <line x1="18.5" y1="10.5" x2="18.5" y2="16" />
-                    <line x1="2" y1="19" x2="22" y2="19" stroke-width="2" />
-                    <line x1="4" y1="21.5" x2="20" y2="21.5" />
-                  </svg>
-                )}
-
-                {item.id === "etiquette-card-3" && (
-                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="7" r="2.5" />
-                    <path d="M9 19v-2c0-1.7 1.3-3 3-3s3 1.3 3 3v2" />
-                    <circle cx="6" cy="9" r="2" />
-                    <path d="M3 19v-1.5c0-1.4 1-2.5 2.5-2.5.8 0 1.6.4 2 1" />
-                    <circle cx="18" cy="9" r="2" />
-                    <path d="M21 19v-1.5c0-1.4-1-2.5-2.5-2.5-.8 0-1.6.4-2 1" />
-                  </svg>
-                )}
-              </div>
-
-              <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">
-                {item.subtitle}
-              </span>
-              <h4 class="font-serif text-xl uppercase text-stone-900 mb-2.5 font-light">
-                {item.title}
-              </h4>
-              <p class="text-xs text-stone-600 font-light leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div class="flex md:hidden justify-center items-center gap-2 mt-2" id="etiquette-dots">
-        <button class="h-2 rounded-full transition-all duration-300 bg-sage-800 w-4" data-index="0" aria-label="Guideline 1"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="1" aria-label="Guideline 2"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="2" aria-label="Guideline 3"></button>
-        <button class="h-2 rounded-full transition-all duration-300 bg-stone-300 w-2" data-index="4" aria-label="Guideline 4"></button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 7. CONTEXTUAL EXPERIENCE FAQS -->
+  <!-- 6. CONTEXTUAL EXPERIENCE FAQS -->
   <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
     <div class="text-center mb-10">
       <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Helpful Guidance</p>
@@ -459,48 +220,6 @@ const etiquetteGuidelines = [
     }
   }
 
+  // Setup mobile carousel for Special Features cards
   setupMobileCarousel('special-track', 'special-dots', 1);
-  setupMobileCarousel('tiers-track-exp', 'tiers-dots-exp', 1);
-  setupMobileCarousel('etiquette-track', 'etiquette-dots', 0);
-
-  function scrollToScheduler() {
-    const bookTarget = document.getElementById('book');
-    if (!bookTarget) return;
-    const header = document.querySelector('header');
-    const headerOffset = header ? header.offsetHeight : 80;
-    const targetTop = bookTarget.getBoundingClientRect().top + window.scrollY - (headerOffset + 24);
-    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-  }
-
-  function selectTierInScheduler(tierName: string) {
-    const radio = document.querySelector(`input[name="experience"][value="${tierName}"]`) as HTMLInputElement;
-    if (radio) {
-      radio.checked = true;
-      radio.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-
-    const btnToStep2 = document.getElementById('btn-to-step-2') as HTMLButtonElement;
-    if (btnToStep2) {
-      btnToStep2.click();
-    }
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const tierParam = urlParams.get('tier');
-  if (tierParam && !urlParams.get('booking')) {
-    setTimeout(() => {
-      selectTierInScheduler(tierParam);
-      scrollToScheduler();
-    }, 150);
-  }
-
-  document.querySelectorAll('.tier-trigger-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const targetTier = (btn as HTMLElement).dataset.selectTier;
-      if (targetTier) {
-        selectTierInScheduler(targetTier);
-        setTimeout(scrollToScheduler, 50);
-      }
-    });
-  });
 </script>

@@ -932,4 +932,41 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
 
   // Execute on page load
   checkReturnRedirect();
+
+  // ==========================================
+  // AUTO-SELECT TIER & OPEN CALENDAR FROM URL
+  // ==========================================
+  function handleUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tierParam = urlParams.get('tier');
+    const dressParam = urlParams.get('dress');
+    const bookingStatus = urlParams.get('booking');
+
+    // If arriving with a tier (e.g. from Homepage tier cards) and not returning from Stripe
+    if (tierParam && !bookingStatus) {
+      const radio = document.querySelector(`input[name="experience"][value="${tierParam}"]`) as HTMLInputElement;
+      if (radio) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+        // Auto-advance directly to Step 2 (Calendar)
+        const btnToStep2 = document.getElementById('btn-to-step-2') as HTMLButtonElement;
+        if (btnToStep2) {
+          btnToStep2.click();
+        }
+        setTimeout(scrollToWidget, 150);
+      }
+    }
+
+    // If arriving with a single dress from Lookbook "Try This On"
+    if (dressParam) {
+      const textarea = document.getElementById('booking-wishlist-input') as HTMLTextAreaElement;
+      if (textarea && (!textarea.value || textarea.value === 'None selected')) {
+        textarea.value = `• ${decodeURIComponent(dressParam)}`;
+      }
+    }
+  }
+
+  // Execute on mount
+  handleUrlParameters();
 </script>

@@ -80,3 +80,33 @@ collections:
             fields:
               - { label: "Question", name: "question", widget: "string" }
               - { label: "Answer", name: "answer", widget: "text" }
+          - label: "About Page Content & Founders"
+        name: "about_content"
+        file: "src/content/settings/about.json"
+        fields:
+          - label: "Hero Content"
+            name: "founderHero"
+            widget: "object"
+            fields:
+              - { label: "Subtitle", name: "subtitle", widget: "string" }
+              - { label: "Headline", name: "headline", widget: "string" }
+              - { label: "Lead Biography", name: "lead", widget: "text" }
+          - label: "Experience Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - { label: "Value (e.g. 29+)", name: "value", widget: "string" }
+              - { label: "Label", name: "label", widget: "string" }
+          - label: "Why Choose Us Pillars"
+            name: "pillars"
+            widget: "list"
+            fields:
+              - { label: "Number (e.g. 01)", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+          - label: "Contact & Visiting FAQs"
+            name: "contactFaqs"
+            widget: "list"
+            fields:
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }

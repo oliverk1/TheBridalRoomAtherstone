@@ -1,0 +1,35 @@
+{
+  "founderHero": {
+    "subtitle": "Mother & Daughter • 29+ Years Fashion Pedigree",
+    "headline": "Meet Vicky & Samantha",
+    "lead": "I have worked in fashion for over 29 years, working with some of the biggest names on the British high street across clothing, shoes, lingerie, and jewellery. The only thing I hadn't done was bridal—and now I've been doing it for over 15 years."
+  },
+  "stats": [
+    { "value": "29+", "label": "Years in Fashion Retail" },
+    { "value": "15", "label": "Years Dedicated to Bridal" },
+    { "value": "100%", "label": "Private Closed Boutique" },
+    { "value": "5★", "label": "Bride Rated on Google" }
+  ],
+  "pillars": [
+    {
+      "number": "01",
+      "title": "Unrivalled Experience",
+      "description": "I have worked with brides for years! And not just helping them find their gown—I have worked extensively as a professional wedding photographer, so I know how fabrics react to direct sunlight, venue chandeliers, flash photography, and movement throughout a 12-hour day."
+    },
+    {
+      "number": "02",
+      "title": "We Truly Listen",
+      "description": "Before we touch a single rail, we sit down over a cuppa to talk through your wedding plans. Understanding your venue, style, and personal comfort helps us envisage your day and guide you toward gowns that genuinely feel like you."
+    },
+    {
+      "number": "03",
+      "title": "Complete Exclusivity",
+      "description": "We lock and close the boutique for every appointment. You and your guests have our entire showroom, our mirrors, and our undivided attention with zero outside interruptions or competing brides."
+    },
+    {
+      "number": "04",
+      "title": "We Love What We Do",
+      "description": "We are passionate about making sure our brides look and feel extraordinary. We'll laugh together, share happy tears, and celebrate finding 'The One' with honest, pressure-free styling advice."
+    }
+  ]
+}

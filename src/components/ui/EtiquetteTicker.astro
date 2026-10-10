@@ -1,0 +1,478 @@
+---
+// src/components/ui/EtiquetteTicker.astro
+
+const etiquetteGuidelines = [
+  {
+    id: "01",
+    title: "Underwear",
+    subtitle: "Nude & Seamless",
+    description: "Nude, seamless underwear is best. Don't worry about special strapless bras—most gowns feature built-in inner corsetry and supportive boning.",
+    icon: "corset"
+  },
+  {
+    id: "02",
+    title: "Tan Policy",
+    subtitle: "Protect The Gowns",
+    description: "Please avoid freshly applied fake tan, tinted bronzers, or heavy body oils on appointment day to keep our designer sample gowns immaculate.",
+    icon: "tan"
+  },
+  {
+    id: "03",
+    title: "Pedestals & Heels",
+    subtitle: "360° Viewing",
+    description: "Raised pedestals are provided. Bring heels of a similar height to your wedding shoes to test the train drape. Outdoor shoes stay off the podiums.",
+    icon: "heels"
+  },
+  {
+    id: "04",
+    title: "Guest Numbers",
+    subtitle: "Intimate Circle",
+    description: "We comfortably host up to 3 guests for Signature consultations and up to 4 for VIB Afternoon Tea sessions to ensure the focus remains on you.",
+    icon: "guests"
+  }
+];
+
+const desktopGroup1 = etiquetteGuidelines.slice(0, 2);
+const desktopGroup2 = etiquetteGuidelines.slice(2, 4);
+---
+
+<div
+  id="etiquette-ticker-wrapper"
+  class="bg-ivory-100/70 border-b border-stone-200 py-16 sm:py-24 px-6 relative overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y"
+>
+  <div class="max-w-5xl mx-auto">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-xl mx-auto mb-12 sm:mb-16">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.3em] text-stone-500 uppercase font-light mb-2">
+        <span class="w-6 h-px bg-stone-300"></span>
+        Visiting Preparation
+        <span class="w-6 h-px bg-stone-300"></span>
+      </div>
+      <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-900 font-light uppercase">
+        Boutique Etiquette &amp; Advice
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-600 font-light mt-2">
+        Swipe or let it scroll to ensure you and your loved ones enjoy the most serene experience.
+      </p>
+    </div>
+
+    <!-- CAROUSEL TRACK (Frameless & Cardless) -->
+    <div class="overflow-hidden">
+      
+      <!-- DESKTOP TRACK (2 Floating Columns Per View) -->
+      <div id="desktop-etiquette-track" class="hidden lg:flex w-full will-change-transform">
+        
+        <!-- Clone of Group 2 (Index 0) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6" aria-hidden="true">
+          {desktopGroup2.map((item) => (
+            <div class="flex flex-col justify-start">
+              <div class="w-11 h-11 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mb-4 shadow-2xs">
+                {item.icon === "heels" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 16h2.5c2 0 3.5-1 5-3.5L14 9c.8-1.3 2-2 3.5-2H20v3.5c0 1.5-.8 3-2.2 3.8L15 16" />
+                    <line x1="18.5" y1="10.5" x2="18.5" y2="16" />
+                    <line x1="2" y1="19" x2="22" y2="19" stroke-width="2" />
+                    <line x1="4" y1="21.5" x2="20" y2="21.5" />
+                  </svg>
+                )}
+                {item.icon === "guests" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="7" r="2.5" />
+                    <path d="M9 19v-2c0-1.7 1.3-3 3-3s3 1.3 3 3v2" />
+                    <circle cx="6" cy="9" r="2" />
+                    <path d="M3 19v-1.5c0-1.4 1-2.5 2.5-2.5.8 0 1.6.4 2 1" />
+                    <circle cx="18" cy="9" r="2" />
+                    <path d="M21 19v-1.5c0-1.4-1-2.5-2.5-2.5-.8 0-1.6.4-2 1" />
+                  </svg>
+                )}
+              </div>
+              <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{item.subtitle}</span>
+              <div class="flex items-baseline justify-between border-b border-stone-300/70 pb-2 mb-3">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light">{item.title}</h3>
+                <span class="font-serif text-base text-sage-900/60 font-light">{item.id}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Group 1 (Index 1) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6">
+          {desktopGroup1.map((item) => (
+            <div class="flex flex-col justify-start">
+              <div class="w-11 h-11 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mb-4 shadow-2xs">
+                {item.icon === "corset" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 4c1.5 2 3.5 2.5 5 1 1.5 1.5 3.5 1 5-1l1 6c-.5 3-2 5-2 9H8c0-4-1.5-6-2-9l1-6z" />
+                    <path d="M12 5.5V20" />
+                    <path d="M9.5 8c.5 3 1 6.5 1 12" />
+                    <path d="M14.5 8c-.5 3-1 6.5-1 12" />
+                  </svg>
+                )}
+                {item.icon === "tan" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93M12 6a6 6 0 100 12 6 6 0 000-12z" />
+                  </svg>
+                )}
+              </div>
+              <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{item.subtitle}</span>
+              <div class="flex items-baseline justify-between border-b border-stone-300/70 pb-2 mb-3">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light">{item.title}</h3>
+                <span class="font-serif text-base text-sage-900/60 font-light">{item.id}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Group 2 (Index 2) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6">
+          {desktopGroup2.map((item) => (
+            <div class="flex flex-col justify-start">
+              <div class="w-11 h-11 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mb-4 shadow-2xs">
+                {item.icon === "heels" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 16h2.5c2 0 3.5-1 5-3.5L14 9c.8-1.3 2-2 3.5-2H20v3.5c0 1.5-.8 3-2.2 3.8L15 16" />
+                    <line x1="18.5" y1="10.5" x2="18.5" y2="16" />
+                    <line x1="2" y1="19" x2="22" y2="19" stroke-width="2" />
+                    <line x1="4" y1="21.5" x2="20" y2="21.5" />
+                  </svg>
+                )}
+                {item.icon === "guests" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="7" r="2.5" />
+                    <path d="M9 19v-2c0-1.7 1.3-3 3-3s3 1.3 3 3v2" />
+                    <circle cx="6" cy="9" r="2" />
+                    <path d="M3 19v-1.5c0-1.4 1-2.5 2.5-2.5.8 0 1.6.4 2 1" />
+                    <circle cx="18" cy="9" r="2" />
+                    <path d="M21 19v-1.5c0-1.4-1-2.5-2.5-2.5-.8 0-1.6.4-2 1" />
+                  </svg>
+                )}
+              </div>
+              <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{item.subtitle}</span>
+              <div class="flex items-baseline justify-between border-b border-stone-300/70 pb-2 mb-3">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light">{item.title}</h3>
+                <span class="font-serif text-base text-sage-900/60 font-light">{item.id}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Clone of Group 1 (Index 3) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6" aria-hidden="true">
+          {desktopGroup1.map((item) => (
+            <div class="flex flex-col justify-start">
+              <div class="w-11 h-11 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mb-4 shadow-2xs">
+                {item.icon === "corset" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 4c1.5 2 3.5 2.5 5 1 1.5 1.5 3.5 1 5-1l1 6c-.5 3-2 5-2 9H8c0-4-1.5-6-2-9l1-6z" />
+                    <path d="M12 5.5V20" />
+                    <path d="M9.5 8c.5 3 1 6.5 1 12" />
+                    <path d="M14.5 8c-.5 3-1 6.5-1 12" />
+                  </svg>
+                )}
+                {item.icon === "tan" && (
+                  <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93M12 6a6 6 0 100 12 6 6 0 000-12z" />
+                  </svg>
+                )}
+              </div>
+              <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{item.subtitle}</span>
+              <div class="flex items-baseline justify-between border-b border-stone-300/70 pb-2 mb-3">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light">{item.title}</h3>
+                <span class="font-serif text-base text-sage-900/60 font-light">{item.id}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      <!-- MOBILE TRACK (1 Floating Item Per View) -->
+      <div id="mobile-etiquette-track" class="flex lg:hidden w-full will-change-transform">
+        
+        <!-- Clone of Item 04 (Index 0) -->
+        <div class="w-full shrink-0 px-4 text-center" aria-hidden="true">
+          <div class="w-12 h-12 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mx-auto mb-3 shadow-2xs">
+            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="7" r="2.5" />
+              <path d="M9 19v-2c0-1.7 1.3-3 3-3s3 1.3 3 3v2" />
+              <circle cx="6" cy="9" r="2" />
+              <path d="M3 19v-1.5c0-1.4 1-2.5 2.5-2.5.8 0 1.6.4 2 1" />
+              <circle cx="18" cy="9" r="2" />
+              <path d="M21 19v-1.5c0-1.4-1-2.5-2.5-2.5-.8 0-1.6.4-2 1" />
+            </svg>
+          </div>
+          <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{etiquetteGuidelines[3].subtitle}</span>
+          <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-2">{etiquetteGuidelines[3].title}</h3>
+          <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{etiquetteGuidelines[3].description}</p>
+        </div>
+
+        <!-- Real 4 Items -->
+        {etiquetteGuidelines.map((item) => (
+          <div class="w-full shrink-0 px-4 text-center">
+            <div class="w-12 h-12 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mx-auto mb-3 shadow-2xs">
+              {item.icon === "corset" && (
+                <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 4c1.5 2 3.5 2.5 5 1 1.5 1.5 3.5 1 5-1l1 6c-.5 3-2 5-2 9H8c0-4-1.5-6-2-9l1-6z" />
+                  <path d="M12 5.5V20" />
+                  <path d="M9.5 8c.5 3 1 6.5 1 12" />
+                  <path d="M14.5 8c-.5 3-1 6.5-1 12" />
+                </svg>
+              )}
+              {item.icon === "tan" && (
+                <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93M12 6a6 6 0 100 12 6 6 0 000-12z" />
+                </svg>
+              )}
+              {item.icon === "heels" && (
+                <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 16h2.5c2 0 3.5-1 5-3.5L14 9c.8-1.3 2-2 3.5-2H20v3.5c0 1.5-.8 3-2.2 3.8L15 16" />
+                  <line x1="18.5" y1="10.5" x2="18.5" y2="16" />
+                  <line x1="2" y1="19" x2="22" y2="19" stroke-width="2" />
+                  <line x1="4" y1="21.5" x2="20" y2="21.5" />
+                </svg>
+              )}
+              {item.icon === "guests" && (
+                <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="7" r="2.5" />
+                  <path d="M9 19v-2c0-1.7 1.3-3 3-3s3 1.3 3 3v2" />
+                  <circle cx="6" cy="9" r="2" />
+                  <path d="M3 19v-1.5c0-1.4 1-2.5 2.5-2.5.8 0 1.6.4 2 1" />
+                  <circle cx="18" cy="9" r="2" />
+                  <path d="M21 19v-1.5c0-1.4-1-2.5-2.5-2.5-.8 0-1.6.4-2 1" />
+                </svg>
+              )}
+            </div>
+            <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{item.subtitle}</span>
+            <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-2">{item.title}</h3>
+            <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{item.description}</p>
+          </div>
+        ))}
+
+        <!-- Clone of Item 01 (Index 5) -->
+        <div class="w-full shrink-0 px-4 text-center" aria-hidden="true">
+          <div class="w-12 h-12 rounded-full bg-sage-200/70 flex items-center justify-center text-sage-900 mx-auto mb-3 shadow-2xs">
+            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 4c1.5 2 3.5 2.5 5 1 1.5 1.5 3.5 1 5-1l1 6c-.5 3-2 5-2 9H8c0-4-1.5-6-2-9l1-6z" />
+              <path d="M12 5.5V20" />
+              <path d="M9.5 8c.5 3 1 6.5 1 12" />
+              <path d="M14.5 8c-.5 3-1 6.5-1 12" />
+            </svg>
+          </div>
+          <span class="text-[9px] uppercase tracking-[0.2em] text-sage-900 font-semibold block mb-1">{etiquetteGuidelines[0].subtitle}</span>
+          <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-2">{etiquetteGuidelines[0].title}</h3>
+          <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{etiquetteGuidelines[0].description}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DESKTOP DOTS (2 Slides) -->
+    <div class="hidden lg:flex justify-center items-center gap-2.5 mt-10" id="desktop-etiquette-dots">
+      <button class="w-2.5 h-2.5 rounded-full bg-sage-800 transition-all duration-300" aria-label="Slide 1"></button>
+      <button class="w-2.5 h-2.5 rounded-full bg-stone-300 transition-all duration-300" aria-label="Slide 2"></button>
+    </div>
+
+    <!-- MOBILE DOTS (4 Slides) -->
+    <div class="flex lg:hidden justify-center items-center gap-2 mt-6" id="mobile-etiquette-dots">
+      {etiquetteGuidelines.map((_, i) => (
+        <button
+          class={`h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-sage-800 w-4' : 'bg-stone-300 w-2'}`}
+          data-index={i}
+          aria-label={`Slide ${i + 1}`}
+        ></button>
+      ))}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const wrapper = document.getElementById('etiquette-ticker-wrapper');
+  const desktopTrack = document.getElementById('desktop-etiquette-track');
+  const mobileTrack = document.getElementById('mobile-etiquette-track');
+  const desktopDots = document.querySelectorAll('#desktop-etiquette-dots button');
+  const mobileDots = document.querySelectorAll('#mobile-etiquette-dots button');
+
+  let isMobile = window.innerWidth < 1024;
+  let currentIndex = 1;
+  let isDragging = false;
+  let startX = 0;
+  let slideTimer: number;
+
+  function getActiveTrack() {
+    return isMobile ? mobileTrack : desktopTrack;
+  }
+
+  function getTotalUnique() {
+    return isMobile ? 4 : 2;
+  }
+
+  function getTotalSlides() {
+    return isMobile ? 6 : 4;
+  }
+
+  function updateDots(activeDot: number) {
+    const dots = isMobile ? mobileDots : desktopDots;
+    dots.forEach((dot, i) => {
+      if (i === activeDot) {
+        dot.classList.add('bg-sage-800');
+        if (isMobile) {
+          dot.classList.add('w-4');
+          dot.classList.remove('w-2');
+        }
+        dot.classList.remove('bg-stone-300');
+      } else {
+        dot.classList.remove('bg-sage-800');
+        if (isMobile) {
+          dot.classList.remove('w-4');
+          dot.classList.add('w-2');
+        }
+        dot.classList.add('bg-stone-300');
+      }
+    });
+  }
+
+  function setPosition(animate = true) {
+    const track = getActiveTrack();
+    if (!track) return;
+    track.style.transition = animate ? 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    const totalUnique = getTotalUnique();
+    const normalized = (currentIndex - 1 + totalUnique) % totalUnique;
+    updateDots(normalized);
+  }
+
+  function nextSlide() {
+    const totalSlides = getTotalSlides();
+    if (currentIndex >= totalSlides - 1) {
+      currentIndex = 1;
+      setPosition(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex++;
+    setPosition(true);
+  }
+
+  function prevSlide() {
+    const totalUnique = getTotalUnique();
+    if (currentIndex <= 0) {
+      currentIndex = totalUnique;
+      setPosition(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex--;
+    setPosition(true);
+  }
+
+  function resetTimer() {
+    clearInterval(slideTimer);
+    if (!document.hidden) {
+      slideTimer = window.setInterval(nextSlide, 8000);
+    }
+  }
+
+  function attachTrackLoop(track: HTMLElement | null) {
+    if (!track) return;
+    track.addEventListener('transitionend', () => {
+      const totalSlides = getTotalSlides();
+      const totalUnique = getTotalUnique();
+      if (currentIndex >= totalSlides - 1) {
+        currentIndex = 1;
+        setPosition(false);
+      } else if (currentIndex <= 0) {
+        currentIndex = totalUnique;
+        setPosition(false);
+      }
+    });
+  }
+
+  attachTrackLoop(desktopTrack);
+  attachTrackLoop(mobileTrack);
+
+  if (wrapper) {
+    setPosition(false);
+    resetTimer();
+
+    desktopDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPosition(true);
+        resetTimer();
+      });
+    });
+
+    mobileDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPosition(true);
+        resetTimer();
+      });
+    });
+
+    // Touch & Mouse Drag Handling
+    wrapper.addEventListener('pointerdown', (e: PointerEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      clearInterval(slideTimer);
+      const track = getActiveTrack();
+      if (track) track.style.transition = 'none';
+      try { wrapper.setPointerCapture(e.pointerId); } catch {}
+    });
+
+    wrapper.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging) return;
+      const track = getActiveTrack();
+      if (!track) return;
+      const diffX = e.clientX - startX;
+      const movePercent = (diffX / wrapper.offsetWidth) * 100;
+      track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${movePercent}%))`;
+    });
+
+    const handlePointerEnd = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch {}
+
+      const diffX = e.clientX - startX;
+      const threshold = 35;
+
+      if (diffX < -threshold) {
+        nextSlide();
+      } else if (diffX > threshold) {
+        prevSlide();
+      } else {
+        setPosition(true);
+      }
+      resetTimer();
+    };
+
+    wrapper.addEventListener('pointerup', handlePointerEnd);
+    wrapper.addEventListener('pointercancel', handlePointerEnd);
+
+    window.addEventListener('resize', () => {
+      const nowMobile = window.innerWidth < 1024;
+      if (nowMobile !== isMobile) {
+        isMobile = nowMobile;
+        currentIndex = 1;
+      }
+      setPosition(false);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(slideTimer);
+      } else {
+        resetTimer();
+      }
+    });
+  }
+</script>

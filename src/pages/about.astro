@@ -1,31 +1,27 @@
 ---
 // src/pages/about.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PillarTicker from '../components/ui/PillarTicker.astro';
 import FAQAccordion from '../components/ui/FAQAccordion.astro';
 
-const aboutFaqs = [
-  {
-    question: "How long has The Bridal Room been in Atherstone?",
-    answer: "The Bridal Room has welcomed brides to our Station Street boutique since 2017. Vicky brings over 29 years of fashion retail and 15 years of dedicated bridal experience, giving brides exceptional technical expertise on cut, sizing, and silhouette."
-  },
-  {
-    question: "Why does Vicky's photography background matter when choosing a dress?",
-    answer: "Before dedicating herself full-time to bridal styling, Vicky worked extensively as a wedding photographer. She understands how fabrics react to camera flash, how Mikado catches golden hour natural light, and how lace trains spread across venue steps—giving you practical, camera-ready styling advice."
-  },
-  {
-    question: "Do you offer in-house alteration fittings?",
-    answer: "Yes. We work closely with trusted, professional seamstresses who know our designer gowns inside and out. From shortening hems and lifting shoulders to adding custom sleeves and bustle points, we guide your alteration journey right through to your final collection."
-  }
-];
+// Pull decoupled data from Decap CMS JSON settings
+import aboutData from '../content/settings/about.json';
+import faqsData from '../content/settings/faqs.json';
+
+const { founderHero, stats, pillars } = aboutData;
+const aboutFaqs = faqsData.aboutFaqs;
+
+const PHONE_NUMBER = "01827 946 098";
+const PHONE_HREF = "tel:01827946098";
 ---
 
 <BaseLayout
   title="About Vicky & Samantha | The Bridal Room Atherstone"
-  description="Meet Vicky & Samantha at The Bridal Room Atherstone. Over 29 years of fashion retail and bridal styling expertise. Discover our story and Station Street boutique."
+  description="Meet Vicky & Samantha at The Bridal Room Atherstone. Over 29 years of fashion retail and 15 years in bridal styling. Former wedding photographer. Discover our boutique story."
   faqs={aboutFaqs}
 >
-  <!-- Page Hero Header -->
-  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-24 px-6">
+  <!-- 1. EDITORIAL HEADER (bg-sage-100) -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-20 px-6">
     <div class="max-w-4xl mx-auto text-center">
       <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
         <span class="w-8 h-px bg-stone-400"></span>
@@ -33,148 +29,202 @@ const aboutFaqs = [
         <span class="w-8 h-px bg-stone-400"></span>
       </div>
       <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-4">
-        Our Story & Heritage
+        Our Story &amp; Heritage
       </h1>
       <p class="font-serif italic text-base sm:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
-        Over 29 years of fashion expertise, 15 years in bridal styling, and a deep love for making women feel extraordinary.
+        Over 29 years in British fashion, 15 years in bridal, and a deep love for making women feel extraordinary.
       </p>
     </div>
   </section>
 
-  <!-- Vicky & Sam Pedigree Grid (E-E-A-T Focus) -->
-  <section class="py-16 sm:py-24 px-6 lg:px-12 max-w-6xl mx-auto">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+  <!-- 2. FOUNDER SPOTLIGHT (bg-ivory-50) -->
+  <section class="py-20 sm:py-28 px-6 lg:px-12 bg-ivory-50">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
       
-      <!-- Boutique / Founder Image -->
-      <div class="relative">
-        <div class="aspect-4/5 overflow-hidden shadow-lg bg-stone-200">
-          <img
-            src="/images/boutique.webp"
-            alt="The Bridal Room Atherstone boutique showroom interior"
-            width="800"
-            height="1000"
-            loading="lazy"
-            decoding="async"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="absolute -bottom-6 -right-6 bg-sage-800 text-white p-6 shadow-xl hidden sm:block max-w-[220px]">
-          <p class="font-serif text-2xl font-light leading-none mb-1">29+ Years</p>
-          <p class="text-[9px] uppercase tracking-[0.2em] text-stone-300">Fashion & Styling Heritage</p>
+      <!-- Left: Portrait Photo of Vicky & Samantha (lg:col-span-5) -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="relative w-full max-w-md">
+          <div class="aspect-4/5 overflow-hidden shadow-xl bg-stone-200 border border-stone-200/90 rounded-xs group">
+            <img
+              src="/images/vicky-and-samantha.webp"
+              alt="Vicky and Samantha, mother and daughter founders of The Bridal Room Atherstone"
+              width="800"
+              height="1000"
+              loading="eager"
+              decoding="sync"
+              class="w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-700"
+            />
+          </div>
+
+          <!-- Decorative Floating Heritage Badge -->
+          <div class="absolute -bottom-5 -right-3 sm:-right-5 bg-sage-800 text-white p-5 sm:p-6 shadow-xl max-w-[210px] rounded-xs">
+            <span class="font-serif text-3xl font-light leading-none block mb-1">29+ Yrs</span>
+            <span class="text-[9px] uppercase tracking-[0.2em] text-stone-200 block font-light leading-tight">
+              Fashion &amp; Bridal Heritage
+            </span>
+          </div>
         </div>
       </div>
 
-      <!-- Pedigree Narrative -->
-      <div>
-        <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-3">Meet The Founders</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase leading-tight mb-6">
-          Vicky & Samantha &mdash;<br />
-          <span class="italic font-light">Passion, Honesty, and Technique.</span>
+      <!-- Right: Narrative & Pedigree (lg:col-span-7) -->
+      <div class="lg:col-span-7">
+        <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-2 font-medium">
+          {founderHero.subtitle}
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-900 font-light uppercase leading-tight mb-6">
+          {founderHero.headline} &mdash;<br />
+          <span class="italic font-light">Passion, Technique &amp; Heart.</span>
         </h2>
-        
+
         <div class="space-y-4 text-xs sm:text-sm text-stone-600 font-light leading-relaxed">
-          <p>
-            The Bridal Room was founded with a singular ambition: to strip away the stress, pushiness, and intimidation often felt when shopping for a wedding dress, replacing it with warmth, genuine honesty, and refined luxury.
+          <p class="font-normal text-stone-800 text-[13px] sm:text-[15px] leading-relaxed">
+            {founderHero.lead}
           </p>
           <p>
-            <strong>Vicky’s Pedigree:</strong> With over 29 years in fashion retail and 15 years dedicated exclusively to bridal design, Vicky possesses an innate understanding of garment construction, corsetry, and fabric drape. Having also spent years as a professional wedding photographer, she looks at every bride through the camera’s lens—knowing exactly how fabrics react to direct sunlight, ballroom chandeliers, and movement throughout a 12-hour wedding day.
+            When brides walk through our doors on Station Street, they are not stepping into a corporate store with sales quotas. They are stepping into a sanctuary where two generations of fashion obsessives listen, style, and care.
           </p>
           <p>
-            <strong>Samantha’s Eye:</strong> With a formal background in Fashion & Design, Samantha brings a fresh, contemporary pulse to the boutique. She meticulously curates our rails, forecasting silhouette trends, hand-selecting designer releases, and creating our signature window displays that brides travel across Warwickshire to see.
+            Vicky brings nearly three decades of structural garment knowledge—from lingerie corsetry and footwear to fabric weights and wedding photography. Sam brings a contemporary eye honed by formal Fashion &amp; Design studies, keeping our rails fresh, inclusive, and modern.
           </p>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-stone-200 grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p class="font-serif text-2xl text-stone-900 font-light">2017</p>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500">Established</p>
-          </div>
-          <div>
-            <p class="font-serif text-2xl text-stone-900 font-light">100%</p>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500">Private Suites</p>
-          </div>
-          <div>
-            <p class="font-serif text-2xl text-stone-900 font-light">5★</p>
-            <p class="text-[9px] uppercase tracking-wider text-stone-500">Bride Rated</p>
-          </div>
+        <!-- Sleek Typographic Stat Bar -->
+        <div class="mt-8 pt-6 border-t border-stone-200 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center sm:text-left">
+          {stats.map((s) => (
+            <div>
+              <span class="font-serif text-2xl sm:text-3xl text-sage-900 font-light block leading-none mb-1">
+                {s.value}
+              </span>
+              <span class="text-[9px] uppercase tracking-wider text-stone-500 font-light block">
+                {s.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- The Physical Showroom Character -->
-  <section class="bg-ivory-100 border-y border-stone-200 py-16 sm:py-24 px-6 lg:px-12">
-    <div class="max-w-4xl mx-auto text-center mb-12">
-      <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-2">65 Station Street, Atherstone</span>
-      <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Inside The Flagship Boutique</h2>
-      <p class="text-xs sm:text-sm text-stone-600 font-light mt-3 max-w-xl mx-auto leading-relaxed">
-        Set inside a historic Atherstone townhouse, our boutique has been curated to feel like an intimate private apartment rather than a commercial store.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center md:text-left">
-      <div class="bg-white p-6 border border-stone-200 shadow-xs">
-        <h3 class="font-serif text-lg uppercase text-stone-900 mb-2">Boudoir Fitting Suites</h3>
-        <p class="text-xs text-stone-600 font-light leading-relaxed">
-          Spacious private changing rooms complete with plush velvet seating, French Louis chairs, and warm flattering ambient lighting.
-        </p>
+  <!-- 3. IN THEIR OWN WORDS: EDITORIAL SPREAD (bg-sage-100 Contrast, No White Boxes) -->
+  <section class="py-20 sm:py-28 px-6 lg:px-12 bg-sage-100 border-y border-sage-200">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center max-w-xl mx-auto mb-14 sm:mb-18">
+        <span class="text-[10px] tracking-[0.3em] uppercase text-stone-500 block mb-1">Meet Your Stylists</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">In Their Own Words</h2>
       </div>
 
-      <div class="bg-white p-6 border border-stone-200 shadow-xs">
-        <h3 class="font-serif text-lg uppercase text-stone-900 mb-2">Private Pedestals</h3>
-        <p class="text-xs text-stone-600 font-light leading-relaxed">
-          Full 360-degree viewing mirrors and raised pedestals that let you see how trains, veils, and bustles move with you.
-        </p>
-      </div>
+      <!-- Two Editorial Narrative Columns with Elegant Vertical Divider -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+        
+        <!-- Vicky's Column -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <div class="flex items-baseline justify-between border-b border-stone-300 pb-3 mb-6">
+              <h3 class="font-serif text-2xl sm:text-3xl uppercase text-stone-900 font-light">Vicky</h3>
+              <span class="text-[10px] uppercase tracking-widest text-sage-900 font-medium">Founder &bull; 29+ Yrs Fashion</span>
+            </div>
 
-      <div class="bg-white p-6 border border-stone-200 shadow-xs">
-        <h3 class="font-serif text-lg uppercase text-stone-900 mb-2">Wednesday Evenings</h3>
-        <p class="text-xs text-stone-600 font-light leading-relaxed">
-          Late-night appointments open until 9:00pm every Wednesday, accommodating busy brides who cannot attend during the workday.
-        </p>
+            <div class="space-y-4 text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">
+              <p>
+                "I have worked in fashion for over 29 years working with some of the biggest high-street names across clothing, shoes, lingerie &amp; jewellery—so you're in safe hands! I always used to say the only thing I hadn't done was bridal, and now I've been doing it for 15 years."
+              </p>
+              <p>
+                "I have also worked as a wedding photographer, so I know how gowns move in reality and how fabrics photograph under venue lighting. More times than not, I mentally put you in a dress as soon as you walk through the door, and that ends up being 'The One'!"
+              </p>
+            </div>
+          </div>
+
+          <p class="font-serif italic text-stone-800 text-sm pt-6 mt-6 border-t border-stone-300/60">
+            "We'll laugh together, and probably share happy tears too!"
+          </p>
+        </div>
+
+        <!-- Samantha's Column -->
+        <div class="flex flex-col justify-between border-t md:border-t-0 md:border-l border-stone-300/80 pt-8 md:pt-0 md:pl-12 lg:pl-16">
+          <div>
+            <div class="flex items-baseline justify-between border-b border-stone-300 pb-3 mb-6">
+              <h3 class="font-serif text-2xl sm:text-3xl uppercase text-stone-900 font-light">Samantha</h3>
+              <span class="text-[10px] uppercase tracking-widest text-sage-900 font-medium">Fashion &amp; Design</span>
+            </div>
+
+            <div class="space-y-4 text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">
+              <p>
+                "My daughter Sam has been coming into my boutique since she was really little. She loved trying on the veils and tiaras, and is now big enough to try on the dresses too! She has a keen eye for bridal fashion and loves to select the perfect dresses for you."
+              </p>
+              <p>
+                "Sam's job is to change our boutique mannequins, and it has become a running joke: every dress she puts on display, the bride in the shop at that time ends up falling in love with it! With formal studies in Fashion &amp; Design, she brings fresh ideas, trend forecasting, and modern perspectives."
+              </p>
+            </div>
+          </div>
+
+          <p class="font-serif italic text-stone-800 text-sm pt-6 mt-6 border-t border-stone-300/60">
+            "Every dress Sam styles on the mannequin finds its bride."
+          </p>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Bride Reviews Quote Block -->
-  <section class="py-20 px-6 max-w-4xl mx-auto text-center">
-    <svg class="w-8 h-8 mx-auto text-sage-800 mb-4 fill-current opacity-40" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-    <blockquote class="font-serif text-xl sm:text-2xl text-stone-900 font-light leading-relaxed mb-6 italic">
-      "From the moment my mum and I walked through the door on Station Street, Vicky made us feel like family. Having the entire shop to ourselves with no other brides watching was magical. I never felt rushed or pressured, and when I stepped out in my Justin Alexander gown, we all cried. Truly unforgettable."
-    </blockquote>
-    <p class="text-[11px] uppercase tracking-[0.25em] text-stone-600 font-medium">Charlotte M. &bull; #TBRBride</p>
-    <p class="text-[10px] text-stone-400 font-light mt-0.5">Warwickshire Wedding</p>
+  <!-- 4. WHY BRIDES TRUST US: TICKER BLENDED INTO WARM IVORY (bg-ivory-50) -->
+  <section class="bg-ivory-50 border-b border-stone-200">
+    <PillarTicker pillars={pillars} />
   </section>
 
-  <!-- Direct CTA Section -->
-  <section class="bg-sage-200 py-16 px-6 text-center border-t border-sage-300">
-    <div class="max-w-xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light mb-3 uppercase">Come and Say Hello</h2>
-      <p class="text-xs sm:text-sm text-stone-600 font-light mb-8 leading-relaxed">
-        We would love to welcome you to our Atherstone boutique. Book your private styling appointment or phone us directly.
+  <!-- 5. THE BOUTIQUE ATMOSPHERE (bg-sage-200 with Botanical Leaf SVGs matching Home Page CTA) -->
+  <section class="relative bg-sage-200 py-20 sm:py-24 px-6 border-b border-sage-300 overflow-hidden text-center">
+    
+    <!-- Left Leaf SVG -->
+    <img
+      src="/images/leaf.svg"
+      alt=""
+      aria-hidden="true"
+      class="absolute left-2 sm:left-6 lg:left-12 top-1/2 -translate-y-1/2 w-24 sm:w-36 lg:w-48 opacity-35 pointer-events-none select-none"
+    />
+
+    <!-- Right Leaf SVG -->
+    <img
+      src="/images/leaf.svg"
+      alt=""
+      aria-hidden="true"
+      class="absolute right-2 sm:right-6 lg:right-12 top-1/2 -translate-y-1/2 w-24 sm:w-36 lg:w-48 opacity-35 pointer-events-none select-none -scale-x-100"
+    />
+
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        65 Station Street, Atherstone
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-900 font-light uppercase mb-4">
+        A Little Piece of Bridal Heaven
+      </h2>
+      <p class="font-serif italic text-base sm:text-lg text-stone-700 font-light leading-relaxed max-w-2xl mx-auto mb-8">
+        "Crystal chandeliers and French Louis chairs set the stage for an intimate boudoir of all things sparkly—where your guests relax while you find your gown."
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a
           href="/the-experience#book"
-          class="bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-800 transition-colors w-full sm:w-auto"
+          class="w-full sm:w-auto bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-800 transition-colors shadow-xs"
         >
-          Book Your Fitting &rarr;
+          Book Your Appointment &rarr;
         </a>
         <a
-          href="/contact"
-          class="border border-stone-700 bg-transparent text-stone-900 text-xs uppercase tracking-[0.2em] px-6 py-3.5 hover:bg-stone-900 hover:text-white transition-colors w-full sm:w-auto"
+          href={PHONE_HREF}
+          class="w-full sm:w-auto border border-stone-700 bg-transparent text-stone-900 text-xs uppercase tracking-[0.2em] px-6 py-3.5 hover:bg-stone-900 hover:text-white transition-colors"
         >
-          Location & Parking
+          Call {PHONE_NUMBER}
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Contextual About FAQs -->
-  <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
+  <!-- 6. CONTEXTUAL ABOUT FAQS (bg-ivory-50) -->
+  <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto bg-ivory-50">
     <div class="text-center mb-10">
-      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Heritage & Service</p>
+      <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Heritage &amp; Expertise</p>
       <h2 class="font-serif text-2xl sm:text-3xl text-stone-900 font-light uppercase">Frequently Asked Questions</h2>
     </div>
     <FAQAccordion faqs={aboutFaqs} />

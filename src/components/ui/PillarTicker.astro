@@ -1,0 +1,325 @@
+---
+// src/components/ui/PillarTicker.astro
+interface PillarItem {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  pillars: PillarItem[];
+}
+
+const { pillars } = Astro.props;
+
+// Group pillars into pairs of 2 for desktop
+const desktopGroup1 = pillars.slice(0, 2);
+const desktopGroup2 = pillars.slice(2, 4);
+---
+
+<div
+  id="pillar-ticker-wrapper"
+  class="py-20 sm:py-28 px-6 relative overflow-hidden select-none cursor-grab active:cursor-grabbing touch-pan-y"
+>
+  <div class="max-w-5xl mx-auto">
+    
+    <!-- Minimal Editorial Header -->
+    <div class="text-center max-w-xl mx-auto mb-14 sm:mb-18">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-500 uppercase font-light mb-2">
+        <span class="w-8 h-px bg-stone-300"></span>
+        Our Core Commitment
+        <span class="w-8 h-px bg-stone-300"></span>
+      </div>
+      <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-900 font-light uppercase">
+        Why Brides Trust Us
+      </h2>
+    </div>
+
+    <!-- CAROUSEL TRACK (Transparent & Blended - No White Cards) -->
+    <div class="overflow-hidden">
+      
+      <!-- DESKTOP TRACK (2 Columns Floating Seamlessly) -->
+      <div id="desktop-pillar-track" class="hidden lg:flex w-full will-change-transform">
+        <!-- Clone of Group 2 (Index 0) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6" aria-hidden="true">
+          {desktopGroup2.map((p) => (
+            <div class="flex flex-col justify-start">
+              <div class="flex items-baseline justify-between border-b border-stone-300/80 pb-3 mb-4">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light tracking-wide">{p.title}</h3>
+                <span class="font-serif text-lg text-sage-900/60 font-light">{p.number}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{p.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Group 1 (Index 1) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6">
+          {desktopGroup1.map((p) => (
+            <div class="flex flex-col justify-start">
+              <div class="flex items-baseline justify-between border-b border-stone-300/80 pb-3 mb-4">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light tracking-wide">{p.title}</h3>
+                <span class="font-serif text-lg text-sage-900/60 font-light">{p.number}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{p.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Group 2 (Index 2) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6">
+          {desktopGroup2.map((p) => (
+            <div class="flex flex-col justify-start">
+              <div class="flex items-baseline justify-between border-b border-stone-300/80 pb-3 mb-4">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light tracking-wide">{p.title}</h3>
+                <span class="font-serif text-lg text-sage-900/60 font-light">{p.number}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{p.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Clone of Group 1 (Index 3) -->
+        <div class="w-full shrink-0 grid grid-cols-2 gap-16 px-6" aria-hidden="true">
+          {desktopGroup1.map((p) => (
+            <div class="flex flex-col justify-start">
+              <div class="flex items-baseline justify-between border-b border-stone-300/80 pb-3 mb-4">
+                <h3 class="font-serif text-2xl uppercase text-stone-900 font-light tracking-wide">{p.title}</h3>
+                <span class="font-serif text-lg text-sage-900/60 font-light">{p.number}</span>
+              </div>
+              <p class="text-xs sm:text-[13px] text-stone-600 font-light leading-relaxed">{p.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- MOBILE TRACK (1 Clean Floating Item Per View) -->
+      <div id="mobile-pillar-track" class="flex lg:hidden w-full will-change-transform">
+        <!-- Clone of Last Item (Index 0) -->
+        <div class="w-full shrink-0 px-4 text-center" aria-hidden="true">
+          <span class="font-serif text-lg text-sage-900/60 font-light block mb-1">{pillars[3].number}</span>
+          <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-3">{pillars[3].title}</h3>
+          <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{pillars[3].description}</p>
+        </div>
+
+        <!-- Real 4 Items -->
+        {pillars.map((p) => (
+          <div class="w-full shrink-0 px-4 text-center">
+            <span class="font-serif text-lg text-sage-900/60 font-light block mb-1">{p.number}</span>
+            <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-3">{p.title}</h3>
+            <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{p.description}</p>
+          </div>
+        ))}
+
+        <!-- Clone of First Item (Index 5) -->
+        <div class="w-full shrink-0 px-4 text-center" aria-hidden="true">
+          <span class="font-serif text-lg text-sage-900/60 font-light block mb-1">{pillars[0].number}</span>
+          <h3 class="font-serif text-xl sm:text-2xl uppercase text-stone-900 font-light mb-3">{pillars[0].title}</h3>
+          <p class="text-xs text-stone-600 font-light leading-relaxed max-w-md mx-auto">{pillars[0].description}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Minimal Dot Indicators -->
+    <div class="hidden lg:flex justify-center items-center gap-2.5 mt-12" id="desktop-pillar-dots">
+      <button class="w-2.5 h-2.5 rounded-full bg-sage-800 transition-all duration-300" aria-label="Slide 1"></button>
+      <button class="w-2.5 h-2.5 rounded-full bg-stone-300 transition-all duration-300" aria-label="Slide 2"></button>
+    </div>
+
+    <div class="flex lg:hidden justify-center items-center gap-2 mt-8" id="mobile-pillar-dots">
+      {pillars.map((_, i) => (
+        <button
+          class={`h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-sage-800 w-4' : 'bg-stone-300 w-2'}`}
+          data-index={i}
+          aria-label={`Slide ${i + 1}`}
+        ></button>
+      ))}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const wrapper = document.getElementById('pillar-ticker-wrapper');
+  const desktopTrack = document.getElementById('desktop-pillar-track');
+  const mobileTrack = document.getElementById('mobile-pillar-track');
+  const desktopDots = document.querySelectorAll('#desktop-pillar-dots button');
+  const mobileDots = document.querySelectorAll('#mobile-pillar-dots button');
+
+  let isMobile = window.innerWidth < 1024;
+  let currentIndex = 1;
+  let isDragging = false;
+  let startX = 0;
+  let slideTimer: number;
+
+  function getActiveTrack() {
+    return isMobile ? mobileTrack : desktopTrack;
+  }
+
+  function getTotalUnique() {
+    return isMobile ? 4 : 2;
+  }
+
+  function getTotalSlides() {
+    return isMobile ? 6 : 4;
+  }
+
+  function updateDots(activeDot: number) {
+    const dots = isMobile ? mobileDots : desktopDots;
+    dots.forEach((dot, i) => {
+      if (i === activeDot) {
+        dot.classList.add('bg-sage-800');
+        if (isMobile) {
+          dot.classList.add('w-4');
+          dot.classList.remove('w-2');
+        }
+        dot.classList.remove('bg-stone-300');
+      } else {
+        dot.classList.remove('bg-sage-800');
+        if (isMobile) {
+          dot.classList.remove('w-4');
+          dot.classList.add('w-2');
+        }
+        dot.classList.add('bg-stone-300');
+      }
+    });
+  }
+
+  function setPosition(animate = true) {
+    const track = getActiveTrack();
+    if (!track) return;
+    track.style.transition = animate ? 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    const totalUnique = getTotalUnique();
+    const normalized = (currentIndex - 1 + totalUnique) % totalUnique;
+    updateDots(normalized);
+  }
+
+  function nextSlide() {
+    const totalSlides = getTotalSlides();
+    if (currentIndex >= totalSlides - 1) {
+      currentIndex = 1;
+      setPosition(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex++;
+    setPosition(true);
+  }
+
+  function prevSlide() {
+    const totalUnique = getTotalUnique();
+    if (currentIndex <= 0) {
+      currentIndex = totalUnique;
+      setPosition(false);
+      const t = getActiveTrack();
+      if (t) void t.offsetHeight;
+    }
+    currentIndex--;
+    setPosition(true);
+  }
+
+  function resetTimer() {
+    clearInterval(slideTimer);
+    if (!document.hidden) {
+      slideTimer = window.setInterval(nextSlide, 8000);
+    }
+  }
+
+  function attachTrackLoop(track: HTMLElement | null) {
+    if (!track) return;
+    track.addEventListener('transitionend', () => {
+      const totalSlides = getTotalSlides();
+      const totalUnique = getTotalUnique();
+      if (currentIndex >= totalSlides - 1) {
+        currentIndex = 1;
+        setPosition(false);
+      } else if (currentIndex <= 0) {
+        currentIndex = totalUnique;
+        setPosition(false);
+      }
+    });
+  }
+
+  attachTrackLoop(desktopTrack);
+  attachTrackLoop(mobileTrack);
+
+  if (wrapper) {
+    setPosition(false);
+    resetTimer();
+
+    desktopDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPosition(true);
+        resetTimer();
+      });
+    });
+
+    mobileDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx + 1;
+        setPosition(true);
+        resetTimer();
+      });
+    });
+
+    wrapper.addEventListener('pointerdown', (e: PointerEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      clearInterval(slideTimer);
+      const track = getActiveTrack();
+      if (track) track.style.transition = 'none';
+      try { wrapper.setPointerCapture(e.pointerId); } catch {}
+    });
+
+    wrapper.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging) return;
+      const track = getActiveTrack();
+      if (!track) return;
+      const diffX = e.clientX - startX;
+      const movePercent = (diffX / wrapper.offsetWidth) * 100;
+      track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${movePercent}%))`;
+    });
+
+    const handlePointerEnd = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch {}
+
+      const diffX = e.clientX - startX;
+      const threshold = 35;
+
+      if (diffX < -threshold) {
+        nextSlide();
+      } else if (diffX > threshold) {
+        prevSlide();
+      } else {
+        setPosition(true);
+      }
+      resetTimer();
+    };
+
+    wrapper.addEventListener('pointerup', handlePointerEnd);
+    wrapper.addEventListener('pointercancel', handlePointerEnd);
+
+    window.addEventListener('resize', () => {
+      const nowMobile = window.innerWidth < 1024;
+      if (nowMobile !== isMobile) {
+        isMobile = nowMobile;
+        currentIndex = 1;
+      }
+      setPosition(false);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(slideTimer);
+      } else {
+        resetTimer();
+      }
+    });
+  }
+</script>

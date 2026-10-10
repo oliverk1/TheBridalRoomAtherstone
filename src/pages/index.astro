@@ -243,7 +243,7 @@ const homepageFaqs = faqsData.homepageFaqs;
               <span class="text-[10px] text-stone-500 font-light">{tier.priceNote}</span>
             </div>
             <a
-              href={`/the-experience#book?tier=${encodeURIComponent(tier.bookingParam)}`}
+              href={`/the-experience?tier=${encodeURIComponent(tier.bookingParam)}#book`}
               class={`block w-full text-center py-3 text-[10px] uppercase tracking-[0.2em] transition-colors ${
                 tier.isPopular
                   ? 'bg-sage-800 text-white hover:bg-stone-900'
