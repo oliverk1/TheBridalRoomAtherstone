@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -18,7 +18,7 @@
       --tbr-border: #E2DBD2;
     }
 
-    /* Full-screen Ivory Background */
+    /* 1. Full Screen Ivory Background */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
@@ -27,46 +27,46 @@
       background-color: var(--tbr-ivory) !important;
       font-family: 'Jost', -apple-system, sans-serif !important;
       color: #262928 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
     }
 
     #nc-root {
       width: 100% !important;
-      height: 100% !important;
+      min-height: 100vh !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      padding: 20px !important;
+      box-sizing: border-box !important;
     }
 
-    /* 1. HIDE ALL DEFAULT DECAP LOGOS & OCTOCATS */
-    svg[class*="Icon"],
-    span[class*="Logo"],
-    div[class*="Logo"],
-    button svg {
-      display: none !important;
-    }
-
-    /* 2. CONSTRAIN AND CENTER THE LOGIN CARD */
-    div[class*="StyledAuthenticationPage"],
-    section[class*="CardContainer"],
-    div[class*="CardContainer"],
-    div[class*="Login-container"] {
-      width: 100% !important;
-      max-width: 440px !important;
-      margin: 0 auto !important;
+    /* 2. Style Decap's Exact Outer Section into an Ivory Luxury Card */
+    section[class*="StyledAuthenticationPage"],
+    section.exus10f5 {
       background-color: #FFFFFF !important;
       border: 1px solid var(--tbr-border) !important;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05) !important;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.06) !important;
       border-radius: 3px !important;
-      padding: 40px 32px !important;
+      max-width: 440px !important;
+      width: 100% !important;
+      margin: auto !important;
+      padding: 45px 36px !important;
       box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
       text-align: center !important;
     }
 
-    /* 3. CUSTOM BOUTIQUE CREST HEADER */
+    /* 3. Hide Pink Decap Logo Completely */
+    span[class*="IconWrapper-DecapLogoIcon"],
+    span.exus10f3 {
+      display: none !important;
+    }
+
+    /* 4. Luxury Branded Header */
     .tbr-login-header {
+      width: 100%;
+      text-align: center;
       margin-bottom: 28px;
       padding-bottom: 20px;
       border-bottom: 1px solid #EEE8E0;
@@ -79,6 +79,7 @@
       color: var(--tbr-dark-sage);
       margin: 0 0 6px 0;
       font-weight: 400;
+      line-height: 1.1;
     }
     .tbr-login-subtitle {
       font-size: 9px;
@@ -86,64 +87,64 @@
       text-transform: uppercase;
       color: #7D8582;
       display: block;
+      margin-bottom: 8px;
+    }
+    .tbr-login-hint {
+      font-size: 11px;
+      color: #555E5A;
+      font-weight: 300;
+      line-height: 1.5;
+      margin: 0;
     }
 
-    /* 4. CLEAN INPUTS */
-    input[type="text"],
-    input[type="password"] {
-      width: 100% !important;
-      box-sizing: border-box !important;
-      border: 1px solid #D5CFC7 !important;
-      border-radius: 2px !important;
-      padding: 12px 14px !important;
-      font-family: 'Jost', sans-serif !important;
-      font-size: 13px !important;
-      margin-bottom: 16px !important;
-      outline: none !important;
-      background: #FFFFFF !important;
-    }
-
-    input:focus {
-      border-color: var(--tbr-dark-sage) !important;
-    }
-
-    /* 5. CENTERED LUXURY BUTTON (No More Screen-Wide Black Bar) */
+    /* 5. Fix the Button Text Collision */
     button[class*="LoginButton"],
-    button[type="submit"] {
+    button.exus10f1 {
       width: 100% !important;
-      max-width: 100% !important;
       background-color: var(--tbr-dark-sage) !important;
       color: #FFFFFF !important;
       font-family: 'Jost', sans-serif !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.2em !important;
-      font-size: 11px !important;
-      font-weight: 500 !important;
-      padding: 14px 24px !important;
+      font-size: 0 !important; /* HIDES "Login with GitHub" RAW TEXT COMPLETELY */
+      padding: 15px 24px !important;
       border-radius: 2px !important;
       border: none !important;
-      box-shadow: none !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
       cursor: pointer !important;
-      transition: background-color 0.2s ease !important;
-      margin: 12px auto 0 auto !important;
-      display: block !important;
+      transition: background-color 0.2s ease, transform 0.1s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       line-height: normal !important;
-      text-align: center !important;
+      box-sizing: border-box !important;
+      text-decoration: none !important;
+      outline: none !important;
     }
 
     button[class*="LoginButton"]:hover,
-    button[type="submit"]:hover {
+    button.exus10f1:hover {
       background-color: var(--tbr-sage) !important;
     }
 
-    /* Button Text Override */
-    button[class*="LoginButton"] span {
-      font-size: 0 !important;
+    button[class*="LoginButton"]:active,
+    button.exus10f1:active {
+      transform: scale(0.99) !important;
     }
-    button[class*="LoginButton"] span::after {
+
+    /* Hide GitHub Octocat Icon */
+    button[class*="LoginButton"] span[class*="IconWrapper-LoginButtonIcon"],
+    button.exus10f1 span {
+      display: none !important;
+    }
+
+    /* Clean Single Button Label */
+    button[class*="LoginButton"]::after,
+    button.exus10f1::after {
       content: "Sign In to Studio Portal" !important;
       font-size: 11px !important;
-      letter-spacing: 0.2em !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.22em !important;
+      text-transform: uppercase !important;
+      color: #FFFFFF !important;
     }
   </style>
 </head>
@@ -152,9 +153,9 @@
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
 
   <script>
-    // Injects the luxury branded header into the center card
+    // Injects the luxury branded header into Decap's exact container
     const observer = new MutationObserver(() => {
-      const container = document.querySelector('div[class*="StyledAuthenticationPage"], div[class*="CardContainer"], div[class*="Login-container"]');
+      const container = document.querySelector('section[class*="StyledAuthenticationPage"], section.exus10f5');
       if (container && !document.getElementById('tbr-login-injected')) {
         const headerEl = document.createElement('div');
         headerEl.id = 'tbr-login-injected';
@@ -162,6 +163,7 @@
         headerEl.innerHTML = `
           <h1 class="tbr-login-brand">The Bridal Room</h1>
           <span class="tbr-login-subtitle">Atherstone &bull; Studio Management Portal</span>
+          <p class="tbr-login-hint">Authorized access for Vicky & Samantha to manage dresses, appointment notes, and boutique hours.</p>
         `;
         container.insertBefore(headerEl, container.firstChild);
       }
