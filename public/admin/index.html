@@ -18,7 +18,7 @@
       --tbr-border: #E2DBD2;
     }
 
-    /* 1. Full Screen Ivory Background */
+    /* 1. Global Reset (No flex on body so full dashboard layout flows normally) */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
@@ -31,15 +31,10 @@
 
     #nc-root {
       width: 100% !important;
-      min-height: 100vh !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 20px !important;
-      box-sizing: border-box !important;
+      min-height: 100% !important;
     }
 
-    /* 2. Style Decap's Exact Outer Section into an Ivory Luxury Card */
+    /* 2. Login Card: Scoped Centering (Only affects the login screen) */
     section[class*="StyledAuthenticationPage"],
     section.exus10f5 {
       background-color: #FFFFFF !important;
@@ -47,8 +42,8 @@
       box-shadow: 0 15px 45px rgba(0, 0, 0, 0.06) !important;
       border-radius: 3px !important;
       max-width: 440px !important;
-      width: 100% !important;
-      margin: auto !important;
+      width: 90% !important;
+      margin: 15vh auto !important; /* Centers card on login screen without breaking dashboard */
       padding: 45px 36px !important;
       box-sizing: border-box !important;
       display: flex !important;
@@ -57,13 +52,13 @@
       text-align: center !important;
     }
 
-    /* 3. Hide Pink Decap Logo Completely */
+    /* 3. Hide Decap Default Pink Logo on Login */
     span[class*="IconWrapper-DecapLogoIcon"],
     span.exus10f3 {
       display: none !important;
     }
 
-    /* 4. Luxury Branded Header */
+    /* 4. Luxury Login Header */
     .tbr-login-header {
       width: 100%;
       text-align: center;
@@ -97,27 +92,25 @@
       margin: 0;
     }
 
-    /* 5. Fix the Button Text Collision */
+    /* 5. Login Button Styling */
     button[class*="LoginButton"],
     button.exus10f1 {
       width: 100% !important;
       background-color: var(--tbr-dark-sage) !important;
       color: #FFFFFF !important;
       font-family: 'Jost', sans-serif !important;
-      font-size: 0 !important; /* HIDES "Login with GitHub" RAW TEXT COMPLETELY */
+      font-size: 0 !important; /* Hides raw 'Login with GitHub' text */
       padding: 15px 24px !important;
       border-radius: 2px !important;
       border: none !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
       cursor: pointer !important;
-      transition: background-color 0.2s ease, transform 0.1s ease !important;
+      transition: background-color 0.2s ease !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       line-height: normal !important;
       box-sizing: border-box !important;
-      text-decoration: none !important;
-      outline: none !important;
     }
 
     button[class*="LoginButton"]:hover,
@@ -125,18 +118,11 @@
       background-color: var(--tbr-sage) !important;
     }
 
-    button[class*="LoginButton"]:active,
-    button.exus10f1:active {
-      transform: scale(0.99) !important;
-    }
-
-    /* Hide GitHub Octocat Icon */
     button[class*="LoginButton"] span[class*="IconWrapper-LoginButtonIcon"],
     button.exus10f1 span {
       display: none !important;
     }
 
-    /* Clean Single Button Label */
     button[class*="LoginButton"]::after,
     button.exus10f1::after {
       content: "Sign In to Studio Portal" !important;
@@ -146,6 +132,20 @@
       text-transform: uppercase !important;
       color: #FFFFFF !important;
     }
+
+    /* 6. Dashboard Styling Once Logged In */
+    header[class*="AppHeader"] {
+      background-color: #FFFFFF !important;
+      border-bottom: 1px solid var(--tbr-border) !important;
+    }
+
+    /* Active Collection Tab Highlight */
+    a[class*="SidebarNavLink"][class*="active"],
+    div[class*="SidebarLink"][class*="active"] {
+      background-color: #EBF1EE !important;
+      color: var(--tbr-sage) !important;
+      font-weight: 500 !important;
+    }
   </style>
 </head>
 <body>
@@ -153,7 +153,6 @@
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
 
   <script>
-    // Injects the luxury branded header into Decap's exact container
     const observer = new MutationObserver(() => {
       const container = document.querySelector('section[class*="StyledAuthenticationPage"], section.exus10f5');
       if (container && !document.getElementById('tbr-login-injected')) {
