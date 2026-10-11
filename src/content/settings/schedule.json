@@ -5,6 +5,18 @@
     "VIB Afternoon Tea Experience": 120,
     "Accessories & Veil Styling": 45
   },
+  "blockedDates": [
+    "2026-12-25",
+    "2026-12-26",
+    "2027-01-01"
+  ],
+  "blockedSlots": [
+    {
+      "date": "2026-10-24",
+      "time": "14:00",
+      "reason": "Staff training"
+    }
+  ],
   "weeklyHours": {
     "monday":    { "open": "09:30", "close": "17:30", "isOpen": true },
     "tuesday":   { "open": "09:30", "close": "17:30", "isOpen": true },

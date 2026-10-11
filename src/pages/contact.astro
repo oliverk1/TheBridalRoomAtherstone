@@ -458,28 +458,33 @@ const sunHours = formatHours(hours.sunday);
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending Enquiry...';
 
-    const formData = new FormData(form);
-
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const payload = {
+        name: inputName.value.trim(),
+        email: inputEmail.value.trim(),
+        phone: inputPhone.value.trim(),
+        enquiryType: (document.getElementById('contact-type') as HTMLSelectElement)?.value,
+        message: inputMessage.value.trim()
+      };
+
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
 
-      const data = await res.json();
-
-      if (data.success || res.ok) {
+      if (res.ok) {
         form.classList.add('hidden');
         successBox?.classList.remove('hidden');
       } else {
-        // Fallback for testing before access key is populated
-        form.classList.add('hidden');
-        successBox?.classList.remove('hidden');
+        alert('There was an issue sending your message. Please phone the boutique on 01827 946 098.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Enquiry →';
       }
     } catch {
-      // Local fallback
-      form.classList.add('hidden');
-      successBox?.classList.remove('hidden');
+      alert('Network error. Please call the boutique on 01827 946 098.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Enquiry →';
     }
   });
 </script>

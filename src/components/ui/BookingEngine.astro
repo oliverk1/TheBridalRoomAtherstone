@@ -2,6 +2,8 @@
 // src/components/ui/BookingEngine.astro
 import scheduleConfig from '../../content/settings/schedule.json';
 
+const blockedDatesJson = JSON.stringify((scheduleConfig as any).blockedDates || []);
+
 const refinedStyleOptions = [
   "A-Line Silhouette",
   "Ball Gown & Fairytale",
@@ -42,6 +44,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
 
 <div
   id="book"
+  data-blocked-dates={blockedDatesJson}
   class="scroll-mt-32 sm:scroll-mt-36 bg-white border border-stone-200/90 shadow-[0_12px_45px_-12px_rgba(0,0,0,0.07)] rounded-xs max-w-3xl mx-auto overflow-hidden transition-all duration-300"
 >
   <!-- Sleek Luxury Top Bar & Stepper -->
@@ -229,7 +232,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       <!-- Card A: Universal Bride Essentials -->
       <div class="border border-stone-200 p-4 sm:p-6 bg-ivory-50/40 rounded-xs space-y-4">
         <h4 class="font-serif text-lg uppercase text-stone-900 font-light pb-2 border-b border-stone-200/70">
-          1. Bride & Wedding Details
+          1. Bride &amp; Wedding Details
         </h4>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -279,7 +282,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       <!-- Card B1: BRIDAL GOWN SECTION (Signature & VIB only) -->
       <div id="section-dress-styling" class="border border-stone-200 p-4 sm:p-6 bg-ivory-50/40 rounded-xs space-y-4">
         <h4 class="font-serif text-lg uppercase text-stone-900 font-light pb-2 border-b border-stone-200/70">
-          2. Dress Styling & Budget
+          2. Dress Styling &amp; Budget
         </h4>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -310,7 +313,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
         <!-- Sleek Style Checklist Drawer -->
         <div class="border border-stone-200 bg-white p-3.5 rounded-xs">
           <button type="button" id="toggle-styles-btn" class="w-full flex items-center justify-between text-left text-xs text-stone-800 cursor-pointer">
-            <span class="font-medium text-[11px] uppercase tracking-wider text-stone-900">+ Dress Silhouettes & Styles You Love (Optional)</span>
+            <span class="font-medium text-[11px] uppercase tracking-wider text-stone-900">+ Dress Silhouettes &amp; Styles You Love (Optional)</span>
             <span id="styles-toggle-icon" class="text-sm font-light text-stone-500">+</span>
           </button>
           
@@ -326,7 +329,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
-            <label class="block text-[10px] uppercase tracking-wider text-stone-700 mb-1">High Street Dress Size & Notes</label>
+            <label class="block text-[10px] uppercase tracking-wider text-stone-700 mb-1">High Street Dress Size &amp; Notes</label>
             <textarea name="notes" rows="2" class="w-full border border-stone-300 p-2.5 text-xs bg-white rounded-xs focus:border-stone-900 focus:outline-none" placeholder="e.g. High street size 12, venue ideas..."></textarea>
           </div>
           <div>
@@ -339,7 +342,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       <!-- Card B2: ACCESSORIES SECTION -->
       <div id="section-accessory-styling" class="hidden border border-stone-200 p-4 sm:p-6 bg-ivory-50/40 rounded-xs space-y-4">
         <h4 class="font-serif text-lg uppercase text-stone-900 font-light pb-2 border-b border-stone-200/70">
-          2. Accessories & Veil Consultation
+          2. Accessories &amp; Veil Consultation
         </h4>
 
         <div>
@@ -365,8 +368,8 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
             </select>
           </div>
           <div>
-            <label class="block text-[10px] uppercase tracking-wider text-stone-700 mb-1">Dress Details (Neckline, Fabric & Tone)</label>
-            <textarea name="accessoryNotes" rows="2" class="w-full border border-stone-300 p-2.5 text-xs bg-white rounded-xs focus:border-stone-900 focus:outline-none" placeholder="e.g. Low back lace, ivory crepe, sweetheart neckline..."></textarea>
+            <label class="block text-[10px] uppercase tracking-wider text-stone-700 mb-1">Dress Details (Neckline, Fabric &amp; Tone)</label>
+            <textarea name="accessoryNotes" rows="2" class="w-full border border-stone-300 p-2.5 text-xs bg-white focus:border-stone-900 focus:outline-none" placeholder="e.g. Low back lace, ivory crepe, sweetheart neckline..."></textarea>
           </div>
         </div>
       </div>
@@ -374,7 +377,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       <!-- Action Buttons -->
       <div class="pt-3 flex justify-between items-center border-t border-stone-100">
         <button type="button" id="btn-back-to-2" class="text-xs uppercase tracking-wider text-stone-600 hover:text-stone-900 cursor-pointer">
-          &larr; Back & Release Slot
+          &larr; Back &amp; Release Slot
         </button>
         <button
           type="submit"
@@ -396,10 +399,10 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     <span class="text-[10px] tracking-[0.3em] uppercase text-stone-400 block mb-1">Appointment Confirmed</span>
     <h3 class="font-serif text-3xl sm:text-4xl uppercase font-light text-stone-900 mb-3">Your Suite is Reserved</h3>
     <p class="text-xs sm:text-sm text-stone-600 font-light max-w-md mx-auto leading-relaxed mb-6">
-      Your private fitting has been booked on Vicky & Samantha’s calendar. A luxury confirmation email has been dispatched.
+      Your private fitting has been booked on Vicky &amp; Samantha’s calendar. A luxury confirmation email has been dispatched.
     </p>
     <div class="bg-ivory-50 border border-stone-200 p-4 max-w-sm mx-auto text-xs text-stone-600 text-left rounded-xs">
-      <strong class="text-stone-900 uppercase tracking-wider text-[10px] block mb-1">Visiting & Parking Notice:</strong>
+      <strong class="text-stone-900 uppercase tracking-wider text-[10px] block mb-1">Visiting &amp; Parking Notice:</strong>
       65 Station Street, Atherstone CV9 1DB.<br />
       Free 2-hour parking is located at Cattle Market Car Park (1-min walk, RingGo code 3611082).
     </div>
@@ -464,6 +467,9 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
   let selectedIsoDate = '';
   let countdownTimer: number;
 
+  // Set of dates that have 0 open slots
+  let fullyBookedDatesSet = new Set<string>();
+
   // Header-Aware Precision Scrolling
   function scrollToWidget() {
     const widget = document.getElementById('book');
@@ -527,6 +533,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     stepNum1?.classList.remove('font-semibold', 'text-stone-900', 'border-b', 'border-stone-900');
     stepNum2?.classList.add('font-semibold', 'text-stone-900', 'border-b', 'border-stone-900');
     renderCalendar();
+    fetchMonthAvailability();
     scrollToWidget();
   });
 
@@ -537,6 +544,26 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     stepNum1?.classList.add('font-semibold', 'text-stone-900', 'border-b', 'border-stone-900');
     scrollToWidget();
   });
+
+  // ==========================================
+  // FETCH FULL-MONTH AVAILABILITY
+  // ==========================================
+  async function fetchMonthAvailability() {
+    const year = currentCalDate.getFullYear();
+    const month = String(currentCalDate.getMonth() + 1).padStart(2, '0');
+    const monthStr = `${year}-${month}`;
+
+    try {
+      const res = await fetch(`/api/availability?month=${monthStr}&tier=${encodeURIComponent(getSelectedTier())}`);
+      const data = await res.json();
+      if (data.fullyBookedDates) {
+        fullyBookedDatesSet = new Set(data.fullyBookedDates);
+        renderCalendar(); // Re-render to gray out filled days
+      }
+    } catch (e) {
+      console.warn('[Calendar] Month scan error:', e);
+    }
+  }
 
   // ==========================================
   // CALENDAR RENDERER
@@ -555,6 +582,15 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Read synchronously blocked dates (Christmas, Boxing Day, etc.)
+    const bookEl = document.getElementById('book');
+    let staticBlockedDates: string[] = [];
+    try {
+      staticBlockedDates = JSON.parse(bookEl?.dataset.blockedDates || '[]');
+    } catch {
+      staticBlockedDates = [];
+    }
+
     for (let i = 0; i < firstDayIndex; i++) {
       const emptyCell = document.createElement('div');
       emptyCell.className = 'py-1 text-stone-200';
@@ -570,14 +606,22 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       const dStr = String(dayNum).padStart(2, '0');
       const isoString = `${year}-${mStr}-${dStr}`;
 
+      // Date is unavailable if: Past, Sunday, in blockedDates (Christmas), or fully booked
+      const isStaticBlocked = staticBlockedDates.includes(isoString);
+      const isFullyBooked = fullyBookedDatesSet.has(isoString);
+      const isUnavailable = isSunday || isPast || isStaticBlocked || isFullyBooked;
+
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = String(dayNum);
       btn.dataset.date = isoString;
 
-      if (isSunday || isPast) {
+      if (isUnavailable) {
         btn.disabled = true;
-        btn.className = 'w-8 h-8 sm:w-9 sm:h-9 mx-auto my-0.5 rounded-full text-stone-300 text-[11px] sm:text-xs flex items-center justify-center cursor-not-allowed';
+        btn.className = 'w-8 h-8 sm:w-9 sm:h-9 mx-auto my-0.5 rounded-full text-stone-300 text-[11px] sm:text-xs flex items-center justify-center cursor-not-allowed select-none line-through decoration-stone-200';
+        if (isStaticBlocked || isFullyBooked) {
+          btn.title = isStaticBlocked ? 'Boutique Closed (Holiday)' : 'Fully Booked';
+        }
       } else {
         const isSelected = isoString === selectedIsoDate;
         btn.className = `w-8 h-8 sm:w-9 sm:h-9 mx-auto my-0.5 rounded-full text-[11px] sm:text-xs font-medium flex items-center justify-center transition-all cursor-pointer ${
@@ -598,10 +642,13 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
   document.getElementById('cal-prev-month')?.addEventListener('click', () => {
     currentCalDate.setMonth(currentCalDate.getMonth() - 1);
     renderCalendar();
+    fetchMonthAvailability();
   });
+
   document.getElementById('cal-next-month')?.addEventListener('click', () => {
     currentCalDate.setMonth(currentCalDate.getMonth() + 1);
     renderCalendar();
+    fetchMonthAvailability();
   });
 
   // ==========================================
@@ -866,6 +913,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       } else {
         alert('Could not initialize Stripe checkout. Please call 01827 946 098.');
         submitBtn.disabled = false;
+        submitBtn.textContent = 'Pay £50 Deposit & Confirm';
       }
     } else {
       const bookRes = await fetch('/api/book-signature', {
@@ -880,6 +928,7 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       } else {
         alert('Error booking appointment. Please call the boutique on 01827 946 098.');
         submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm Fitting';
       }
     }
   });
@@ -942,14 +991,12 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
     const dressParam = urlParams.get('dress');
     const bookingStatus = urlParams.get('booking');
 
-    // If arriving with a tier (e.g. from Homepage tier cards) and not returning from Stripe
     if (tierParam && !bookingStatus) {
       const radio = document.querySelector(`input[name="experience"][value="${tierParam}"]`) as HTMLInputElement;
       if (radio) {
         radio.checked = true;
         radio.dispatchEvent(new Event('change', { bubbles: true }));
 
-        // Auto-advance directly to Step 2 (Calendar)
         const btnToStep2 = document.getElementById('btn-to-step-2') as HTMLButtonElement;
         if (btnToStep2) {
           btnToStep2.click();
@@ -958,7 +1005,6 @@ const lateNightHours = lateNightDay ? `${(lateNightDay[1] as any).open}–${(lat
       }
     }
 
-    // If arriving with a single dress from Lookbook "Try This On"
     if (dressParam) {
       const textarea = document.getElementById('booking-wishlist-input') as HTMLTextAreaElement;
       if (textarea && (!textarea.value || textarea.value === 'None selected')) {

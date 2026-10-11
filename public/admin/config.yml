@@ -1,14 +1,20 @@
 # public/admin/config.yml
+
 backend:
-  name: git-gateway
+  name: github
+  repo: oliverk1/TheBridalRoomAtherstone
   branch: main
+  base_url: https://thebridalroomstaging.pages.dev/
+  auth_endpoint: auth
 
 # Auto uploads directly into the source assets folder
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
+  # =========================================================================
   # 1. INDIVIDUAL DRESSES COLLECTION
+  # =========================================================================
   - name: "dresses"
     label: "Dresses & Gowns"
     folder: "src/content/dresses"
@@ -16,19 +22,28 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Dress Title", name: "title", widget: "string" }
-      - { label: "Designer", name: "designer", widget: "select", options: ["Justin Alexander", "Sincerity Bridal", "Adore by Justin Alexander", "Phoenix Gowns", "Danielle Couture"] }
+      - { label: "Designer", name: "designer", widget: "string", hint: "e.g. Justin Alexander, Sincerity Bridal, or type any new designer" }
       - { label: "Rail / Category", name: "category", widget: "select", options: ["Made to Order (£1,200 - £2,500)", "Sample Sale Rail (£250 - £900)", "Accessories"] }
-      - { label: "Price / Price Range", name: "price", widget: "string", hint: "e.g. £1,450 or Sample £650 (RRP £1,400)" }
-      - { label: "Sample Size Available in Store", name: "sampleSize", widget: "string", default: "14" }
-      - { label: "Silhouette / Style", name: "silhouette", widget: "select", options: ["A-Line", "Fit and Flare / Mermaid", "Ballgown", "Clean & Modern", "Boho & Lace"] }
+      - { label: "Price / Price Tag", name: "price", widget: "string", hint: "e.g. £1,450 or Sample £650 (RRP £1,400)" }
+      - { label: "In-Store Sample Size", name: "sampleSize", widget: "string", default: "14", hint: "e.g. 12, 14, 16, 18, 20" }
+      - { label: "Silhouette / Cut", name: "silhouette", widget: "string", default: "A-Line", hint: "e.g. A-Line, Fit and Flare / Mermaid, Ballgown, Clean & Modern, Boho & Lace" }
+      - { label: "Neckline", name: "neckline", widget: "string", default: "Sweetheart", hint: "e.g. Sweetheart, V-Neck / Plunge, Square & Straight, Strapless, High Neck" }
+      - label: "Feature Tags"
+        name: "tags"
+        widget: "list"
+        default: ["Romantic Lace"]
+        field: { label: "Tag", name: "tag", widget: "string" }
+        hint: "e.g. Romantic Lace, Clean Mikado & Crepe, Sparkle & Beading, Low Back Detail, Sleeves"
       - { label: "Featured on Homepage", name: "featured", widget: "boolean", default: false }
       - { label: "Hero Gown Image", name: "image", widget: "image" }
       - { label: "Back View / Detail Image (Optional)", name: "imageDetail", widget: "image", required: false }
       - { label: "Editorial Description", name: "body", widget: "markdown" }
 
-  # 2. SITE-WIDE ANNOUNCEMENTS, TICKER & BANNER (SINGLETON)
+  # =========================================================================
+  # 2. SITE-WIDE SETTINGS, TICKERS & FOUNDER CONTENT
+  # =========================================================================
   - name: "settings"
-    label: "Site Announcements & Tickers"
+    label: "Website Settings"
     files:
       - label: "Reassurance Ticker Points"
         name: "ticker"
@@ -39,19 +54,11 @@ collections:
             widget: "list"
             field: { label: "Point", name: "point", widget: "string" }
 
-      - label: "Homepage Hero Notice"
-        name: "hero_notice"
-        file: "src/content/settings/notice.json"
-        fields:
-          - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
-          - { label: "Banner Text", name: "text", widget: "string" }
-          - { label: "Link URL (Optional)", name: "link", widget: "string", required: false }
-      
-      - label: "Bride Testimonials & Quotes"
+      - label: "Bride Testimonials & Quotes Ticker"
         name: "quotes"
         file: "src/content/settings/quotes.json"
         fields:
-          - label: "Bride Quotes"
+          - label: "Quotes"
             name: "quotes"
             widget: "list"
             fields:
@@ -60,27 +67,7 @@ collections:
               - { label: "Designer / Gown", name: "designer", widget: "string" }
               - { label: "Wedding Location", name: "location", widget: "string" }
 
-  # 3. FREQUENTLY ASKED QUESTIONS (SINGLETON)
-  - name: "faqs"
-    label: "Website FAQs"
-    files:
-      - label: "Frequently Asked Questions"
-        name: "all_faqs"
-        file: "src/content/settings/faqs.json"
-        fields:
-          - label: "Homepage FAQs"
-            name: "homepageFaqs"
-            widget: "list"
-            fields:
-              - { label: "Question", name: "question", widget: "string" }
-              - { label: "Answer", name: "answer", widget: "text" }
-          - label: "The Experience & Fitting FAQs"
-            name: "experienceFaqs"
-            widget: "list"
-            fields:
-              - { label: "Question", name: "question", widget: "string" }
-              - { label: "Answer", name: "answer", widget: "text" }
-          - label: "About Page Content & Founders"
+      - label: "About Page Content & Founders"
         name: "about_content"
         file: "src/content/settings/about.json"
         fields:
@@ -104,6 +91,49 @@ collections:
               - { label: "Number (e.g. 01)", name: "number", widget: "string" }
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
+
+      - label: "Homepage Hero Notice"
+        name: "hero_notice"
+        file: "src/content/settings/notice.json"
+        fields:
+          - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
+          - { label: "Banner Text", name: "text", widget: "string" }
+          - { label: "Link URL (Optional)", name: "link", widget: "string", required: false }
+
+  # =========================================================================
+  # 3. WEBSITE FAQS
+  # =========================================================================
+  - name: "faqs"
+    label: "Website FAQs"
+    files:
+      - label: "Frequently Asked Questions"
+        name: "all_faqs"
+        file: "src/content/settings/faqs.json"
+        fields:
+          - label: "Homepage FAQs"
+            name: "homepageFaqs"
+            widget: "list"
+            fields:
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }
+          - label: "The Experience & Fitting FAQs"
+            name: "experienceFaqs"
+            widget: "list"
+            fields:
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }
+          - label: "The Dresses & Lookbook FAQs"
+            name: "dressFaqs"
+            widget: "list"
+            fields:
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }
+          - label: "About Page FAQs"
+            name: "aboutFaqs"
+            widget: "list"
+            fields:
+              - { label: "Question", name: "question", widget: "string" }
+              - { label: "Answer", name: "answer", widget: "text" }
           - label: "Contact & Visiting FAQs"
             name: "contactFaqs"
             widget: "list"

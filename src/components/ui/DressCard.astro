@@ -8,6 +8,8 @@ interface Props {
   price: string;
   sampleSize?: string;
   silhouette: string;
+  neckline?: string;
+  features?: string[];
   image: string;
   imageDetail?: string;
 }
@@ -20,11 +22,13 @@ const {
   price,
   sampleSize = "14",
   silhouette,
+  neckline = "Sweetheart",
+  features = [],
   image,
   imageDetail
 } = Astro.props;
 
-const isSampleSale = category.toLowerCase().includes("sample");
+const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerCase().includes("sample");
 ---
 
 <div
@@ -33,7 +37,9 @@ const isSampleSale = category.toLowerCase().includes("sample");
   data-designer={designer}
   data-category={category}
   data-silhouette={silhouette}
+  data-neckline={neckline}
   data-sample-size={sampleSize}
+  data-features={JSON.stringify(features)}
   data-title={title}
   data-price={price}
   data-image={image}
@@ -67,7 +73,7 @@ const isSampleSale = category.toLowerCase().includes("sample");
     )}
 
     <!-- Hover Zoom Pill -->
-    <div class="absolute inset-0 bg-stone-900/15 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+    <div class="absolute inset-0 bg-stone-900/15 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
       <span class="bg-white/90 backdrop-blur-xs text-stone-900 text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 shadow-sm font-medium flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
         Maximise
@@ -98,7 +104,7 @@ const isSampleSale = category.toLowerCase().includes("sample");
     </button>
   </div>
 
-  <!-- Content & Details (Title also triggers Lightbox) -->
+  <!-- Content & Details -->
   <div class="mt-auto text-center">
     <p class="text-[10px] tracking-[0.25em] uppercase text-stone-500 mb-1">{designer}</p>
     <h3
@@ -113,7 +119,7 @@ const isSampleSale = category.toLowerCase().includes("sample");
       <span class="text-stone-500 text-[11px]">Sample Size {sampleSize}</span>
     </div>
 
-    <!-- Direct Booking CTA (Isolated from Lightbox Trigger) -->
+    <!-- Direct Booking CTA -->
     <a
       href={`/the-experience#book?dress=${encodeURIComponent(title + " by " + designer)}`}
       class="try-on-btn inline-block w-full py-2.5 border border-stone-300 text-[10px] uppercase tracking-[0.2em] text-stone-800 hover:bg-stone-900 hover:text-white hover:border-stone-900 transition-colors shadow-2xs"
@@ -124,7 +130,6 @@ const isSampleSale = category.toLowerCase().includes("sample");
 </div>
 
 <script>
-  // 1. Sync Wishlist Heart Icons
   function syncHeartIcons() {
     const saved = JSON.parse(localStorage.getItem('tbr_wishlist') || '[]');
     const savedIds = new Set(saved.map((item: any) => item.id));
@@ -142,7 +147,6 @@ const isSampleSale = category.toLowerCase().includes("sample");
     });
   }
 
-  // 2. Wishlist Heart Click Event (Stops Propagation to Lightbox)
   document.querySelectorAll('.wishlist-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -175,14 +179,12 @@ const isSampleSale = category.toLowerCase().includes("sample");
     });
   });
 
-  // 3. Try On Button Click Event (Stops Propagation to Lightbox)
   document.querySelectorAll('.try-on-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
     });
   });
 
-  // 4. Card / Image Click Triggers Lightbox Modal
   document.querySelectorAll('.dress-card-trigger').forEach(trigger => {
     trigger.addEventListener('click', (e) => {
       e.preventDefault();

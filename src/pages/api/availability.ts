@@ -6,12 +6,113 @@ import { getKV } from '../../lib/kv';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request }) => {
+interface BlockedSlot {
+  date: string;
+  time: string;
+  reason?: string;
+}
+
+export const GET: APIRoute = async ({ request }): Promise<Response> => {
   try {
     const url = new URL(request.url);
-    const dateStr = url.searchParams.get('date'); // YYYY-MM-DD
+    const dateStr = url.searchParams.get('date');   // YYYY-MM-DD (Single Day)
+    const monthStr = url.searchParams.get('month'); // YYYY-MM (Full Month Check)
     const tier = url.searchParams.get('tier') || 'Signature Bridal Styling';
 
+    const durationMinutes = (scheduleConfig.slotDurations as any)[tier] || 90;
+    const bufferMinutes = scheduleConfig.bufferMinutes || 15;
+    const totalSlotLength = durationMinutes + bufferMinutes;
+    const blockedDates: string[] = (scheduleConfig as any).blockedDates || [];
+    const blockedSlots: BlockedSlot[] = (scheduleConfig as any).blockedSlots || [];
+
+    const CAL_ID = import.meta.env.GOOGLE_CALENDAR_ID;
+    const CLIENT_EMAIL = import.meta.env.GOOGLE_CLIENT_EMAIL;
+    const PRIVATE_KEY = import.meta.env.GOOGLE_PRIVATE_KEY;
+
+    // =========================================================================
+    // MODE 1: WHOLE-MONTH SCAN (Returns all fully booked or blocked days)
+    // =========================================================================
+    if (monthStr && !dateStr) {
+      const [y, m] = monthStr.split('-').map(Number);
+      const daysInMonth = new Date(y, m, 0).getDate();
+      const timeMin = `${monthStr}-01T00:00:00Z`;
+      const timeMax = `${monthStr}-${String(daysInMonth).padStart(2, '0')}T23:59:59Z`;
+
+      let busyPeriods: Array<{ start: string; end: string }> = [];
+      if (CAL_ID && CLIENT_EMAIL && PRIVATE_KEY && !PRIVATE_KEY.includes('...')) {
+        try {
+          busyPeriods = await getCalendarBusyPeriods(CAL_ID, CLIENT_EMAIL, PRIVATE_KEY, timeMin, timeMax);
+        } catch (e) {
+          console.warn('[Month Scan] Google sync skipped:', e);
+        }
+      }
+
+      const nowInUK = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
+      const todayStrInUK = nowInUK.toISOString().split('T')[0];
+      const leadTimeCutoff = new Date(nowInUK.getTime() + 60 * 60000);
+
+      const fullyBookedDates: string[] = [];
+
+      for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+        const dStr = `${monthStr}-${String(dayNum).padStart(2, '0')}`;
+
+        // 1. Manually blocked dates (e.g. Christmas)
+        if (blockedDates.includes(dStr)) {
+          fullyBookedDates.push(dStr);
+          continue;
+        }
+
+        const targetDate = new Date(Date.UTC(y, m - 1, dayNum));
+        const dayName = targetDate.toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' }).toLowerCase();
+        const dayConfig = (scheduleConfig.weeklyHours as any)[dayName];
+
+        if (!dayConfig || !dayConfig.isOpen) {
+          fullyBookedDates.push(dStr);
+          continue;
+        }
+
+        // Calculate candidate slots for this day
+        const [openH, openM] = dayConfig.open.split(':').map(Number);
+        const [closeH, closeM] = dayConfig.close.split(':').map(Number);
+        const startMinutes = openH * 60 + openM;
+        const endMinutes = closeH * 60 + closeM;
+
+        let hasAvailableSlot = false;
+        const isToday = dStr === todayStrInUK;
+
+        for (let current = startMinutes; current + durationMinutes <= endMinutes; current += 30) {
+          const h = Math.floor(current / 60);
+          const min = current % 60;
+          const time = `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+          const slotStart = new Date(y, m - 1, dayNum, h, min);
+          const slotEnd = new Date(slotStart.getTime() + totalSlotLength * 60000);
+
+          if (isToday && slotStart < leadTimeCutoff) continue;
+          if (blockedSlots.some(b => b.date === dStr && b.time === time)) continue;
+
+          const isBusy = busyPeriods.some(busy => {
+            const bStart = new Date(busy.start);
+            const bEnd = new Date(busy.end);
+            return slotStart < bEnd && slotEnd > bStart;
+          });
+
+          if (!isBusy) {
+            hasAvailableSlot = true;
+            break; // Found at least 1 open slot! Day is available.
+          }
+        }
+
+        if (!hasAvailableSlot) {
+          fullyBookedDates.push(dStr);
+        }
+      }
+
+      return new Response(JSON.stringify({ fullyBookedDates, blockedDates }), { status: 200 });
+    }
+
+    // =========================================================================
+    // MODE 2: SINGLE-DAY SLOTS (Generates specific slots for selected day)
+    // =========================================================================
     if (!dateStr) {
       return new Response(JSON.stringify({ error: 'Missing date parameter' }), { status: 400 });
     }
@@ -22,6 +123,15 @@ export const GET: APIRoute = async ({ request }) => {
     const formattedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
     const dayConfig = (scheduleConfig.weeklyHours as any)[dayName];
 
+    if (blockedDates.includes(dateStr)) {
+      return new Response(JSON.stringify({
+        slots: [],
+        dayName: formattedDay,
+        isClosed: true,
+        message: 'The boutique is closed for appointments on this date.'
+      }), { status: 200 });
+    }
+
     if (!dayConfig || !dayConfig.isOpen) {
       return new Response(JSON.stringify({
         slots: [],
@@ -31,21 +141,11 @@ export const GET: APIRoute = async ({ request }) => {
       }), { status: 200 });
     }
 
-    const durationMinutes = (scheduleConfig.slotDurations as any)[tier] || 90;
-    const bufferMinutes = scheduleConfig.bufferMinutes || 15;
-    const totalSlotLength = durationMinutes + bufferMinutes;
-
-    // Detect if this day has late night closing (e.g. after 18:00)
     const [openH, openM] = dayConfig.open.split(':').map(Number);
     const [closeH, closeM] = dayConfig.close.split(':').map(Number);
     const isLateNight = closeH >= 18;
 
-    // 1. Google Calendar FreeBusy
     let busyPeriods: Array<{ start: string; end: string }> = [];
-    const CAL_ID = import.meta.env.GOOGLE_CALENDAR_ID;
-    const CLIENT_EMAIL = import.meta.env.GOOGLE_CLIENT_EMAIL;
-    const PRIVATE_KEY = import.meta.env.GOOGLE_PRIVATE_KEY;
-
     if (CAL_ID && CLIENT_EMAIL && PRIVATE_KEY && !PRIVATE_KEY.includes('...')) {
       try {
         const timeMin = `${dateStr}T00:00:00Z`;
@@ -56,7 +156,6 @@ export const GET: APIRoute = async ({ request }) => {
       }
     }
 
-    // 2. Fetch Active Holds from KV
     const kv = await getKV();
     const kvBusyPeriods: Array<{ start: string; end: string }> = [];
     try {
@@ -74,22 +173,20 @@ export const GET: APIRoute = async ({ request }) => {
 
     const allBusyWindows = [...busyPeriods, ...kvBusyPeriods];
 
-    // 3. Candidate Slots from Schedule
     const startMinutes = openH * 60 + openM;
     const endMinutes = closeH * 60 + closeM;
-
     const candidateSlots: string[] = [];
+
     for (let current = startMinutes; current + durationMinutes <= endMinutes; current += 30) {
       const h = Math.floor(current / 60).toString().padStart(2, '0');
       const m = (current % 60).toString().padStart(2, '0');
       candidateSlots.push(`${h}:${m}`);
     }
 
-    // 4. Past time filter (UK Europe/London time)
     const nowInUK = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
     const todayStrInUK = nowInUK.toISOString().split('T')[0];
     const isToday = dateStr === todayStrInUK;
-    const leadTimeCutoff = new Date(nowInUK.getTime() + 60 * 60000); // 1-hour lead time
+    const leadTimeCutoff = new Date(nowInUK.getTime() + 60 * 60000);
 
     const availableSlots: string[] = [];
 
@@ -98,9 +195,8 @@ export const GET: APIRoute = async ({ request }) => {
       const slotStart = new Date(year, month - 1, day, h, m);
       const slotEnd = new Date(slotStart.getTime() + totalSlotLength * 60000);
 
-      if (isToday && slotStart < leadTimeCutoff) {
-        continue;
-      }
+      if (isToday && slotStart < leadTimeCutoff) continue;
+      if (blockedSlots.some(b => b.date === dateStr && b.time === time)) continue;
 
       const hasConflict = allBusyWindows.some(busy => {
         const bStart = new Date(busy.start);

@@ -5,17 +5,12 @@ const dresses = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    designer: z.enum([
-      "Justin Alexander",
-      "Sincerity Bridal",
-      "Adore by Justin Alexander",
-      "Phoenix Gowns",
-      "Danielle Couture"
-    ]),
+    designer: z.string(),
     category: z.string(),
     price: z.string(),
     sampleSize: z.string().default("14"),
-    silhouette: z.string(),
+    silhouette: z.string().default("A-Line"),
+    neckline: z.string().optional().default("Sweetheart"),
     featured: z.boolean().default(false),
     isSampleSale: z.boolean().default(false),
     tags: z.array(z.string()).default([]),

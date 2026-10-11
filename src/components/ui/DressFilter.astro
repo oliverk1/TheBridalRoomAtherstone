@@ -1,88 +1,362 @@
 ---
 // src/components/ui/DressFilter.astro
-const designers = [
-  "All Designers",
-  "Justin Alexander",
-  "Sincerity Bridal",
-  "Adore by Justin Alexander",
-  "Phoenix Gowns"
-];
+
+interface Props {
+  designers?: string[];
+  silhouettes?: string[];
+  necklines?: string[];
+  featuresList?: string[];
+  sampleSizes?: string[];
+}
+
+const {
+  designers = ["Justin Alexander", "Sincerity Bridal", "Adore by Justin Alexander", "Phoenix Gowns"],
+  silhouettes = ["A-Line", "Fit and Flare / Mermaid", "Ballgown", "Clean & Modern", "Boho & Lace"],
+  necklines = ["Sweetheart", "V-Neck / Plunge", "Square & Straight", "Strapless", "High Neck / Halter"],
+  featuresList = ["Romantic Lace", "Clean Mikado & Crepe", "Sparkle & Beading", "Low Back Detail", "Long Cathedral Train", "Sleeves & Straps"],
+  sampleSizes = ["12", "14", "16", "18", "20"]
+} = Astro.props;
 
 const categories = [
-  "All Gowns",
-  "Made to Order (£1,200 - £2,500)",
-  "Sample Sale Rail (£250 - £900)",
-  "Accessories"
+  { label: "All Gowns", value: "all" },
+  { label: "Made to Order (£1.2k–£2.5k)", value: "made-to-order" },
+  { label: "Sample Sale Rail (£250–£900)", value: "sample-sale" },
+  { label: "Accessories", value: "accessories" }
 ];
 ---
 
-<div class="bg-sage-100 border border-sage-200 p-5 sm:p-6 mb-10">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+<div class="mb-10 space-y-4 select-none">
+  
+  <!-- Row 1: Primary Category Tabs -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" id="rail-tabs">
+    {categories.map((cat, i) => (
+      <button
+        type="button"
+        data-rail={cat.value}
+        class={`rail-tab-btn text-[11px] uppercase tracking-[0.18em] px-4 py-2.5 border transition-all cursor-pointer whitespace-nowrap rounded-2xs ${
+          i === 0
+            ? 'bg-stone-900 text-white border-stone-900 font-medium'
+            : 'bg-white text-stone-700 border-stone-200 hover:border-stone-800'
+        }`}
+      >
+        {cat.label}
+      </button>
+    ))}
+  </div>
+
+  <!-- Row 2: Secondary Multi-Filter Bar with Popover Menus -->
+  <div class="bg-sage-100/90 border border-sage-200/90 p-3 sm:p-4 rounded-xs flex flex-wrap items-center justify-between gap-3 shadow-2xs">
     
-    <!-- Category Tabs -->
-    <div class="flex flex-wrap items-center gap-2" id="category-filters">
-      {categories.map((cat, i) => (
+    <!-- Filter Triggers (Desktop Popovers) -->
+    <div class="hidden md:flex items-center gap-2 relative" id="desktop-filter-popovers">
+      
+      <!-- Popover 1: Dynamic Designers -->
+      <div class="relative popover-wrapper">
         <button
           type="button"
-          data-category={cat}
-          class={`filter-category-btn text-[11px] uppercase tracking-[0.18em] px-4 py-2 border transition-all cursor-pointer ${
-            i === 0
-              ? 'bg-stone-900 text-white border-stone-900'
-              : 'bg-white text-stone-700 border-stone-300 hover:border-stone-900'
-          }`}
+          class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
         >
-          {cat}
+          <span>Designer</span>
+          <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
+          <span class="text-[10px] text-stone-400">▾</span>
         </button>
-      ))}
+        <div class="popover-menu hidden absolute top-full left-0 mt-1.5 w-60 bg-white border border-stone-200 shadow-xl p-3 z-30 rounded-xs space-y-2 max-h-64 overflow-y-auto">
+          {designers.map((d) => (
+            <label class="flex items-center gap-2.5 text-xs text-stone-700 hover:text-stone-900 cursor-pointer">
+              <input type="checkbox" value={d} class="filter-checkbox accent-stone-900" data-group="designer" />
+              <span>{d}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- Popover 2: Dynamic Silhouettes -->
+      <div class="relative popover-wrapper">
+        <button
+          type="button"
+          class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
+        >
+          <span>Silhouette</span>
+          <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
+          <span class="text-[10px] text-stone-400">▾</span>
+        </button>
+        <div class="popover-menu hidden absolute top-full left-0 mt-1.5 w-60 bg-white border border-stone-200 shadow-xl p-3 z-30 rounded-xs space-y-2 max-h-64 overflow-y-auto">
+          {silhouettes.map((s) => (
+            <label class="flex items-center gap-2.5 text-xs text-stone-700 hover:text-stone-900 cursor-pointer">
+              <input type="checkbox" value={s} class="filter-checkbox accent-stone-900" data-group="silhouette" />
+              <span>{s}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- Popover 3: Dynamic Necklines -->
+      {necklines.length > 0 && (
+        <div class="relative popover-wrapper">
+          <button
+            type="button"
+            class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
+          >
+            <span>Neckline</span>
+            <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
+            <span class="text-[10px] text-stone-400">▾</span>
+          </button>
+          <div class="popover-menu hidden absolute top-full left-0 mt-1.5 w-60 bg-white border border-stone-200 shadow-xl p-3 z-30 rounded-xs space-y-2 max-h-64 overflow-y-auto">
+            {necklines.map((n) => (
+              <label class="flex items-center gap-2.5 text-xs text-stone-700 hover:text-stone-900 cursor-pointer">
+                <input type="checkbox" value={n} class="filter-checkbox accent-stone-900" data-group="neckline" />
+                <span>{n}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Popover 4: Dynamic Fabric & Features -->
+      {featuresList.length > 0 && (
+        <div class="relative popover-wrapper">
+          <button
+            type="button"
+            class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
+          >
+            <span>Detail &amp; Fabric</span>
+            <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
+            <span class="text-[10px] text-stone-400">▾</span>
+          </button>
+          <div class="popover-menu hidden absolute top-full left-0 mt-1.5 w-64 bg-white border border-stone-200 shadow-xl p-3 z-30 rounded-xs space-y-2 max-h-64 overflow-y-auto">
+            {featuresList.map((f) => (
+              <label class="flex items-center gap-2.5 text-xs text-stone-700 hover:text-stone-900 cursor-pointer">
+                <input type="checkbox" value={f} class="filter-checkbox accent-stone-900" data-group="features" />
+                <span>{f}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Popover 5: Dynamic Sample Sizes -->
+      <div class="relative popover-wrapper">
+        <button
+          type="button"
+          class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
+        >
+          <span>Sample Size</span>
+          <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
+          <span class="text-[10px] text-stone-400">▾</span>
+        </button>
+        <div class="popover-menu hidden absolute top-full left-0 mt-1.5 w-44 bg-white border border-stone-200 shadow-xl p-3 z-30 rounded-xs space-y-2">
+          {sampleSizes.map((sz) => (
+            <label class="flex items-center gap-2.5 text-xs text-stone-700 hover:text-stone-900 cursor-pointer">
+              <input type="checkbox" value={sz} class="filter-checkbox accent-stone-900" data-group="size" />
+              <span>UK Size {sz}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
     </div>
 
-    <!-- Designer Dropdown Filter -->
-    <div class="flex items-center gap-3">
-      <label for="designer-select" class="text-[11px] uppercase tracking-[0.2em] text-stone-600 whitespace-nowrap">
-        Designer:
-      </label>
-      <select
-        id="designer-select"
-        class="bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-stone-900 cursor-pointer"
+    <!-- Mobile Filter Trigger Button -->
+    <div class="flex md:hidden items-center justify-between w-full">
+      <button
+        type="button"
+        id="open-mobile-filter-btn"
+        class="bg-stone-900 text-white text-xs uppercase tracking-[0.18em] px-4 py-2.5 rounded-2xs flex items-center gap-2 shadow-xs cursor-pointer"
       >
-        {designers.map(designer => (
-          <option value={designer}>{designer}</option>
-        ))}
-      </select>
+        <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h18m-14 7h10m-6 7h2" />
+        </svg>
+        <span>Filter Gowns</span>
+        <span id="mobile-total-active" class="hidden bg-sage-800 text-white text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+      </button>
+
+      <span class="text-xs text-stone-600 font-light">
+        <strong id="mobile-count-preview" class="font-medium text-stone-900">0</strong> gowns
+      </span>
+    </div>
+
+    <!-- Live Gowns Counter & Reset (Desktop) -->
+    <div class="hidden md:flex items-center gap-4 text-xs text-stone-600 font-light">
+      <span>Showing <strong id="visible-count" class="text-stone-900 font-medium">0</strong> dresses</span>
+      <button
+        id="reset-all-filters"
+        type="button"
+        class="hidden hover:text-stone-950 underline underline-offset-2 text-[11px] uppercase tracking-wider text-sage-900 font-medium cursor-pointer"
+      >
+        Reset Filters
+      </button>
     </div>
 
   </div>
 
-  <!-- Live Counter Status -->
-  <div class="mt-4 pt-3 border-t border-sage-200/60 flex items-center justify-between text-xs text-stone-500 font-light">
-    <span>Showing <strong id="visible-count" class="text-stone-800 font-medium">0</strong> dresses</span>
-    <button id="reset-filters" class="hover:text-stone-900 underline text-[11px] uppercase tracking-wider cursor-pointer">
-      Reset Filters
+  <!-- Row 3: Active Filters Dismiss Chips -->
+  <div id="active-chips-container" class="hidden flex flex-wrap items-center gap-2 pt-1 text-xs">
+    <span class="text-[10px] uppercase tracking-wider text-stone-500 font-medium">Active:</span>
+    <div id="chips-list" class="flex flex-wrap gap-1.5"></div>
+    <button
+      id="chips-reset-btn"
+      type="button"
+      class="text-[10px] uppercase tracking-wider text-stone-500 hover:text-stone-900 underline ml-2 cursor-pointer"
+    >
+      Clear All
     </button>
   </div>
+
 </div>
 
+<!-- MOBILE FILTER DRAWER -->
+<div id="mobile-filter-overlay" class="fixed inset-0 bg-stone-900/60 z-60 hidden opacity-0 transition-opacity duration-300"></div>
+
+<aside
+  id="mobile-filter-drawer"
+  class="fixed top-0 right-0 h-full w-full max-w-sm bg-ivory-50 z-60 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col"
+  aria-label="Filter Options"
+>
+  <div class="p-5 border-b border-stone-200 flex items-center justify-between bg-sage-100">
+    <h3 class="font-serif text-lg tracking-wider uppercase text-stone-900 font-light">Filter Gowns</h3>
+    <button id="close-mobile-filter-btn" class="p-2 text-stone-600 hover:text-stone-900 cursor-pointer" aria-label="Close Filter">
+      &times;
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-5 space-y-6">
+    <!-- Mobile Designers -->
+    <div>
+      <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Designer</h4>
+      <div class="flex flex-wrap gap-1.5">
+        {designers.map(d => (
+          <label class="inline-flex items-center text-xs border border-stone-200 px-2.5 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
+            <input type="checkbox" value={d} class="hidden mobile-filter-checkbox" data-group="designer" />
+            <span>{d}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mobile Silhouettes -->
+    <div>
+      <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Silhouette</h4>
+      <div class="flex flex-wrap gap-1.5">
+        {silhouettes.map(s => (
+          <label class="inline-flex items-center text-xs border border-stone-200 px-2.5 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
+            <input type="checkbox" value={s} class="hidden mobile-filter-checkbox" data-group="silhouette" />
+            <span>{s}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mobile Necklines -->
+    {necklines.length > 0 && (
+      <div>
+        <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Neckline</h4>
+        <div class="flex flex-wrap gap-1.5">
+          {necklines.map(n => (
+            <label class="inline-flex items-center text-xs border border-stone-200 px-2.5 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
+              <input type="checkbox" value={n} class="hidden mobile-filter-checkbox" data-group="neckline" />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Mobile Details -->
+    {featuresList.length > 0 && (
+      <div>
+        <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Detail &amp; Fabric</h4>
+        <div class="flex flex-wrap gap-1.5">
+          {featuresList.map(f => (
+            <label class="inline-flex items-center text-xs border border-stone-200 px-2.5 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
+              <input type="checkbox" value={f} class="hidden mobile-filter-checkbox" data-group="features" />
+              <span>{f}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Mobile Sizes -->
+    <div>
+      <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">In-Store Sample Size</h4>
+      <div class="flex flex-wrap gap-2">
+        {sampleSizes.map(sz => (
+          <label class="inline-flex items-center text-xs border border-stone-200 px-3 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
+            <input type="checkbox" value={sz} class="hidden mobile-filter-checkbox" data-group="size" />
+            <span>Size {sz}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4 border-t border-stone-200 bg-white flex gap-3">
+    <button
+      type="button"
+      id="mobile-clear-btn"
+      class="flex-1 py-3 border border-stone-300 text-stone-800 text-xs uppercase tracking-wider"
+    >
+      Reset All
+    </button>
+    <button
+      type="button"
+      id="mobile-apply-btn"
+      class="flex-1 py-3 bg-stone-900 text-white text-xs uppercase tracking-wider"
+    >
+      Apply Filters
+    </button>
+  </div>
+</aside>
+
 <script>
-  let activeCategory = "All Gowns";
-  let activeDesigner = "All Designers";
+  let activeRail = "all";
+  const activeFilters = {
+    designer: new Set<string>(),
+    silhouette: new Set<string>(),
+    neckline: new Set<string>(),
+    features: new Set<string>(),
+    size: new Set<string>()
+  };
 
   const cards = document.querySelectorAll('.dress-card') as NodeListOf<HTMLElement>;
-  const visibleCount = document.getElementById('visible-count');
-  const catButtons = document.querySelectorAll('.filter-category-btn');
-  const designerSelect = document.getElementById('designer-select') as HTMLSelectElement;
-  const resetBtn = document.getElementById('reset-filters');
+  const visibleCountEl = document.getElementById('visible-count');
+  const mobileCountPreview = document.getElementById('mobile-count-preview');
+  const mobileTotalActive = document.getElementById('mobile-total-active');
+  const resetAllBtn = document.getElementById('reset-all-filters');
+  const activeChipsContainer = document.getElementById('active-chips-container');
+  const chipsList = document.getElementById('chips-list');
+  const chipsResetBtn = document.getElementById('chips-reset-btn');
 
-  function filterCards() {
+  function evaluateFilters() {
     let count = 0;
 
     cards.forEach(card => {
-      const cardCategory = card.dataset.category || "";
+      const cardCategory = (card.dataset.category || "").toLowerCase();
+      const cardPrice = (card.dataset.price || "").toLowerCase();
       const cardDesigner = card.dataset.designer || "";
+      const cardSilhouette = card.dataset.silhouette || "";
+      const cardNeckline = card.dataset.neckline || "";
+      const cardSize = card.dataset.sampleSize || "";
+      const cardFeatures: string[] = JSON.parse(card.dataset.features || "[]");
 
-      let matchesCat = activeCategory === "All Gowns" || cardCategory.includes(activeCategory.split(' ')[0]);
-      let matchesDesigner = activeDesigner === "All Designers" || cardDesigner === activeDesigner;
+      let matchesRail = true;
+      if (activeRail === "made-to-order") {
+        matchesRail = cardCategory.includes("made") || (!cardCategory.includes("sample") && !cardPrice.includes("sample"));
+      } else if (activeRail === "sample-sale") {
+        matchesRail = cardCategory.includes("sample") || cardPrice.includes("sample");
+      } else if (activeRail === "accessories") {
+        matchesRail = cardCategory.includes("access");
+      }
 
-      if (matchesCat && matchesDesigner) {
+      const matchesDesigner = activeFilters.designer.size === 0 || activeFilters.designer.has(cardDesigner);
+      const matchesSilhouette = activeFilters.silhouette.size === 0 || Array.from(activeFilters.silhouette).some(s => cardSilhouette.toLowerCase().includes(s.toLowerCase()));
+      const matchesNeckline = activeFilters.neckline.size === 0 || Array.from(activeFilters.neckline).some(n => cardNeckline.toLowerCase().includes(n.toLowerCase()));
+      const matchesSize = activeFilters.size.size === 0 || activeFilters.size.has(cardSize);
+      const matchesFeatures = activeFilters.features.size === 0 || Array.from(activeFilters.features).some(f => cardFeatures.some(cf => cf.toLowerCase().includes(f.toLowerCase())) || cardSilhouette.toLowerCase().includes(f.toLowerCase()));
+
+      const isVisible = matchesRail && matchesDesigner && matchesSilhouette && matchesNeckline && matchesSize && matchesFeatures;
+
+      if (isVisible) {
         card.style.display = "flex";
         count++;
       } else {
@@ -90,34 +364,176 @@ const categories = [
       }
     });
 
-    if (visibleCount) visibleCount.textContent = String(count);
+    if (visibleCountEl) visibleCountEl.textContent = String(count);
+    if (mobileCountPreview) mobileCountPreview.textContent = String(count);
+
+    renderChips();
+    updatePopovers();
   }
 
-  catButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      catButtons.forEach(b => {
-        b.classList.remove('bg-stone-900', 'text-white', 'border-stone-900');
-        b.classList.add('bg-white', 'text-stone-700', 'border-stone-300');
-      });
-      btn.classList.remove('bg-white', 'text-stone-700', 'border-stone-300');
-      btn.classList.add('bg-stone-900', 'text-white', 'border-stone-900');
+  function renderChips() {
+    if (!chipsList || !activeChipsContainer) return;
+    chipsList.innerHTML = "";
+    let totalActive = 0;
 
-      activeCategory = (btn as HTMLElement).dataset.category || "All Gowns";
-      filterCards();
+    Object.entries(activeFilters).forEach(([group, set]) => {
+      set.forEach(val => {
+        totalActive++;
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "inline-flex items-center gap-1 bg-white border border-stone-300 text-stone-800 text-[11px] px-2 py-0.5 rounded-2xs hover:border-stone-900 cursor-pointer";
+        chip.innerHTML = `<span>${val}</span><span class="text-stone-400 hover:text-stone-900 font-bold">&times;</span>`;
+        chip.addEventListener("click", () => {
+          set.delete(val);
+          syncCheckboxes(group, val, false);
+          evaluateFilters();
+        });
+        chipsList.appendChild(chip);
+      });
+    });
+
+    if (totalActive > 0) {
+      activeChipsContainer.classList.remove("hidden");
+      resetAllBtn?.classList.remove("hidden");
+      if (mobileTotalActive) {
+        mobileTotalActive.textContent = String(totalActive);
+        mobileTotalActive.classList.remove("hidden");
+      }
+    } else {
+      activeChipsContainer.classList.add("hidden");
+      resetAllBtn?.classList.add("hidden");
+      mobileTotalActive?.classList.add("hidden");
+    }
+  }
+
+  function syncCheckboxes(group: string, value: string, isChecked: boolean) {
+    document.querySelectorAll<HTMLInputElement>(`input[data-group="${group}"][value="${value}"]`).forEach(input => {
+      input.checked = isChecked;
+    });
+  }
+
+  function updatePopovers() {
+    document.querySelectorAll('.popover-wrapper').forEach(wrapper => {
+      const inputs = wrapper.querySelectorAll<HTMLInputElement>('.filter-checkbox:checked');
+      const badge = wrapper.querySelector('.filter-count');
+      if (badge) {
+        if (inputs.length > 0) {
+          badge.textContent = String(inputs.length);
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  document.querySelectorAll('.rail-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.rail-tab-btn').forEach(b => {
+        b.classList.remove('bg-stone-900', 'text-white', 'border-stone-900', 'font-medium');
+        b.classList.add('bg-white', 'text-stone-700', 'border-stone-200');
+      });
+      btn.classList.remove('bg-white', 'text-stone-700', 'border-stone-200');
+      btn.classList.add('bg-stone-900', 'text-white', 'border-stone-900', 'font-medium');
+
+      activeRail = (btn as HTMLElement).dataset.rail || "all";
+      evaluateFilters();
     });
   });
 
-  designerSelect?.addEventListener('change', () => {
-    activeDesigner = designerSelect.value;
-    filterCards();
+  document.querySelectorAll('.popover-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const currentMenu = btn.nextElementSibling as HTMLElement;
+      document.querySelectorAll('.popover-menu').forEach(m => {
+        if (m !== currentMenu) m.classList.add('hidden');
+      });
+      currentMenu?.classList.toggle('hidden');
+    });
   });
 
-  resetBtn?.addEventListener('click', () => {
-    activeCategory = "All Gowns";
-    activeDesigner = "All Designers";
-    designerSelect.value = "All Designers";
-    catButtons[0]?.dispatchEvent(new Event('click'));
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.popover-menu').forEach(m => m.classList.add('hidden'));
   });
 
-  document.addEventListener('DOMContentLoaded', filterCards);
+  document.querySelectorAll('.popover-menu').forEach(menu => {
+    menu.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  function attachCheckboxListeners(selector: string) {
+    document.querySelectorAll<HTMLInputElement>(selector).forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const group = checkbox.dataset.group as keyof typeof activeFilters;
+        const val = checkbox.value;
+
+        if (checkbox.checked) {
+          activeFilters[group]?.add(val);
+        } else {
+          activeFilters[group]?.delete(val);
+        }
+
+        syncCheckboxes(group, val, checkbox.checked);
+        evaluateFilters();
+      });
+    });
+  }
+
+  attachCheckboxListeners('.filter-checkbox');
+  attachCheckboxListeners('.mobile-filter-checkbox');
+
+  function resetAll() {
+    activeRail = "all";
+    Object.values(activeFilters).forEach(set => set.clear());
+
+    document.querySelectorAll<HTMLInputElement>('.filter-checkbox, .mobile-filter-checkbox').forEach(cb => {
+      cb.checked = false;
+    });
+
+    const railButtons = document.querySelectorAll('.rail-tab-btn');
+    railButtons.forEach((b, i) => {
+      if (i === 0) {
+        b.classList.add('bg-stone-900', 'text-white', 'border-stone-900', 'font-medium');
+        b.classList.remove('bg-white', 'text-stone-700', 'border-stone-200');
+      } else {
+        b.classList.remove('bg-stone-900', 'text-white', 'border-stone-900', 'font-medium');
+        b.classList.add('bg-white', 'text-stone-700', 'border-stone-200');
+      }
+    });
+
+    evaluateFilters();
+  }
+
+  resetAllBtn?.addEventListener('click', resetAll);
+  chipsResetBtn?.addEventListener('click', resetAll);
+
+  const mobileDrawer = document.getElementById('mobile-filter-drawer');
+  const mobileOverlay = document.getElementById('mobile-filter-overlay');
+  const openMobileBtn = document.getElementById('open-mobile-filter-btn');
+  const closeMobileBtn = document.getElementById('close-mobile-filter-btn');
+  const mobileApplyBtn = document.getElementById('mobile-apply-btn');
+  const mobileClearBtn = document.getElementById('mobile-clear-btn');
+
+  function openMobileFilters() {
+    mobileDrawer?.classList.remove('translate-x-full');
+    mobileOverlay?.classList.remove('hidden');
+    requestAnimationFrame(() => mobileOverlay?.classList.remove('opacity-0'));
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileFilters() {
+    mobileDrawer?.classList.add('translate-x-full');
+    mobileOverlay?.classList.add('opacity-0');
+    setTimeout(() => {
+      mobileOverlay?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 250);
+  }
+
+  openMobileBtn?.addEventListener('click', openMobileFilters);
+  closeMobileBtn?.addEventListener('click', closeMobileFilters);
+  mobileOverlay?.addEventListener('click', closeMobileFilters);
+  mobileApplyBtn?.addEventListener('click', closeMobileFilters);
+  mobileClearBtn?.addEventListener('click', resetAll);
+
+  document.addEventListener('DOMContentLoaded', evaluateFilters);
 </script>

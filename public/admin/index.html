@@ -1,13 +1,173 @@
 <!-- public/admin/index.html -->
 <!doctype html>
-<html>
+<html lang="en-GB">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Bridal Room Admin | Content Manager</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <title>The Bridal Room Atherstone — Studio Management Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --tbr-sage: #2D4A3E;
+      --tbr-dark-sage: #172420;
+      --tbr-ivory: #FAF8F5;
+      --tbr-border: #E2DBD2;
+    }
+
+    /* Full-screen Ivory Background */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background-color: var(--tbr-ivory) !important;
+      font-family: 'Jost', -apple-system, sans-serif !important;
+      color: #262928 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #nc-root {
+      width: 100% !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    /* 1. HIDE ALL DEFAULT DECAP LOGOS & OCTOCATS */
+    svg[class*="Icon"],
+    span[class*="Logo"],
+    div[class*="Logo"],
+    button svg {
+      display: none !important;
+    }
+
+    /* 2. CONSTRAIN AND CENTER THE LOGIN CARD */
+    div[class*="StyledAuthenticationPage"],
+    section[class*="CardContainer"],
+    div[class*="CardContainer"],
+    div[class*="Login-container"] {
+      width: 100% !important;
+      max-width: 440px !important;
+      margin: 0 auto !important;
+      background-color: #FFFFFF !important;
+      border: 1px solid var(--tbr-border) !important;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05) !important;
+      border-radius: 3px !important;
+      padding: 40px 32px !important;
+      box-sizing: border-box !important;
+      text-align: center !important;
+    }
+
+    /* 3. CUSTOM BOUTIQUE CREST HEADER */
+    .tbr-login-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #EEE8E0;
+    }
+    .tbr-login-brand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 26px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--tbr-dark-sage);
+      margin: 0 0 6px 0;
+      font-weight: 400;
+    }
+    .tbr-login-subtitle {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #7D8582;
+      display: block;
+    }
+
+    /* 4. CLEAN INPUTS */
+    input[type="text"],
+    input[type="password"] {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      border: 1px solid #D5CFC7 !important;
+      border-radius: 2px !important;
+      padding: 12px 14px !important;
+      font-family: 'Jost', sans-serif !important;
+      font-size: 13px !important;
+      margin-bottom: 16px !important;
+      outline: none !important;
+      background: #FFFFFF !important;
+    }
+
+    input:focus {
+      border-color: var(--tbr-dark-sage) !important;
+    }
+
+    /* 5. CENTERED LUXURY BUTTON (No More Screen-Wide Black Bar) */
+    button[class*="LoginButton"],
+    button[type="submit"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      background-color: var(--tbr-dark-sage) !important;
+      color: #FFFFFF !important;
+      font-family: 'Jost', sans-serif !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.2em !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      padding: 14px 24px !important;
+      border-radius: 2px !important;
+      border: none !important;
+      box-shadow: none !important;
+      cursor: pointer !important;
+      transition: background-color 0.2s ease !important;
+      margin: 12px auto 0 auto !important;
+      display: block !important;
+      line-height: normal !important;
+      text-align: center !important;
+    }
+
+    button[class*="LoginButton"]:hover,
+    button[type="submit"]:hover {
+      background-color: var(--tbr-sage) !important;
+    }
+
+    /* Button Text Override */
+    button[class*="LoginButton"] span {
+      font-size: 0 !important;
+    }
+    button[class*="LoginButton"] span::after {
+      content: "Sign In to Studio Portal" !important;
+      font-size: 11px !important;
+      letter-spacing: 0.2em !important;
+    }
+  </style>
 </head>
 <body>
+  <div id="nc-root"></div>
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+
+  <script>
+    // Injects the luxury branded header into the center card
+    const observer = new MutationObserver(() => {
+      const container = document.querySelector('div[class*="StyledAuthenticationPage"], div[class*="CardContainer"], div[class*="Login-container"]');
+      if (container && !document.getElementById('tbr-login-injected')) {
+        const headerEl = document.createElement('div');
+        headerEl.id = 'tbr-login-injected';
+        headerEl.className = 'tbr-login-header';
+        headerEl.innerHTML = `
+          <h1 class="tbr-login-brand">The Bridal Room</h1>
+          <span class="tbr-login-subtitle">Atherstone &bull; Studio Management Portal</span>
+        `;
+        container.insertBefore(headerEl, container.firstChild);
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  </script>
 </body>
 </html>
