@@ -4,7 +4,7 @@ backend:
   name: github
   repo: oliverk1/TheBridalRoomAtherstone
   branch: main
-  base_url: https://thebridalroomstaging.pages.dev/
+  base_url: https://tbr-decap-auth.oking574.workers.dev
   auth_endpoint: auth
 
 # Auto uploads directly into the source assets folder
