@@ -16,6 +16,10 @@ const dresses = defineCollection({
     tags: z.array(z.string()).default([]),
     image: z.string(),
     imageDetail: z.string().optional(),
+    gallery: z.union([
+      z.array(z.string()),
+      z.array(z.object({ photo: z.string() }))
+    ]).optional().default([]),
   }),
 });
 

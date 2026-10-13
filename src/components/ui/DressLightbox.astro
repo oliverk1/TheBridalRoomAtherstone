@@ -13,7 +13,7 @@
     id="lightbox-dialog"
     class="relative w-full max-w-4xl bg-ivory-50 border border-stone-300 shadow-2xl scale-95 transition-transform duration-300 overflow-hidden flex flex-col md:flex-row max-h-[92vh] rounded-xs"
   >
-    <!-- Close Button (Top-Right of modal) -->
+    <!-- Close Button -->
     <button
       id="lightbox-close-btn"
       type="button"
@@ -23,15 +23,37 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
 
-    <!-- Left: Image Stage & Gallery Selector -->
+    <!-- Left: Image Stage with Next/Previous Arrows & Gallery Thumbnails -->
     <div class="relative md:w-3/5 bg-stone-200 overflow-hidden flex flex-col items-center justify-between min-h-[340px] md:min-h-[580px] max-h-[52vh] md:max-h-[92vh]">
-      <div class="w-full h-full flex items-center justify-center overflow-hidden">
+      
+      <!-- Main Photo -->
+      <div class="w-full h-full flex items-center justify-center overflow-hidden relative">
         <img
           id="lightbox-main-img"
           src=""
           alt="Maximised Wedding Dress"
           class="w-full h-full object-cover object-top transition-opacity duration-300"
         />
+
+        <!-- Previous Photo Arrow -->
+        <button
+          id="lightbox-prev-arrow"
+          type="button"
+          class="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-900 flex items-center justify-center shadow-md cursor-pointer opacity-0 hover:opacity-100 transition-opacity hidden"
+          aria-label="Previous Photo"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        <!-- Next Photo Arrow -->
+        <button
+          id="lightbox-next-arrow"
+          type="button"
+          class="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-900 flex items-center justify-center shadow-md cursor-pointer opacity-0 hover:opacity-100 transition-opacity hidden"
+          aria-label="Next Photo"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
 
       <!-- Category Pill -->
@@ -48,7 +70,6 @@
     <!-- Right: Editorial Details (With pr-12 padding to avoid close-button collision) -->
     <div class="md:w-2/5 p-6 sm:p-8 bg-white flex flex-col justify-between overflow-y-auto">
       <div>
-        <!-- pr-12 guarantees the silhouette text (e.g. 'A-Line') never collides with the close cross -->
         <div class="flex items-center justify-between mb-2 pr-12">
           <p id="lightbox-designer" class="text-[10px] tracking-[0.28em] uppercase text-stone-500 font-medium">Designer</p>
           <span id="lightbox-silhouette" class="text-[10px] tracking-wider uppercase text-stone-400 font-medium">Silhouette</span>
@@ -111,11 +132,15 @@
 
 <script>
   let activeDress: any = null;
+  let activeImageIndex = 0;
+  let currentGalleryImages: string[] = [];
 
   const modal = document.getElementById('global-dress-lightbox');
   const dialog = document.getElementById('lightbox-dialog');
   const closeBtn = document.getElementById('lightbox-close-btn');
   const mainImg = document.getElementById('lightbox-main-img') as HTMLImageElement;
+  const prevArrow = document.getElementById('lightbox-prev-arrow');
+  const nextArrow = document.getElementById('lightbox-next-arrow');
   const badge = document.getElementById('lightbox-badge');
   const designerEl = document.getElementById('lightbox-designer');
   const silhouetteEl = document.getElementById('lightbox-silhouette');
@@ -128,10 +153,29 @@
   const wishlistText = document.getElementById('lightbox-wishlist-text');
   const galleryBar = document.getElementById('lightbox-gallery-bar');
 
+  function setMainImageByIndex(idx: number) {
+    if (!mainImg || currentGalleryImages.length === 0) return;
+    activeImageIndex = (idx + currentGalleryImages.length) % currentGalleryImages.length;
+    mainImg.src = currentGalleryImages[activeImageIndex];
+
+    // Highlight active thumbnail
+    document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+      if (i === activeImageIndex) {
+        thumb.classList.add('border-white', 'opacity-100');
+        thumb.classList.remove('border-stone-500', 'opacity-60');
+      } else {
+        thumb.classList.remove('border-white', 'opacity-100');
+        thumb.classList.add('border-stone-500', 'opacity-60');
+      }
+    });
+  }
+
   function openLightbox(dress: any) {
     if (!modal || !mainImg) return;
     activeDress = dress;
+    activeImageIndex = 0;
 
+    // Collect all unique photos
     const allImages = [dress.image];
     if (dress.imageDetail && dress.imageDetail !== dress.image) {
       allImages.push(dress.imageDetail);
@@ -141,8 +185,9 @@
         if (g && !allImages.includes(g)) allImages.push(g);
       });
     }
+    currentGalleryImages = allImages;
 
-    mainImg.src = allImages[0];
+    setMainImageByIndex(0);
     mainImg.alt = `${dress.title} by ${dress.designer}`;
 
     if (designerEl) designerEl.textContent = dress.designer;
@@ -164,36 +209,36 @@
       bookBtn.href = `/the-experience#book?dress=${encodeURIComponent(dress.title + ' by ' + dress.designer)}`;
     }
 
-    if (galleryBar) {
-      if (allImages.length > 1) {
+    // Toggle navigation arrows & gallery bar
+    if (currentGalleryImages.length > 1) {
+      prevArrow?.classList.remove('hidden');
+      nextArrow?.classList.remove('hidden');
+
+      if (galleryBar) {
         galleryBar.classList.remove('hidden');
         galleryBar.classList.add('flex');
-        galleryBar.innerHTML = allImages.map((src, i) => `
+        galleryBar.innerHTML = currentGalleryImages.map((src, i) => `
           <button
             type="button"
-            class="gallery-thumb w-8 h-10 border ${i === 0 ? 'border-white' : 'border-stone-500 opacity-60'} overflow-hidden cursor-pointer transition-all"
-            data-src="${src}"
+            class="gallery-thumb w-8 h-10 border ${i === 0 ? 'border-white opacity-100' : 'border-stone-500 opacity-60'} overflow-hidden cursor-pointer transition-all shrink-0"
+            data-index="${i}"
           >
             <img src="${src}" class="w-full h-full object-cover" />
           </button>
         `).join('');
 
-        document.querySelectorAll('.gallery-thumb').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const src = (btn as HTMLElement).dataset.src;
-            if (src && mainImg) mainImg.src = src;
-            document.querySelectorAll('.gallery-thumb').forEach(b => {
-              b.classList.remove('border-white');
-              b.classList.add('border-stone-500', 'opacity-60');
-            });
-            btn.classList.add('border-white');
-            btn.classList.remove('border-stone-500', 'opacity-60');
+        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+          thumb.addEventListener('click', () => {
+            const idx = Number((thumb as HTMLElement).dataset.index || 0);
+            setMainImageByIndex(idx);
           });
         });
-      } else {
-        galleryBar.classList.add('hidden');
-        galleryBar.classList.remove('flex');
       }
+    } else {
+      prevArrow?.classList.add('hidden');
+      nextArrow?.classList.add('hidden');
+      galleryBar?.classList.add('hidden');
+      galleryBar?.classList.remove('flex');
     }
 
     syncLightboxWishlistBtn();
@@ -206,6 +251,16 @@
       dialog?.classList.add('scale-100');
     });
   }
+
+  prevArrow?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setMainImageByIndex(activeImageIndex - 1);
+  });
+
+  nextArrow?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setMainImageByIndex(activeImageIndex + 1);
+  });
 
   function closeLightbox() {
     if (!modal) return;
@@ -264,8 +319,10 @@
   });
 
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-      closeLightbox();
+    if (modal && !modal.classList.contains('hidden')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') setMainImageByIndex(activeImageIndex - 1);
+      if (e.key === 'ArrowRight') setMainImageByIndex(activeImageIndex + 1);
     }
   });
 

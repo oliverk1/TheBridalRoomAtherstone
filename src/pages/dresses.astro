@@ -5,23 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import DressCard from '../components/ui/DressCard.astro';
 import DressFilter from '../components/ui/DressFilter.astro';
 import FAQAccordion from '../components/ui/FAQAccordion.astro';
-import faqsData from '../content/settings/faqs.json';
 
-// Pull FAQs dynamically from settings JSON
-const dressFaqs = (faqsData as any).dressFaqs || [
-  {
-    question: "How far in advance should I order my wedding dress?",
-    answer: "Made-to-order designer gowns typically take between 6 to 9 months to be cut, beaded, and delivered. We recommend ordering 9 to 12 months before your wedding to allow comfortable time for fitting appointments with our in-house seamstress."
-  },
-  {
-    question: "Can I take home a dress immediately if my wedding is soon?",
-    answer: "Yes. Our Designer Ex-Sample Rail features genuine showroom gowns available off-the-peg from £250 to £900 (up to 70% off RRP) that can be purchased and taken home the very same day."
-  },
-  {
-    question: "What sample sizes do you keep in the Atherstone showroom?",
-    answer: "Our in-store sample gowns range from UK size 12 to 20, expertly clipped and pinned during your 1-to-1 styling session to show how they flatter your shape. When ordering new made-to-order styles, gowns can be ordered from UK size 2 through to size 32."
-  }
-];
+// Pull FAQs dynamically from settings JSON (managed via Decap CMS)
+import faqsData from '../content/settings/faqs.json';
+const dressFaqs = (faqsData as any).dressFaqs || [];
 
 // Query all dresses from Decap markdown content collection
 let allDressesEntries: any[] = [];
@@ -31,7 +18,7 @@ try {
   allDressesEntries = [];
 }
 
-// Fallback curated inventory if no markdown files are published yet
+// Fallback curated inventory with multi-image gallery support
 const fallbackDresses = [
   {
     id: "ja-88250",
@@ -44,7 +31,8 @@ const fallbackDresses = [
     neckline: "Sweetheart",
     features: ["Romantic Lace", "Sparkle & Beading", "Low Back Detail"],
     image: "/images/dress-1.webp",
-    imageDetail: "/images/dress-1.webp"
+    imageDetail: "/images/dress-1.webp",
+    gallery: ["/images/dress-1.webp", "/images/dress-2.webp", "/images/dress-3.webp"]
   },
   {
     id: "sinc-44320",
@@ -57,7 +45,8 @@ const fallbackDresses = [
     neckline: "Square & Straight",
     features: ["Clean Mikado & Crepe", "Buttons Down The Train"],
     image: "/images/dress-2.webp",
-    imageDetail: "/images/dress-2.webp"
+    imageDetail: "/images/dress-2.webp",
+    gallery: ["/images/dress-2.webp", "/images/dress-1.webp"]
   },
   {
     id: "sample-adore-01",
@@ -70,7 +59,8 @@ const fallbackDresses = [
     neckline: "V-Neck / Plunge",
     features: ["Romantic Lace", "Low Back Detail"],
     image: "/images/dress-3.webp",
-    imageDetail: "/images/dress-3.webp"
+    imageDetail: "/images/dress-3.webp",
+    gallery: ["/images/dress-3.webp"]
   },
   {
     id: "phx-ivy",
@@ -82,25 +72,34 @@ const fallbackDresses = [
     silhouette: "Boho & Lace",
     neckline: "V-Neck / Plunge",
     features: ["Romantic Lace", "Sleeves & Straps"],
-    image: "/images/dress-1.webp"
+    image: "/images/dress-1.webp",
+    gallery: ["/images/dress-1.webp"]
   }
 ];
 
 // Normalize dresses list from CMS or Fallback
 const dressesList = allDressesEntries.length > 0
-  ? allDressesEntries.map((d: any) => ({
-      id: d.slug || d.id,
-      title: d.data.title,
-      designer: d.data.designer,
-      category: d.data.category,
-      price: d.data.price,
-      sampleSize: String(d.data.sampleSize || "14"),
-      silhouette: d.data.silhouette || "A-Line",
-      neckline: d.data.neckline || "Sweetheart",
-      features: Array.isArray(d.data.tags) ? d.data.tags : ["Romantic Lace"],
-      image: d.data.image,
-      imageDetail: d.data.imageDetail
-    }))
+  ? allDressesEntries.map((d: any) => {
+      const rawGallery = d.data.gallery || [];
+      const cleanGallery = Array.isArray(rawGallery)
+        ? rawGallery.map((g: any) => typeof g === 'string' ? g : g?.photo).filter(Boolean)
+        : [];
+
+      return {
+        id: d.slug || d.id,
+        title: d.data.title,
+        designer: d.data.designer,
+        category: d.data.category,
+        price: d.data.price,
+        sampleSize: String(d.data.sampleSize || "14"),
+        silhouette: d.data.silhouette || "A-Line",
+        neckline: d.data.neckline || "Sweetheart",
+        features: Array.isArray(d.data.tags) ? d.data.tags : ["Romantic Lace"],
+        image: d.data.image,
+        imageDetail: d.data.imageDetail,
+        gallery: cleanGallery
+      };
+    })
   : fallbackDresses;
 
 // DYNAMIC EXTRACTION: Scans dress collection to generate filter pills automatically
@@ -116,7 +115,7 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
   description="Explore curated bridal gowns at The Bridal Room Atherstone. Made to order luxury £1,200–£2,500, ex-sample rail £250–£900, UK sizes 12–20 in store. Book your private suite."
   faqs={dressFaqs}
 >
-  <!-- Page Header -->
+  <!-- 1. EDITORIAL HEADER -->
   <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-20 px-6">
     <div class="max-w-4xl mx-auto text-center">
       <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
@@ -133,7 +132,7 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
     </div>
   </section>
 
-  <!-- Lookbook Core -->
+  <!-- 2. LOOKBOOK CORE: MULTI-CRITERIA FILTERS & GOWN GRID -->
   <section class="py-12 sm:py-16 px-6 lg:px-12 max-w-6xl mx-auto">
     <!-- Multi-Criteria Filter Suite (Dynamically populated from content collection) -->
     <DressFilter
@@ -152,23 +151,23 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
     </div>
   </section>
 
-  <!-- Editorial Designer Authority Block -->
+  <!-- 3. EDITORIAL DESIGNER AUTHORITY BLOCK -->
   <section class="bg-ivory-100/70 border-y border-stone-200 py-16 px-6 lg:px-12">
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
       <div>
-        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Justin Alexander</h3>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2 font-normal">Justin Alexander</h3>
         <p class="text-xs text-stone-600 leading-relaxed font-light">
           World-renowned for vintage-inspired silhouettes, opulent hand-beading, and couture inner corsetry that flatters every curve.
         </p>
       </div>
       <div>
-        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Sincerity Bridal</h3>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2 font-normal">Sincerity Bridal</h3>
         <p class="text-xs text-stone-600 leading-relaxed font-light">
           Graceful, fairytale dresses pairing soft tulles and romantic sweethearts for the timeless, classic bride.
         </p>
       </div>
       <div>
-        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2">Ex-Sample Rail</h3>
+        <h3 class="font-serif text-lg uppercase tracking-wider text-stone-900 mb-2 font-normal">Ex-Sample Rail</h3>
         <p class="text-xs text-stone-600 leading-relaxed font-light">
           Discontinued runway gowns and pristine showroom floor samples discounted from £250–£900. Ready to take home immediately.
         </p>
@@ -176,7 +175,7 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
     </div>
   </section>
 
-  <!-- Contextual FAQ Pillar -->
+  <!-- 4. CONTEXTUAL DRESS FAQS (Pulled from faqs.json & passed to Schema.org) -->
   <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
     <div class="text-center mb-10">
       <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Helpful Guidance</p>

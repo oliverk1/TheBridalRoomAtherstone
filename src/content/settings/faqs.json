@@ -35,10 +35,32 @@
       "answer": "We understand plans change. For our complimentary Signature styling appointments, we kindly request at least 48 hours notice so we can offer the private suite to another bride on our waiting list. For VIB Afternoon Tea appointments, rescheduling is available with 72 hours notice."
     }
   ],
+  "dressFaqs": [
+    {
+      "question": "How far in advance should I order my wedding dress?",
+      "answer": "Made-to-order designer gowns typically take between 6 to 9 months to be cut, beaded, and delivered by our international design houses. We recommend ordering 9 to 12 months before your wedding date to allow comfortable time for fitting appointments with our in-house seamstresses."
+    },
+    {
+      "question": "Can I take home a wedding dress immediately if my wedding is soon?",
+      "answer": "Yes! Our Designer Ex-Sample Rail features genuine showroom gowns available off-the-peg from £250 to £900 (up to 70% off RRP). These dresses are in pristine showroom condition and can be purchased and taken home on the very same day."
+    },
+    {
+      "question": "What sample sizes do you keep in the Atherstone showroom?",
+      "answer": "Our in-store sample gowns range from UK size 12 to 20, expertly clipped and pinned during your 1-to-1 appointment to show you exactly how the gown flatters your body. When ordering new made-to-order styles, gowns can be ordered from UK size 2 through to size 32."
+    },
+    {
+      "question": "What is the price range of your wedding dresses?",
+      "answer": "Our Made to Order designer gowns range from £1,200 to £2,500. For brides with shorter lead times or seeking a bargain, our Designer Ex-Sample rail features gowns from £250 to £900. Custom cathedral veils, tiaras, and bridal jewellery start from £45."
+    },
+    {
+      "question": "Do you offer in-house alteration fittings?",
+      "answer": "Yes. We work closely with trusted, professional bridal seamstresses who know our designer gowns inside and out. From shortening hems and lifting shoulders to adding custom sleeves and bustle points, we guide your alteration journey right through to your final collection."
+    }
+  ],
   "aboutFaqs": [
     {
       "question": "How long has The Bridal Room been open in Atherstone?",
-      "answer": "The Bridal Room has welcomed brides to our Station Street boutique since 2013. Vicky brings over 29 years of fashion retail and 15 years of dedicated bridal experience, giving brides exceptional technical expertise on cut, sizing, and corsetry."
+      "answer": "The Bridal Room has welcomed brides to our Station Street boutique since 2017. Vicky brings over 29 years of fashion retail and 15 years of dedicated bridal experience, giving brides exceptional technical expertise on cut, sizing, and corsetry."
     },
     {
       "question": "Why does Vicky's wedding photography background matter?",

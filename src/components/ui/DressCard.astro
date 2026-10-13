@@ -12,6 +12,7 @@ interface Props {
   features?: string[];
   image: string;
   imageDetail?: string;
+  gallery?: string[];
 }
 
 const {
@@ -25,10 +26,18 @@ const {
   neckline = "Sweetheart",
   features = [],
   image,
-  imageDetail
+  imageDetail,
+  gallery = []
 } = Astro.props;
 
 const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerCase().includes("sample");
+
+// Clean gallery photos array
+const allCardImages = [image];
+if (imageDetail && imageDetail !== image) allCardImages.push(imageDetail);
+gallery.forEach(img => {
+  if (img && !allCardImages.includes(img)) allCardImages.push(img);
+});
 ---
 
 <div
@@ -40,6 +49,7 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
   data-neckline={neckline}
   data-sample-size={sampleSize}
   data-features={JSON.stringify(features)}
+  data-gallery={JSON.stringify(allCardImages)}
   data-title={title}
   data-price={price}
   data-image={image}
@@ -48,8 +58,9 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
   <!-- Image Container (Click opens Lightbox) -->
   <div
     class="dress-card-trigger relative aspect-4/5 overflow-hidden bg-stone-200 mb-4 sm:mb-5 cursor-zoom-in group/img"
-    title="Click to enlarge dress"
+    title="Click to view all photos"
   >
+    <!-- Front View -->
     <img
       src={image}
       alt={`${title} wedding dress by ${designer} at The Bridal Room Atherstone`}
@@ -60,6 +71,7 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
       class="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-700 primary-image"
     />
 
+    <!-- Back View (Fades in smoothly on hover if available) -->
     {imageDetail && (
       <img
         src={imageDetail}
@@ -76,7 +88,7 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
     <div class="absolute inset-0 bg-stone-900/15 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
       <span class="bg-white/90 backdrop-blur-xs text-stone-900 text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 shadow-sm font-medium flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
-        Maximise
+        {allCardImages.length > 1 ? `View Photos (${allCardImages.length})` : 'Maximise'}
       </span>
     </div>
 
@@ -91,7 +103,7 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
       </span>
     )}
 
-    <!-- Heart Wishlist Toggle Button (Isolated from Lightbox Trigger) -->
+    <!-- Heart Wishlist Toggle Button -->
     <button
       type="button"
       class="wishlist-btn absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-stone-700 hover:text-red-700 hover:bg-white transition-all shadow-xs cursor-pointer"
@@ -109,7 +121,7 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
     <p class="text-[10px] tracking-[0.25em] uppercase text-stone-500 mb-1">{designer}</p>
     <h3
       class="dress-card-trigger font-serif text-base uppercase text-stone-900 font-light mb-1.5 cursor-pointer hover:text-sage-800 transition-colors"
-      title="Click to enlarge"
+      title="Click to view all photos"
     >
       {title}
     </h3>
@@ -200,7 +212,8 @@ const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerC
         silhouette: card.dataset.silhouette,
         category: card.dataset.category,
         image: card.dataset.image,
-        imageDetail: card.dataset.imageDetail
+        imageDetail: card.dataset.imageDetail,
+        gallery: JSON.parse(card.dataset.gallery || '[]')
       };
 
       if ((window as any).tbrOpenDressLightbox) {
