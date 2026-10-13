@@ -11,9 +11,9 @@
 >
   <div
     id="lightbox-dialog"
-    class="relative w-full max-w-4xl bg-ivory-50 border border-stone-300 shadow-2xl scale-95 transition-transform duration-300 overflow-hidden flex flex-col md:flex-row max-h-[92vh]"
+    class="relative w-full max-w-4xl bg-ivory-50 border border-stone-300 shadow-2xl scale-95 transition-transform duration-300 overflow-hidden flex flex-col md:flex-row max-h-[92vh] rounded-xs"
   >
-    <!-- Close Button -->
+    <!-- Close Button (Top-Right of modal) -->
     <button
       id="lightbox-close-btn"
       type="button"
@@ -23,52 +23,54 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
 
-    <!-- Left: Large Image Stage -->
-    <div class="relative md:w-3/5 bg-stone-200 overflow-hidden flex items-center justify-center min-h-[340px] md:min-h-[580px] max-h-[52vh] md:max-h-[92vh]">
-      <img
-        id="lightbox-main-img"
-        src=""
-        alt="Maximised Wedding Dress"
-        class="w-full h-full object-cover object-top transition-opacity duration-300"
-      />
+    <!-- Left: Image Stage & Gallery Selector -->
+    <div class="relative md:w-3/5 bg-stone-200 overflow-hidden flex flex-col items-center justify-between min-h-[340px] md:min-h-[580px] max-h-[52vh] md:max-h-[92vh]">
+      <div class="w-full h-full flex items-center justify-center overflow-hidden">
+        <img
+          id="lightbox-main-img"
+          src=""
+          alt="Maximised Wedding Dress"
+          class="w-full h-full object-cover object-top transition-opacity duration-300"
+        />
+      </div>
 
       <!-- Category Pill -->
       <span id="lightbox-badge" class="absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium">
         Made to Order
       </span>
 
-      <!-- Detail Image Toggle (If back view exists) -->
-      <div id="lightbox-view-toggle" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden items-center gap-2 bg-stone-900/80 backdrop-blur-xs p-1 rounded-full shadow-md">
-        <button id="view-front-btn" type="button" class="text-[9px] uppercase tracking-wider text-white px-3 py-1 rounded-full bg-white/25 font-medium cursor-pointer">Front</button>
-        <button id="view-back-btn" type="button" class="text-[9px] uppercase tracking-wider text-stone-300 px-3 py-1 rounded-full hover:text-white cursor-pointer">Back View</button>
+      <!-- Multi-Image Thumbnail Gallery Bar -->
+      <div id="lightbox-gallery-bar" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 hidden items-center gap-2 bg-stone-900/80 backdrop-blur-xs px-3 py-1.5 rounded-full shadow-md max-w-[90%] overflow-x-auto">
+        <!-- Thumbnails injected dynamically -->
       </div>
     </div>
 
-    <!-- Right: Editorial Details & Action Suite -->
+    <!-- Right: Editorial Details (With pr-12 padding to avoid close-button collision) -->
     <div class="md:w-2/5 p-6 sm:p-8 bg-white flex flex-col justify-between overflow-y-auto">
       <div>
-        <div class="flex items-center justify-between mb-2">
+        <!-- pr-12 guarantees the silhouette text (e.g. 'A-Line') never collides with the close cross -->
+        <div class="flex items-center justify-between mb-2 pr-12">
           <p id="lightbox-designer" class="text-[10px] tracking-[0.28em] uppercase text-stone-500 font-medium">Designer</p>
-          <span id="lightbox-silhouette" class="text-[10px] tracking-wider uppercase text-stone-400">Silhouette</span>
+          <span id="lightbox-silhouette" class="text-[10px] tracking-wider uppercase text-stone-400 font-medium">Silhouette</span>
         </div>
         
-        <h3 id="lightbox-title" class="font-serif text-2xl sm:text-3xl uppercase text-stone-900 font-light leading-snug mb-3">
+        <h3 id="lightbox-title" class="font-serif text-2xl sm:text-3xl uppercase text-stone-900 font-light leading-snug mb-3 pr-8">
           Dress Title
         </h3>
 
         <div class="flex items-baseline gap-3 pb-4 mb-4 border-b border-stone-200">
           <span id="lightbox-price" class="font-serif text-xl text-sage-900 font-medium">£1,650</span>
-          <span id="lightbox-sample-size" class="text-xs text-stone-500 font-light">Sample Size 14 in Boutique</span>
+          <span id="lightbox-sample-size" class="text-xs text-stone-500 font-light">Sample Size in Store</span>
         </div>
 
         <div class="space-y-3 text-xs text-stone-600 font-light leading-relaxed mb-6">
-          <p>
+          <p id="lightbox-desc">
             Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.
           </p>
           <ul class="space-y-1.5 text-[11px] text-stone-500">
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
-              1-to-1 unhurried styling session with Vicky & Sam
+              1-to-1 styling session with Vicky & Sam
             </li>
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
@@ -109,8 +111,6 @@
 
 <script>
   let activeDress: any = null;
-  let frontImgSrc = '';
-  let backImgSrc = '';
 
   const modal = document.getElementById('global-dress-lightbox');
   const dialog = document.getElementById('lightbox-dialog');
@@ -126,19 +126,23 @@
   const wishlistBtn = document.getElementById('lightbox-wishlist-btn');
   const heartIcon = document.getElementById('lightbox-heart-icon');
   const wishlistText = document.getElementById('lightbox-wishlist-text');
-
-  const viewToggle = document.getElementById('lightbox-view-toggle');
-  const viewFrontBtn = document.getElementById('view-front-btn');
-  const viewBackBtn = document.getElementById('view-back-btn');
+  const galleryBar = document.getElementById('lightbox-gallery-bar');
 
   function openLightbox(dress: any) {
     if (!modal || !mainImg) return;
     activeDress = dress;
 
-    frontImgSrc = dress.image;
-    backImgSrc = dress.imageDetail || '';
+    const allImages = [dress.image];
+    if (dress.imageDetail && dress.imageDetail !== dress.image) {
+      allImages.push(dress.imageDetail);
+    }
+    if (Array.isArray(dress.gallery)) {
+      dress.gallery.forEach((g: string) => {
+        if (g && !allImages.includes(g)) allImages.push(g);
+      });
+    }
 
-    mainImg.src = frontImgSrc;
+    mainImg.src = allImages[0];
     mainImg.alt = `${dress.title} by ${dress.designer}`;
 
     if (designerEl) designerEl.textContent = dress.designer;
@@ -160,15 +164,35 @@
       bookBtn.href = `/the-experience#book?dress=${encodeURIComponent(dress.title + ' by ' + dress.designer)}`;
     }
 
-    // Toggle Back View button if detail image is available
-    if (viewToggle) {
-      if (backImgSrc && backImgSrc !== frontImgSrc) {
-        viewToggle.classList.remove('hidden');
-        viewToggle.classList.add('flex');
-        setActiveView(true);
+    if (galleryBar) {
+      if (allImages.length > 1) {
+        galleryBar.classList.remove('hidden');
+        galleryBar.classList.add('flex');
+        galleryBar.innerHTML = allImages.map((src, i) => `
+          <button
+            type="button"
+            class="gallery-thumb w-8 h-10 border ${i === 0 ? 'border-white' : 'border-stone-500 opacity-60'} overflow-hidden cursor-pointer transition-all"
+            data-src="${src}"
+          >
+            <img src="${src}" class="w-full h-full object-cover" />
+          </button>
+        `).join('');
+
+        document.querySelectorAll('.gallery-thumb').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const src = (btn as HTMLElement).dataset.src;
+            if (src && mainImg) mainImg.src = src;
+            document.querySelectorAll('.gallery-thumb').forEach(b => {
+              b.classList.remove('border-white');
+              b.classList.add('border-stone-500', 'opacity-60');
+            });
+            btn.classList.add('border-white');
+            btn.classList.remove('border-stone-500', 'opacity-60');
+          });
+        });
       } else {
-        viewToggle.classList.add('hidden');
-        viewToggle.classList.remove('flex');
+        galleryBar.classList.add('hidden');
+        galleryBar.classList.remove('flex');
       }
     }
 
@@ -194,26 +218,6 @@
       activeDress = null;
     }, 250);
   }
-
-  function setActiveView(isFront: boolean) {
-    if (!mainImg) return;
-    mainImg.src = isFront ? frontImgSrc : backImgSrc;
-
-    if (isFront) {
-      viewFrontBtn?.classList.add('bg-white/25', 'text-white');
-      viewFrontBtn?.classList.remove('text-stone-300');
-      viewBackBtn?.classList.remove('bg-white/25', 'text-white');
-      viewBackBtn?.classList.add('text-stone-300');
-    } else {
-      viewBackBtn?.classList.add('bg-white/25', 'text-white');
-      viewBackBtn?.classList.remove('text-stone-300');
-      viewFrontBtn?.classList.remove('bg-white/25', 'text-white');
-      viewFrontBtn?.classList.add('text-stone-300');
-    }
-  }
-
-  viewFrontBtn?.addEventListener('click', () => setActiveView(true));
-  viewBackBtn?.addEventListener('click', () => setActiveView(false));
 
   function syncLightboxWishlistBtn() {
     if (!activeDress) return;
@@ -265,6 +269,5 @@
     }
   });
 
-  // Global listener for card clicks
   (window as any).tbrOpenDressLightbox = openLightbox;
 </script>

@@ -18,7 +18,6 @@
       --tbr-border: #E2DBD2;
     }
 
-    /* 1. Global Reset (No flex on body so full dashboard layout flows normally) */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
@@ -34,7 +33,7 @@
       min-height: 100% !important;
     }
 
-    /* 2. Login Card: Scoped Centering (Only affects the login screen) */
+    /* Center Login Screen Card */
     section[class*="StyledAuthenticationPage"],
     section.exus10f5 {
       background-color: #FFFFFF !important;
@@ -43,7 +42,7 @@
       border-radius: 3px !important;
       max-width: 440px !important;
       width: 90% !important;
-      margin: 15vh auto !important; /* Centers card on login screen without breaking dashboard */
+      margin: 15vh auto !important;
       padding: 45px 36px !important;
       box-sizing: border-box !important;
       display: flex !important;
@@ -52,13 +51,13 @@
       text-align: center !important;
     }
 
-    /* 3. Hide Decap Default Pink Logo on Login */
+    /* Hide Default Decap Pink Logo */
     span[class*="IconWrapper-DecapLogoIcon"],
     span.exus10f3 {
       display: none !important;
     }
 
-    /* 4. Luxury Login Header */
+    /* Luxury Branded Login Header */
     .tbr-login-header {
       width: 100%;
       text-align: center;
@@ -92,14 +91,14 @@
       margin: 0;
     }
 
-    /* 5. Login Button Styling */
+    /* Styled Login Button */
     button[class*="LoginButton"],
     button.exus10f1 {
       width: 100% !important;
       background-color: var(--tbr-dark-sage) !important;
       color: #FFFFFF !important;
       font-family: 'Jost', sans-serif !important;
-      font-size: 0 !important; /* Hides raw 'Login with GitHub' text */
+      font-size: 0 !important; /* Hides raw text collision */
       padding: 15px 24px !important;
       border-radius: 2px !important;
       border: none !important;
@@ -109,7 +108,6 @@
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      line-height: normal !important;
       box-sizing: border-box !important;
     }
 
@@ -133,18 +131,10 @@
       color: #FFFFFF !important;
     }
 
-    /* 6. Dashboard Styling Once Logged In */
+    /* Dashboard Header */
     header[class*="AppHeader"] {
       background-color: #FFFFFF !important;
       border-bottom: 1px solid var(--tbr-border) !important;
-    }
-
-    /* Active Collection Tab Highlight */
-    a[class*="SidebarNavLink"][class*="active"],
-    div[class*="SidebarLink"][class*="active"] {
-      background-color: #EBF1EE !important;
-      color: var(--tbr-sage) !important;
-      font-weight: 500 !important;
     }
   </style>
 </head>
@@ -153,6 +143,7 @@
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
 
   <script>
+    // 1. Injects the branded header on the login screen
     const observer = new MutationObserver(() => {
       const container = document.querySelector('section[class*="StyledAuthenticationPage"], section.exus10f5');
       if (container && !document.getElementById('tbr-login-injected')) {
@@ -167,8 +158,48 @@
         container.insertBefore(headerEl, container.firstChild);
       }
     });
-
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // 2. Registers custom 'combobox' widget (Pick from dropdown OR type any custom value)
+    if (window.CMS && window.createClass && window.h) {
+      const ComboboxControl = window.createClass({
+        handleChange: function(e) {
+          this.props.onChange(e.target.value);
+        },
+        render: function() {
+          const listId = this.props.forID + '_datalist';
+          const rawOptions = this.props.field.get('options');
+          const options = rawOptions ? rawOptions.toJS() : [];
+
+          return window.h('div', { style: { width: '100%' } }, [
+            window.h('input', {
+              id: this.props.forID,
+              className: this.props.classNameWrapper,
+              type: 'text',
+              list: listId,
+              value: this.props.value || '',
+              onChange: this.handleChange,
+              placeholder: this.props.field.get('hint') || 'Choose from list or type custom...',
+              style: {
+                width: '100%',
+                padding: '10px 14px',
+                fontSize: '14px',
+                border: '1px solid #D5CFC7',
+                borderRadius: '2px',
+                boxSizing: 'border-box'
+              }
+            }),
+            window.h('datalist', { id: listId },
+              options.map(function(opt) {
+                return window.h('option', { value: opt, key: opt });
+              })
+            )
+          ]);
+        }
+      });
+
+      window.CMS.registerWidget('combobox', ComboboxControl);
+    }
   </script>
 </body>
 </html>
