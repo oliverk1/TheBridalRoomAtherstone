@@ -13,6 +13,7 @@ interface Props {
   image: string;
   imageDetail?: string;
   gallery?: string[];
+  description?: string;
 }
 
 const {
@@ -27,7 +28,8 @@ const {
   features = [],
   image,
   imageDetail,
-  gallery = []
+  gallery = [],
+  description = ""
 } = Astro.props;
 
 const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerCase().includes("sample");
@@ -54,6 +56,7 @@ gallery.forEach(img => {
   data-price={price}
   data-image={image}
   data-image-detail={imageDetail || ""}
+  data-description={description}
 >
   <!-- Image Container (Click opens Lightbox) -->
   <div
@@ -213,7 +216,8 @@ gallery.forEach(img => {
         category: card.dataset.category,
         image: card.dataset.image,
         imageDetail: card.dataset.imageDetail,
-        gallery: JSON.parse(card.dataset.gallery || '[]')
+        gallery: JSON.parse(card.dataset.gallery || '[]'),
+        description: card.dataset.description || ''
       };
 
       if ((window as any).tbrOpenDressLightbox) {

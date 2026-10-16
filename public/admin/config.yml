@@ -14,7 +14,7 @@ public_folder: "/images/uploads"
 
 collections:
   # =========================================================================
-  # 1. DRESSES COLLECTION (Combobox widgets allow picking or typing custom)
+  # 1. DRESSES COLLECTION
   # =========================================================================
   - name: "dresses"
     label: "Dresses & Gowns"
@@ -22,9 +22,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Dress Title", name: "title", widget: "string", hint: "e.g. Romantic Beaded Mikado" }
-
-      # Designer: Pick from common designers OR type any new designer name
+      - { label: "Dress Title", name: "title", widget: "string", hint: "e.g. Romantic Beaded Bodice" }
       - label: "Designer"
         name: "designer"
         widget: "combobox"
@@ -35,7 +33,6 @@ collections:
           - "Phoenix Gowns"
           - "Danielle Couture"
         hint: "Pick a designer or type a new brand name"
-
       - label: "Rail / Purchase Type"
         name: "category"
         widget: "select"
@@ -43,16 +40,12 @@ collections:
           - "Made to Order (£1,200 - £2,500)"
           - "Sample Sale Rail (£250 - £900)"
           - "Accessories"
-
       - { label: "Price / Price Tag", name: "price", widget: "string", hint: "e.g. £1,650 or Sample £695 (RRP £1,450)" }
-
       - label: "In-Store Sample Size"
         name: "sampleSize"
         widget: "select"
         default: "14"
         options: ["10", "12", "14", "16", "18", "20", "22", "24"]
-
-      # Silhouette: Pick from standard cuts OR type any custom cut
       - label: "Silhouette / Cut"
         name: "silhouette"
         widget: "combobox"
@@ -66,8 +59,6 @@ collections:
           - "Column / Sheath"
           - "Tea-Length"
         hint: "Pick a silhouette or type a custom cut"
-
-      # Neckline: Pick from standard necklines OR type any custom neckline
       - label: "Neckline"
         name: "neckline"
         widget: "combobox"
@@ -81,16 +72,21 @@ collections:
           - "Bateau / Boatneck"
           - "Off-the-Shoulder"
           - "One Shoulder"
-          - "Cowl Neck"
         hint: "Pick from dropdown or type any custom neckline"
-
-      - label: "Fabric & Feature Tags (Filter Pills)"
+      - label: "Special Details & Features"
         name: "tags"
-        widget: "list"
-        default: ["Romantic Lace"]
-        field: { label: "Tag", name: "tag", widget: "string" }
-        hint: "Add as many feature tags as you like (e.g. Romantic Lace, Crepe, Low Back Detail, Sleeves)"
-
+        widget: "select"
+        multiple: true
+        options:
+          - "Romantic Lace"
+          - "Clean Mikado & Crepe"
+          - "Sparkle & Beading"
+          - "Low Back Detail"
+          - "Long Cathedral Train"
+          - "Sleeves & Straps"
+          - "Buttons Down The Train"
+          - "Pockets"
+        hint: "Hold Ctrl / Cmd to select multiple features (no more clunky text accordion)"
       - { label: "Featured on Homepage", name: "featured", widget: "boolean", default: false }
       - { label: "Main Front Photo", name: "image", widget: "image" }
       - { label: "Back View Photo (Optional)", name: "imageDetail", widget: "image", required: false }
@@ -99,14 +95,22 @@ collections:
         widget: "list"
         required: false
         field: { label: "Photo", name: "photo", widget: "image" }
-      - { label: "Editorial Description", name: "body", widget: "markdown", required: false }
+      - { label: "Dress Description (Shown in Lightbox)", name: "body", widget: "markdown", required: false, hint: "Describe the lace, fabric feel, or styling notes" }
 
   # =========================================================================
-  # 2. SITE-WIDE SETTINGS, TICKERS & FOUNDER CONTENT
+  # 2. SITE-WIDE SETTINGS & ANNOUNCEMENTS
   # =========================================================================
   - name: "settings"
     label: "Website Settings"
     files:
+      - label: "Top Announcement Bar (Hero Notice)"
+        name: "hero_notice"
+        file: "src/content/settings/notice.json"
+        fields:
+          - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
+          - { label: "Banner Text", name: "text", widget: "string", hint: "e.g. Designer Sample Sale Event This Saturday" }
+          - { label: "Link URL (Optional)", name: "link", widget: "string", required: false, hint: "e.g. /dresses or /the-experience#book" }
+
       - label: "Reassurance Ticker Points"
         name: "ticker"
         file: "src/content/settings/ticker.json"
@@ -126,8 +130,6 @@ collections:
             fields:
               - { label: "Quote Text", name: "quote", widget: "text" }
               - { label: "Bride Name", name: "bride", widget: "string" }
-              - { label: "Designer / Gown", name: "designer", widget: "string" }
-              - { label: "Wedding Location", name: "location", widget: "string" }
 
       - label: "About Page Content & Founders"
         name: "about_content"
@@ -153,14 +155,6 @@ collections:
               - { label: "Number (e.g. 01)", name: "number", widget: "string" }
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
-
-      - label: "Homepage Hero Notice"
-        name: "hero_notice"
-        file: "src/content/settings/notice.json"
-        fields:
-          - { label: "Show Announcement Bar", name: "enabled", widget: "boolean", default: false }
-          - { label: "Banner Text", name: "text", widget: "string" }
-          - { label: "Link URL (Optional)", name: "link", widget: "string", required: false }
 
   # =========================================================================
   # 3. WEBSITE FAQS

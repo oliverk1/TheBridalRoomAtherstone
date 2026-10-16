@@ -1,5 +1,7 @@
 ---
-// src/components/layout/Header.astro
+// In src/components/layout/Header.astro frontmatter:
+import noticeData from '../../content/settings/notice.json';
+
 const pathname = new URL(Astro.request.url).pathname;
 
 const navItems = [
@@ -14,9 +16,22 @@ const PHONE_DISPLAY = "01827 946 098";
 const PHONE_HREF = "tel:01827946098";
 ---
 
+<!-- TOP ANNOUNCEMENT BANNER (Controlled via Decap CMS) -->
+{noticeData && noticeData.enabled && (
+  <div class="bg-sage-900 text-white text-[11px] py-2 px-4 text-center tracking-[0.15em] uppercase font-light border-b border-sage-800">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-2">
+      <span>{noticeData.text}</span>
+      {noticeData.link && (
+        <a href={noticeData.link} class="underline underline-offset-2 hover:text-sage-200 ml-1 font-medium">
+          Learn More &rarr;
+        </a>
+      )}
+    </div>
+  </div>
+)}
+
 <header class="sticky top-0 z-40 bg-sage-100/95 backdrop-blur-md border-b border-sage-200 transition-all duration-300">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 py-3 lg:py-4">
-    
     <!-- Boutique Brand Heading -->
     <div class="text-center mb-2.5 lg:mb-3.5">
       <a href="/" class="inline-block group">

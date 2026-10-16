@@ -97,7 +97,8 @@ const dressesList = allDressesEntries.length > 0
         features: Array.isArray(d.data.tags) ? d.data.tags : ["Romantic Lace"],
         image: d.data.image,
         imageDetail: d.data.imageDetail,
-        gallery: cleanGallery
+        gallery: cleanGallery,
+        description: d.body || d.data.description || ""
       };
     })
   : fallbackDresses;

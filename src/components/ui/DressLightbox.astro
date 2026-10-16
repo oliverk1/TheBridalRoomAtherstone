@@ -175,7 +175,13 @@
     activeDress = dress;
     activeImageIndex = 0;
 
-    // Collect all unique photos
+    const descEl = document.getElementById('lightbox-desc');
+    if (descEl) {
+      descEl.textContent = dress.description && dress.description.trim() 
+        ? dress.description 
+        : "Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.";
+    }
+
     const allImages = [dress.image];
     if (dress.imageDetail && dress.imageDetail !== dress.image) {
       allImages.push(dress.imageDetail);
