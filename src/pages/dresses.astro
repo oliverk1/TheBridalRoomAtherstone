@@ -150,6 +150,26 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
         <DressCard {...dress} />
       ))}
     </div>
+
+    <!-- 18-AT-A-TIME "LOAD MORE" CONTAINER -->
+    <div id="load-more-container" class="mt-14 sm:mt-18 text-center hidden">
+      <p id="pagination-status" class="text-xs text-stone-500 font-light mb-3">
+        Showing <span id="paginated-visible-count">0</span> of <span id="paginated-total-count">0</span> gowns
+      </p>
+      
+      <!-- Subtle Progress Bar -->
+      <div class="w-48 h-1 bg-stone-200 mx-auto mb-6 rounded-full overflow-hidden">
+        <div id="pagination-progress-bar" class="h-full bg-sage-800 transition-all duration-300" style="width: 0%;"></div>
+      </div>
+
+      <button
+        id="load-more-btn"
+        type="button"
+        class="bg-stone-900 text-white text-xs uppercase tracking-[0.2em] px-8 py-3.5 hover:bg-sage-900 transition-colors cursor-pointer shadow-xs rounded-2xs font-medium"
+      >
+        Load More Gowns
+      </button>
+    </div>
   </section>
 
   <!-- 3. EDITORIAL DESIGNER AUTHORITY BLOCK -->

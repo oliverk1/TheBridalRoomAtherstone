@@ -332,6 +332,12 @@ const categories = [
 </aside>
 
 <script>
+  // ==========================================
+  // PAGINATION SETTINGS: 18 AT A TIME
+  // ==========================================
+  const PAGE_SIZE = 18;
+  let visibleLimit = PAGE_SIZE;
+
   let activeRail = "all";
   let activeSearchTerm = "";
 
@@ -343,6 +349,7 @@ const categories = [
     size: new Set<string>()
   };
 
+  // DOM Elements
   const cards = document.querySelectorAll('.dress-card') as NodeListOf<HTMLElement>;
   const searchInput = document.getElementById('dress-search-input') as HTMLInputElement;
   const clearSearchBtn = document.getElementById('clear-search-btn');
@@ -354,10 +361,25 @@ const categories = [
   const chipsList = document.getElementById('chips-list');
   const chipsResetBtn = document.getElementById('chips-reset-btn');
 
-  function evaluateFilters() {
-    let count = 0;
-    const term = activeSearchTerm.trim().toLowerCase();
+  // Load More & Progress Bar DOM Elements
+  const loadMoreContainer = document.getElementById('load-more-container');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const paginatedVisibleCount = document.getElementById('paginated-visible-count');
+  const paginatedTotalCount = document.getElementById('paginated-total-count');
+  const progressBar = document.getElementById('pagination-progress-bar');
 
+  // ==========================================
+  // CORE FILTER & PAGINATION EVALUATION
+  // ==========================================
+  function evaluateFilters(resetPage = true) {
+    if (resetPage) {
+      visibleLimit = PAGE_SIZE; // Reset back to first 18 when filters or search change
+    }
+
+    const term = activeSearchTerm.trim().toLowerCase();
+    const matchingCards: HTMLElement[] = [];
+
+    // Step 1: Find all dresses that match all active criteria
     cards.forEach(card => {
       const cardCategory = (card.dataset.category || "").toLowerCase();
       const cardPrice = (card.dataset.price || "").toLowerCase();
@@ -368,10 +390,10 @@ const categories = [
       const cardFeatures: string[] = JSON.parse(card.dataset.features || "[]");
       const cardSearchText = card.dataset.searchText || "";
 
-      // 1. Search Bar Filter (checks across all text)
+      // Check search query across all fields
       const matchesSearch = !term || cardSearchText.includes(term);
 
-      // 2. Rail Check
+      // Check rail type
       let matchesRail = true;
       if (activeRail === "made-to-order") {
         matchesRail = cardCategory.includes("made") || (!cardCategory.includes("sample") && !cardPrice.includes("sample"));
@@ -381,51 +403,94 @@ const categories = [
         matchesRail = cardCategory.includes("access");
       }
 
-      // 3. Dropdowns Check
+      // Check dropdown criteria
       const matchesDesigner = activeFilters.designer.size === 0 || activeFilters.designer.has(cardDesigner);
       const matchesSilhouette = activeFilters.silhouette.size === 0 || Array.from(activeFilters.silhouette).some(s => cardSilhouette.toLowerCase().includes(s.toLowerCase()));
       const matchesNeckline = activeFilters.neckline.size === 0 || Array.from(activeFilters.neckline).some(n => cardNeckline.toLowerCase().includes(n.toLowerCase()));
       const matchesSize = activeFilters.size.size === 0 || activeFilters.size.has(cardSize);
       const matchesFeatures = activeFilters.features.size === 0 || Array.from(activeFilters.features).some(f => cardFeatures.some(cf => cf.toLowerCase().includes(f.toLowerCase())));
 
-      const isVisible = matchesSearch && matchesRail && matchesDesigner && matchesSilhouette && matchesNeckline && matchesSize && matchesFeatures;
+      const isMatching = matchesSearch && matchesRail && matchesDesigner && matchesSilhouette && matchesNeckline && matchesSize && matchesFeatures;
 
-      if (isVisible) {
-        card.style.display = "flex";
-        count++;
+      if (isMatching) {
+        matchingCards.push(card);
       } else {
         card.style.display = "none";
       }
     });
 
-    if (visibleCountEl) visibleCountEl.textContent = String(count);
-    if (mobileCountPreview) mobileCountPreview.textContent = String(count);
+    const totalMatching = matchingCards.length;
+
+    // Step 2: Show only cards up to visibleLimit (18 at a time)
+    matchingCards.forEach((card, index) => {
+      if (index < visibleLimit) {
+        card.style.display = "flex";
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    // Step 3: Update counters & progress bar
+    const currentlyShowing = Math.min(visibleLimit, totalMatching);
+
+    if (visibleCountEl) visibleCountEl.textContent = String(totalMatching);
+    if (mobileCountPreview) mobileCountPreview.textContent = String(totalMatching);
+
+    if (paginatedVisibleCount) paginatedVisibleCount.textContent = String(currentlyShowing);
+    if (paginatedTotalCount) paginatedTotalCount.textContent = String(totalMatching);
+
+    if (progressBar && totalMatching > 0) {
+      const percentage = Math.round((currentlyShowing / totalMatching) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+
+    // Step 4: Toggle "Load More" Button Visibility
+    if (loadMoreContainer && loadMoreBtn) {
+      if (totalMatching > PAGE_SIZE) {
+        loadMoreContainer.classList.remove('hidden');
+        if (currentlyShowing >= totalMatching) {
+          loadMoreBtn.classList.add('hidden');
+        } else {
+          loadMoreBtn.classList.remove('hidden');
+          const remaining = totalMatching - currentlyShowing;
+          loadMoreBtn.textContent = `Load More Gowns (${remaining} Remaining)`;
+        }
+      } else {
+        loadMoreContainer.classList.add('hidden');
+      }
+    }
 
     renderChips();
     updatePopovers();
   }
 
-  // Live Search Listener
+  // Load More Button Click
+  loadMoreBtn?.addEventListener('click', () => {
+    visibleLimit += PAGE_SIZE; // Advance by next 18
+    evaluateFilters(false);    // Do not reset pagination limit
+  });
+
+  // Search Input Listener
   searchInput?.addEventListener('input', () => {
     activeSearchTerm = searchInput.value;
     clearSearchBtn?.classList.toggle('hidden', !activeSearchTerm);
-    evaluateFilters();
+    evaluateFilters(true);
   });
 
   clearSearchBtn?.addEventListener('click', () => {
     searchInput.value = '';
     activeSearchTerm = '';
     clearSearchBtn.classList.add('hidden');
-    evaluateFilters();
+    evaluateFilters(true);
   });
 
-  // Render Dismissible Active Chips (Including Search Term)
+  // Active Dismissible Filter Chips
   function renderChips() {
     if (!chipsList || !activeChipsContainer) return;
     chipsList.innerHTML = "";
     let totalActive = 0;
 
-    // Search chip
+    // Search query chip
     if (activeSearchTerm.trim()) {
       totalActive++;
       const searchChip = document.createElement("button");
@@ -436,7 +501,7 @@ const categories = [
         searchInput.value = '';
         activeSearchTerm = '';
         clearSearchBtn?.classList.add('hidden');
-        evaluateFilters();
+        evaluateFilters(true);
       });
       chipsList.appendChild(searchChip);
     }
@@ -452,7 +517,7 @@ const categories = [
         chip.addEventListener("click", () => {
           set.delete(val);
           syncCheckboxes(group, val, false);
-          evaluateFilters();
+          evaluateFilters(true);
         });
         chipsList.appendChild(chip);
       });
@@ -504,7 +569,7 @@ const categories = [
       btn.classList.add('bg-stone-900', 'text-white', 'border-stone-900', 'font-medium');
 
       activeRail = (btn as HTMLElement).dataset.rail || "all";
-      evaluateFilters();
+      evaluateFilters(true);
     });
   });
 
@@ -541,7 +606,7 @@ const categories = [
         }
 
         syncCheckboxes(group, val, checkbox.checked);
-        evaluateFilters();
+        evaluateFilters(true);
       });
     });
   }
@@ -557,7 +622,7 @@ const categories = [
 
     Object.values(activeFilters).forEach(set => set.clear());
 
-    document.querySelectorAll<HTMLInputElement>('.filter-checkbox, .mobile-filter-checkbox').forEach(cb => {
+    document.querySelectorAll<HTMLInputElement>(`input[type="checkbox"]`).forEach(cb => {
       cb.checked = false;
     });
 
@@ -572,7 +637,7 @@ const categories = [
       }
     });
 
-    evaluateFilters();
+    evaluateFilters(true);
   }
 
   resetAllBtn?.addEventListener('click', resetAll);
@@ -608,5 +673,5 @@ const categories = [
   mobileApplyBtn?.addEventListener('click', closeMobileFilters);
   mobileClearBtn?.addEventListener('click', resetAll);
 
-  document.addEventListener('DOMContentLoaded', evaluateFilters);
+  document.addEventListener('DOMContentLoaded', () => evaluateFilters(true));
 </script>
