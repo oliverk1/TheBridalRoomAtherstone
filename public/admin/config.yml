@@ -75,8 +75,7 @@ collections:
         hint: "Pick from dropdown or type any custom neckline"
       - label: "Special Details & Features"
         name: "tags"
-        widget: "select"
-        multiple: true
+        widget: "tags"
         options:
           - "Romantic Lace"
           - "Clean Mikado & Crepe"
@@ -86,7 +85,12 @@ collections:
           - "Sleeves & Straps"
           - "Buttons Down The Train"
           - "Pockets"
-        hint: "Hold Ctrl / Cmd to select multiple features (no more clunky text accordion)"
+          - "3D Floral Appliques"
+          - "Leg Slit / Split"
+          - "Corset Lace-Up Back"
+          - "Detachable Sleeves"
+          - "Pearl Detailing"
+        hint: "Type any custom feature and press Enter (or click quick-add presets below)"
       - { label: "Featured on Homepage", name: "featured", widget: "boolean", default: false }
       - { label: "Main Front Photo", name: "image", widget: "image" }
       - { label: "Back View Photo (Optional)", name: "imageDetail", widget: "image", required: false }

@@ -98,7 +98,7 @@
       background-color: var(--tbr-dark-sage) !important;
       color: #FFFFFF !important;
       font-family: 'Jost', sans-serif !important;
-      font-size: 0 !important; /* Hides raw text collision */
+      font-size: 0 !important;
       padding: 15px 24px !important;
       border-radius: 2px !important;
       border: none !important;
@@ -160,7 +160,7 @@
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // 2. Registers custom 'combobox' widget (Pick from dropdown OR type any custom value)
+    // 2. Registers custom 'combobox' widget (Single-select dropdown OR type custom text)
     if (window.CMS && window.createClass && window.h) {
       const ComboboxControl = window.createClass({
         handleChange: function(e) {
@@ -197,8 +197,179 @@
           ]);
         }
       });
-
       window.CMS.registerWidget('combobox', ComboboxControl);
+
+      // 3. Registers custom 'tags' widget (Multiple chips + Type custom + Quick-add presets)
+      const TagsControl = window.createClass({
+        getInitialState: function() {
+          return { inputValue: '' };
+        },
+        handleChange: function(e) {
+          this.setState({ inputValue: e.target.value });
+        },
+        handleKeyDown: function(e) {
+          if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            this.addTag(this.state.inputValue);
+          }
+        },
+        addTag: function(tagText) {
+          const trimmed = (tagText || '').trim();
+          if (!trimmed) return;
+          const rawVal = this.props.value;
+          let currentTags = [];
+          if (rawVal) {
+            currentTags = Array.isArray(rawVal) ? rawVal.slice() : (rawVal.toJS ? rawVal.toJS() : []);
+          }
+          if (!currentTags.includes(trimmed)) {
+            const nextTags = currentTags.concat([trimmed]);
+            this.props.onChange(nextTags);
+          }
+          this.setState({ inputValue: '' });
+        },
+        removeTag: function(tagToRemove) {
+          const rawVal = this.props.value;
+          let currentTags = [];
+          if (rawVal) {
+            currentTags = Array.isArray(rawVal) ? rawVal.slice() : (rawVal.toJS ? rawVal.toJS() : []);
+          }
+          const nextTags = currentTags.filter(function(t) { return t !== tagToRemove; });
+          this.props.onChange(nextTags);
+        },
+        render: function() {
+          const rawVal = this.props.value;
+          let currentTags = [];
+          if (rawVal) {
+            currentTags = Array.isArray(rawVal) ? rawVal : (rawVal.toJS ? rawVal.toJS() : []);
+          }
+
+          const rawOptions = this.props.field.get('options');
+          const presets = rawOptions ? (rawOptions.toJS ? rawOptions.toJS() : rawOptions) : [];
+          const self = this;
+
+          // Selected Tag Badges
+          const chips = currentTags.map(function(tag) {
+            return window.h('span', {
+              key: tag,
+              style: {
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#2D4A3E',
+                color: '#FFFFFF',
+                padding: '4px 10px',
+                borderRadius: '2px',
+                fontSize: '11px',
+                marginRight: '6px',
+                marginBottom: '6px',
+                letterSpacing: '0.05em'
+              }
+            }, [
+              tag,
+              window.h('button', {
+                type: 'button',
+                style: {
+                  background: 'none',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  padding: '0 2px',
+                  fontSize: '14px',
+                  lineHeight: '1'
+                },
+                onClick: function() { self.removeTag(tag); }
+              }, '×')
+            ]);
+          });
+
+          // Text Input + Add Button
+          const inputRow = window.h('div', {
+            style: { display: 'flex', gap: '8px', marginTop: '8px' }
+          }, [
+            window.h('input', {
+              type: 'text',
+              value: this.state.inputValue,
+              onChange: this.handleChange,
+              onKeyDown: this.handleKeyDown,
+              placeholder: this.props.field.get('hint') || 'Type any custom detail & press Enter...',
+              style: {
+                flex: '1',
+                padding: '9px 12px',
+                fontSize: '13px',
+                border: '1px solid #D5CFC7',
+                borderRadius: '2px',
+                outline: 'none',
+                background: '#FFFFFF'
+              }
+            }),
+            window.h('button', {
+              type: 'button',
+              onClick: function() { self.addTag(self.state.inputValue); },
+              style: {
+                background: '#172420',
+                color: '#FFFFFF',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '2px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.15em',
+                cursor: 'pointer'
+              }
+            }, '+ Add')
+          ]);
+
+          // Preset Quick-Picks
+          const presetPills = presets.map(function(opt) {
+            const isSelected = currentTags.includes(opt);
+            return window.h('button', {
+              key: opt,
+              type: 'button',
+              disabled: isSelected,
+              onClick: function() { self.addTag(opt); },
+              style: {
+                display: 'inline-block',
+                margin: '3px 4px 3px 0',
+                padding: '4px 8px',
+                fontSize: '11px',
+                borderRadius: '2px',
+                border: '1px solid ' + (isSelected ? '#E2DBD2' : '#CBD5E1'),
+                background: isSelected ? '#F1F5F9' : '#FFFFFF',
+                color: isSelected ? '#94A3B8' : '#334155',
+                cursor: isSelected ? 'default' : 'pointer'
+              }
+            }, (isSelected ? '✓ ' : '+ ') + opt);
+          });
+
+          const presetSection = presets.length > 0 ? window.h('div', {
+            style: { marginTop: '12px', paddingTop: '10px', borderTop: '1px dashed #E2DBD2' }
+          }, [
+            window.h('div', {
+              style: { fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#64748B', marginBottom: '6px' }
+            }, 'Quick-Add Common Bridal Features:'),
+            window.h('div', {}, presetPills)
+          ]) : null;
+
+          return window.h('div', {
+            style: {
+              width: '100%',
+              padding: '12px',
+              background: '#FAF8F5',
+              border: '1px solid #E2DBD2',
+              borderRadius: '2px',
+              boxSizing: 'border-box'
+            }
+          }, [
+            window.h('div', {}, chips.length > 0 ? chips : [
+              window.h('span', { style: { fontSize: '11px', color: '#94A3B8', fontStyle: 'italic' } }, 'No features selected yet.')
+            ]),
+            inputRow,
+            presetSection
+          ]);
+        }
+      });
+      window.CMS.registerWidget('tags', TagsControl);
     }
   </script>
 </body>
