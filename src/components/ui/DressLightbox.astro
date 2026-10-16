@@ -57,17 +57,16 @@
       </div>
 
       <!-- Category Pill -->
-      <span id="lightbox-badge" class="absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium">
+      <span id="lightbox-badge" class="absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium rounded-2xs">
         Made to Order
       </span>
 
       <!-- Multi-Image Thumbnail Gallery Bar -->
       <div id="lightbox-gallery-bar" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 hidden items-center gap-2 bg-stone-900/80 backdrop-blur-xs px-3 py-1.5 rounded-full shadow-md max-w-[90%] overflow-x-auto">
-        <!-- Thumbnails injected dynamically -->
       </div>
     </div>
 
-    <!-- Right: Editorial Details (With pr-12 padding to avoid close-button collision) -->
+    <!-- Right: Editorial Details -->
     <div class="md:w-2/5 p-6 sm:p-8 bg-white flex flex-col justify-between overflow-y-auto">
       <div>
         <div class="flex items-center justify-between mb-2 pr-12">
@@ -79,19 +78,26 @@
           Dress Title
         </h3>
 
-        <div class="flex items-baseline gap-3 pb-4 mb-4 border-b border-stone-200">
+        <div class="flex items-baseline gap-3 pb-3 mb-3 border-b border-stone-200">
           <span id="lightbox-price" class="font-serif text-xl text-sage-900 font-medium">£1,650</span>
           <span id="lightbox-sample-size" class="text-xs text-stone-500 font-light">Sample Size in Store</span>
         </div>
 
+        <!-- SPECIAL FEATURES CHIP TRAY (Shows all tagged details inside lightbox) -->
+        <div id="lightbox-features-box" class="mb-4 hidden">
+          <span class="text-[9px] uppercase tracking-[0.15em] text-stone-400 font-medium block mb-1.5">Gown Features:</span>
+          <div id="lightbox-features-list" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- Custom Description from Decap CMS -->
         <div class="space-y-3 text-xs text-stone-600 font-light leading-relaxed mb-6">
-          <p id="lightbox-desc">
+          <p id="lightbox-desc" class="whitespace-pre-line leading-relaxed text-stone-700">
             Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.
           </p>
-          <ul class="space-y-1.5 text-[11px] text-stone-500">
+          <ul class="space-y-1.5 text-[11px] text-stone-500 pt-2 border-t border-stone-100">
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
-              1-to-1 styling session with Vicky & Sam
+              1-to-1 styling session with Vicky &amp; Sam
             </li>
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
@@ -110,7 +116,7 @@
         <a
           id="lightbox-book-btn"
           href="/the-experience#book"
-          class="w-full text-center bg-stone-900 text-white py-3.5 px-4 text-xs uppercase tracking-[0.2em] hover:bg-sage-800 transition-colors shadow-xs"
+          class="w-full text-center bg-stone-900 text-white py-3.5 px-4 text-xs uppercase tracking-[0.2em] hover:bg-sage-800 transition-colors shadow-xs rounded-2xs"
         >
           Try This On in Boutique &rarr;
         </a>
@@ -118,7 +124,7 @@
         <button
           id="lightbox-wishlist-btn"
           type="button"
-          class="w-full text-center border border-stone-300 py-3 px-4 text-xs uppercase tracking-[0.18em] text-stone-800 hover:border-stone-900 transition-colors cursor-pointer flex items-center justify-center gap-2"
+          class="w-full text-center border border-stone-300 py-3 px-4 text-xs uppercase tracking-[0.18em] text-stone-800 hover:border-stone-900 transition-colors cursor-pointer flex items-center justify-center gap-2 rounded-2xs"
         >
           <svg id="lightbox-heart-icon" class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
@@ -147,6 +153,9 @@
   const titleEl = document.getElementById('lightbox-title');
   const priceEl = document.getElementById('lightbox-price');
   const sampleSizeEl = document.getElementById('lightbox-sample-size');
+  const descEl = document.getElementById('lightbox-desc');
+  const featuresBox = document.getElementById('lightbox-features-box');
+  const featuresList = document.getElementById('lightbox-features-list');
   const bookBtn = document.getElementById('lightbox-book-btn') as HTMLAnchorElement;
   const wishlistBtn = document.getElementById('lightbox-wishlist-btn');
   const heartIcon = document.getElementById('lightbox-heart-icon');
@@ -158,7 +167,6 @@
     activeImageIndex = (idx + currentGalleryImages.length) % currentGalleryImages.length;
     mainImg.src = currentGalleryImages[activeImageIndex];
 
-    // Highlight active thumbnail
     document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
       if (i === activeImageIndex) {
         thumb.classList.add('border-white', 'opacity-100');
@@ -175,13 +183,30 @@
     activeDress = dress;
     activeImageIndex = 0;
 
-    const descEl = document.getElementById('lightbox-desc');
+    // 1. Populate Custom Description
     if (descEl) {
       descEl.textContent = dress.description && dress.description.trim() 
         ? dress.description 
         : "Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.";
     }
 
+    // 2. Populate Special Features Badges
+    if (featuresBox && featuresList) {
+      const feats: string[] = Array.isArray(dress.features) ? dress.features : [];
+      if (feats.length > 0) {
+        featuresBox.classList.remove('hidden');
+        featuresList.innerHTML = feats.map(f => `
+          <span class="inline-block bg-sage-100 border border-sage-200 text-sage-900 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-2xs font-medium">
+            ${f}
+          </span>
+        `).join('');
+      } else {
+        featuresBox.classList.add('hidden');
+        featuresList.innerHTML = '';
+      }
+    }
+
+    // 3. Collect Images
     const allImages = [dress.image];
     if (dress.imageDetail && dress.imageDetail !== dress.image) {
       allImages.push(dress.imageDetail);
@@ -197,7 +222,10 @@
     mainImg.alt = `${dress.title} by ${dress.designer}`;
 
     if (designerEl) designerEl.textContent = dress.designer;
-    if (silhouetteEl) silhouetteEl.textContent = dress.silhouette || 'Bridal Gown';
+    if (silhouetteEl) {
+      const necklineText = dress.neckline ? ` • ${dress.neckline}` : '';
+      silhouetteEl.textContent = `${dress.silhouette || 'Bridal Gown'}${necklineText}`;
+    }
     if (titleEl) titleEl.textContent = dress.title;
     if (priceEl) priceEl.textContent = dress.price;
     if (sampleSizeEl) sampleSizeEl.textContent = `In-Store Sample Size ${dress.sampleSize || '14'}`;
@@ -207,15 +235,14 @@
                        (dress.price && dress.price.toLowerCase().includes('sample'));
       badge.textContent = isSample ? 'Sample Sale' : 'Made to Order';
       badge.className = isSample
-        ? 'absolute top-4 left-4 z-20 bg-red-900/90 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium'
-        : 'absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium';
+        ? 'absolute top-4 left-4 z-20 bg-red-900/90 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium rounded-2xs'
+        : 'absolute top-4 left-4 z-20 bg-stone-900/85 text-white text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 backdrop-blur-xs font-medium rounded-2xs';
     }
 
     if (bookBtn) {
       bookBtn.href = `/the-experience#book?dress=${encodeURIComponent(dress.title + ' by ' + dress.designer)}`;
     }
 
-    // Toggle navigation arrows & gallery bar
     if (currentGalleryImages.length > 1) {
       prevArrow?.classList.remove('hidden');
       nextArrow?.classList.remove('hidden');
@@ -226,7 +253,7 @@
         galleryBar.innerHTML = currentGalleryImages.map((src, i) => `
           <button
             type="button"
-            class="gallery-thumb w-8 h-10 border ${i === 0 ? 'border-white opacity-100' : 'border-stone-500 opacity-60'} overflow-hidden cursor-pointer transition-all shrink-0"
+            class="gallery-thumb w-8 h-10 border ${i === 0 ? 'border-white opacity-100' : 'border-stone-500 opacity-60'} overflow-hidden cursor-pointer transition-all shrink-0 rounded-2xs"
             data-index="${i}"
           >
             <img src="${src}" class="w-full h-full object-cover" />

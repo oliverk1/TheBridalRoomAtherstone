@@ -13,8 +13,8 @@ const {
   designers = ["Justin Alexander", "Sincerity Bridal", "Adore by Justin Alexander", "Phoenix Gowns"],
   silhouettes = ["A-Line", "Fit and Flare / Mermaid", "Ballgown", "Clean & Modern", "Boho & Lace"],
   necklines = ["Sweetheart", "V-Neck / Plunge", "Square & Straight", "Strapless", "High Neck / Halter"],
-  featuresList = ["Romantic Lace", "Clean Mikado & Crepe", "Sparkle & Beading", "Low Back Detail", "Long Cathedral Train", "Sleeves & Straps"],
-  sampleSizes = ["12", "14", "16", "18", "20"]
+  featuresList = ["Romantic Lace", "Clean Mikado & Crepe", "Sparkle & Beading", "Low Back Detail", "Long Cathedral Train", "Sleeves & Straps", "Pockets"],
+  sampleSizes = ["10", "12", "14", "16", "18", "20"]
 } = Astro.props;
 
 const categories = [
@@ -25,9 +25,32 @@ const categories = [
 ];
 ---
 
-<div class="mb-10 space-y-4 select-none">
+<div class="mb-10 space-y-3.5 select-none">
   
-  <!-- Row 1: Primary Category Tabs -->
+  <!-- ROW 1: UNIVERSAL SEARCH BAR -->
+  <div class="relative w-full">
+    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
+      <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+    <input
+      type="text"
+      id="dress-search-input"
+      placeholder="Search gowns by style name, code, designer, fabric, or features (e.g. Mikado, Pockets, 88250)..."
+      class="w-full pl-10 pr-10 py-3 bg-white border border-stone-200/90 text-xs text-stone-800 placeholder:text-stone-400 rounded-xs focus:border-stone-900 focus:outline-none shadow-2xs transition-colors"
+    />
+    <button
+      type="button"
+      id="clear-search-btn"
+      class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-900 cursor-pointer text-base"
+      aria-label="Clear Search"
+    >
+      &times;
+    </button>
+  </div>
+
+  <!-- ROW 2: PRIMARY RAIL CATEGORY BUTTONS -->
   <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" id="rail-tabs">
     {categories.map((cat, i) => (
       <button
@@ -44,13 +67,13 @@ const categories = [
     ))}
   </div>
 
-  <!-- Row 2: Secondary Multi-Filter Bar with Popover Menus -->
+  <!-- ROW 3: SECONDARY DROPDOWNS & COUNTER -->
   <div class="bg-sage-100/90 border border-sage-200/90 p-3 sm:p-4 rounded-xs flex flex-wrap items-center justify-between gap-3 shadow-2xs">
     
-    <!-- Filter Triggers (Desktop Popovers) -->
+    <!-- Desktop Popover Dropdowns -->
     <div class="hidden md:flex items-center gap-2 relative" id="desktop-filter-popovers">
       
-      <!-- Popover 1: Dynamic Designers -->
+      <!-- Popover 1: Designer -->
       <div class="relative popover-wrapper">
         <button
           type="button"
@@ -70,7 +93,7 @@ const categories = [
         </div>
       </div>
 
-      <!-- Popover 2: Dynamic Silhouettes -->
+      <!-- Popover 2: Silhouette -->
       <div class="relative popover-wrapper">
         <button
           type="button"
@@ -90,7 +113,7 @@ const categories = [
         </div>
       </div>
 
-      <!-- Popover 3: Dynamic Necklines -->
+      <!-- Popover 3: Neckline -->
       {necklines.length > 0 && (
         <div class="relative popover-wrapper">
           <button
@@ -112,14 +135,14 @@ const categories = [
         </div>
       )}
 
-      <!-- Popover 4: Dynamic Fabric & Features -->
+      <!-- Popover 4: Fabric & Features -->
       {featuresList.length > 0 && (
         <div class="relative popover-wrapper">
           <button
             type="button"
             class="popover-btn bg-white border border-stone-300 text-stone-800 text-xs px-3 py-2 rounded-2xs uppercase tracking-wider flex items-center gap-2 hover:border-stone-900 cursor-pointer"
           >
-            <span>Detail &amp; Fabric</span>
+            <span>Features</span>
             <span class="filter-count hidden bg-sage-800 text-white text-[9px] px-1.5 py-0.2 rounded-full">0</span>
             <span class="text-[10px] text-stone-400">▾</span>
           </button>
@@ -134,7 +157,7 @@ const categories = [
         </div>
       )}
 
-      <!-- Popover 5: Dynamic Sample Sizes -->
+      <!-- Popover 5: Sample Size -->
       <div class="relative popover-wrapper">
         <button
           type="button"
@@ -156,7 +179,7 @@ const categories = [
 
     </div>
 
-    <!-- Mobile Filter Trigger Button -->
+    <!-- Mobile Trigger Button -->
     <div class="flex md:hidden items-center justify-between w-full">
       <button
         type="button"
@@ -189,7 +212,7 @@ const categories = [
 
   </div>
 
-  <!-- Row 3: Active Filters Dismiss Chips -->
+  <!-- ROW 4: ACTIVE FILTER CHIPS (Shows active categories, dropdowns, and search term) -->
   <div id="active-chips-container" class="hidden flex flex-wrap items-center gap-2 pt-1 text-xs">
     <span class="text-[10px] uppercase tracking-wider text-stone-500 font-medium">Active:</span>
     <div id="chips-list" class="flex flex-wrap gap-1.5"></div>
@@ -214,7 +237,7 @@ const categories = [
 >
   <div class="p-5 border-b border-stone-200 flex items-center justify-between bg-sage-100">
     <h3 class="font-serif text-lg tracking-wider uppercase text-stone-900 font-light">Filter Gowns</h3>
-    <button id="close-mobile-filter-btn" class="p-2 text-stone-600 hover:text-stone-900 cursor-pointer" aria-label="Close Filter">
+    <button id="close-mobile-filter-btn" class="p-2 text-stone-600 hover:text-stone-900 cursor-pointer text-xl leading-none" aria-label="Close Filter">
       &times;
     </button>
   </div>
@@ -261,10 +284,10 @@ const categories = [
       </div>
     )}
 
-    <!-- Mobile Details -->
+    <!-- Mobile Features -->
     {featuresList.length > 0 && (
       <div>
-        <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Detail &amp; Fabric</h4>
+        <h4 class="text-[11px] uppercase tracking-[0.2em] text-stone-900 font-medium mb-2.5">Special Features</h4>
         <div class="flex flex-wrap gap-1.5">
           {featuresList.map(f => (
             <label class="inline-flex items-center text-xs border border-stone-200 px-2.5 py-1.5 rounded-2xs cursor-pointer has-checked:bg-stone-900 has-checked:text-white has-checked:border-stone-900 bg-white">
@@ -310,6 +333,8 @@ const categories = [
 
 <script>
   let activeRail = "all";
+  let activeSearchTerm = "";
+
   const activeFilters = {
     designer: new Set<string>(),
     silhouette: new Set<string>(),
@@ -319,6 +344,8 @@ const categories = [
   };
 
   const cards = document.querySelectorAll('.dress-card') as NodeListOf<HTMLElement>;
+  const searchInput = document.getElementById('dress-search-input') as HTMLInputElement;
+  const clearSearchBtn = document.getElementById('clear-search-btn');
   const visibleCountEl = document.getElementById('visible-count');
   const mobileCountPreview = document.getElementById('mobile-count-preview');
   const mobileTotalActive = document.getElementById('mobile-total-active');
@@ -329,6 +356,7 @@ const categories = [
 
   function evaluateFilters() {
     let count = 0;
+    const term = activeSearchTerm.trim().toLowerCase();
 
     cards.forEach(card => {
       const cardCategory = (card.dataset.category || "").toLowerCase();
@@ -338,7 +366,12 @@ const categories = [
       const cardNeckline = card.dataset.neckline || "";
       const cardSize = card.dataset.sampleSize || "";
       const cardFeatures: string[] = JSON.parse(card.dataset.features || "[]");
+      const cardSearchText = card.dataset.searchText || "";
 
+      // 1. Search Bar Filter (checks across all text)
+      const matchesSearch = !term || cardSearchText.includes(term);
+
+      // 2. Rail Check
       let matchesRail = true;
       if (activeRail === "made-to-order") {
         matchesRail = cardCategory.includes("made") || (!cardCategory.includes("sample") && !cardPrice.includes("sample"));
@@ -348,13 +381,14 @@ const categories = [
         matchesRail = cardCategory.includes("access");
       }
 
+      // 3. Dropdowns Check
       const matchesDesigner = activeFilters.designer.size === 0 || activeFilters.designer.has(cardDesigner);
       const matchesSilhouette = activeFilters.silhouette.size === 0 || Array.from(activeFilters.silhouette).some(s => cardSilhouette.toLowerCase().includes(s.toLowerCase()));
       const matchesNeckline = activeFilters.neckline.size === 0 || Array.from(activeFilters.neckline).some(n => cardNeckline.toLowerCase().includes(n.toLowerCase()));
       const matchesSize = activeFilters.size.size === 0 || activeFilters.size.has(cardSize);
-      const matchesFeatures = activeFilters.features.size === 0 || Array.from(activeFilters.features).some(f => cardFeatures.some(cf => cf.toLowerCase().includes(f.toLowerCase())) || cardSilhouette.toLowerCase().includes(f.toLowerCase()));
+      const matchesFeatures = activeFilters.features.size === 0 || Array.from(activeFilters.features).some(f => cardFeatures.some(cf => cf.toLowerCase().includes(f.toLowerCase())));
 
-      const isVisible = matchesRail && matchesDesigner && matchesSilhouette && matchesNeckline && matchesSize && matchesFeatures;
+      const isVisible = matchesSearch && matchesRail && matchesDesigner && matchesSilhouette && matchesNeckline && matchesSize && matchesFeatures;
 
       if (isVisible) {
         card.style.display = "flex";
@@ -371,11 +405,43 @@ const categories = [
     updatePopovers();
   }
 
+  // Live Search Listener
+  searchInput?.addEventListener('input', () => {
+    activeSearchTerm = searchInput.value;
+    clearSearchBtn?.classList.toggle('hidden', !activeSearchTerm);
+    evaluateFilters();
+  });
+
+  clearSearchBtn?.addEventListener('click', () => {
+    searchInput.value = '';
+    activeSearchTerm = '';
+    clearSearchBtn.classList.add('hidden');
+    evaluateFilters();
+  });
+
+  // Render Dismissible Active Chips (Including Search Term)
   function renderChips() {
     if (!chipsList || !activeChipsContainer) return;
     chipsList.innerHTML = "";
     let totalActive = 0;
 
+    // Search chip
+    if (activeSearchTerm.trim()) {
+      totalActive++;
+      const searchChip = document.createElement("button");
+      searchChip.type = "button";
+      searchChip.className = "inline-flex items-center gap-1 bg-sage-800 text-white text-[11px] px-2 py-0.5 rounded-2xs cursor-pointer";
+      searchChip.innerHTML = `<span>Search: "${activeSearchTerm.trim()}"</span><span class="hover:text-stone-300 font-bold">&times;</span>`;
+      searchChip.addEventListener("click", () => {
+        searchInput.value = '';
+        activeSearchTerm = '';
+        clearSearchBtn?.classList.add('hidden');
+        evaluateFilters();
+      });
+      chipsList.appendChild(searchChip);
+    }
+
+    // Dropdown filters chips
     Object.entries(activeFilters).forEach(([group, set]) => {
       set.forEach(val => {
         totalActive++;
@@ -427,6 +493,7 @@ const categories = [
     });
   }
 
+  // Primary Rail Buttons
   document.querySelectorAll('.rail-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.rail-tab-btn').forEach(b => {
@@ -441,6 +508,7 @@ const categories = [
     });
   });
 
+  // Desktop Popover Menu Dropdown Handling
   document.querySelectorAll('.popover-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -483,6 +551,10 @@ const categories = [
 
   function resetAll() {
     activeRail = "all";
+    activeSearchTerm = "";
+    if (searchInput) searchInput.value = "";
+    clearSearchBtn?.classList.add('hidden');
+
     Object.values(activeFilters).forEach(set => set.clear());
 
     document.querySelectorAll<HTMLInputElement>('.filter-checkbox, .mobile-filter-checkbox').forEach(cb => {
@@ -506,6 +578,7 @@ const categories = [
   resetAllBtn?.addEventListener('click', resetAll);
   chipsResetBtn?.addEventListener('click', resetAll);
 
+  // Mobile Drawer Controls
   const mobileDrawer = document.getElementById('mobile-filter-drawer');
   const mobileOverlay = document.getElementById('mobile-filter-overlay');
   const openMobileBtn = document.getElementById('open-mobile-filter-btn');
