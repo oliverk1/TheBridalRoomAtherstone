@@ -10,6 +10,16 @@ import FAQAccordion from '../components/ui/FAQAccordion.astro';
 import faqsData from '../content/settings/faqs.json';
 const dressFaqs = (faqsData as any).dressFaqs || [];
 
+// Helper: Formats feature tags into luxury Title Case
+function toTitleCase(str: string): string {
+  if (!str) return '';
+  return str
+    .trim()
+    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase())
+    .replace(/\b3d\b/gi, '3D')
+    .replace(/\s+&\s+/g, ' & ');
+}
+
 // Query all dresses from Decap markdown content collection
 let allDressesEntries: any[] = [];
 try {
@@ -18,14 +28,13 @@ try {
   allDressesEntries = [];
 }
 
-// Fallback curated inventory with multi-image gallery support
+// Fallback curated inventory (Title Cased & Price Removed)
 const fallbackDresses = [
   {
     id: "ja-88250",
     title: "Romantic Beaded Bodice",
     designer: "Justin Alexander",
     category: "Made to Order (£1,200 - £2,500)",
-    price: "£1,650",
     sampleSize: "14",
     silhouette: "A-Line",
     neckline: "Sweetheart",
@@ -39,7 +48,6 @@ const fallbackDresses = [
     title: "Clean Mikado Ballgown",
     designer: "Sincerity Bridal",
     category: "Made to Order (£1,200 - £2,500)",
-    price: "£1,395",
     sampleSize: "12",
     silhouette: "Clean & Modern",
     neckline: "Square & Straight",
@@ -53,7 +61,6 @@ const fallbackDresses = [
     title: "Floral Applique Mermaid",
     designer: "Adore by Justin Alexander",
     category: "Sample Sale Rail (£250 - £900)",
-    price: "£695 (RRP £1,450)",
     sampleSize: "14",
     silhouette: "Fit and Flare / Mermaid",
     neckline: "V-Neck / Plunge",
@@ -67,7 +74,6 @@ const fallbackDresses = [
     title: "Bohemian Chiffon & Lace",
     designer: "Phoenix Gowns",
     category: "Made to Order (£1,200 - £2,500)",
-    price: "£1,250",
     sampleSize: "16",
     silhouette: "Boho & Lace",
     neckline: "V-Neck / Plunge",
@@ -85,16 +91,19 @@ const dressesList = allDressesEntries.length > 0
         ? rawGallery.map((g: any) => typeof g === 'string' ? g : g?.photo).filter(Boolean)
         : [];
 
+      // Clean & Title Case features
+      const rawTags = Array.isArray(d.data.tags) ? d.data.tags : ["Romantic Lace"];
+      const titleCasedFeatures = rawTags.map(toTitleCase).filter(Boolean);
+
       return {
         id: d.slug || d.id,
         title: d.data.title,
         designer: d.data.designer,
         category: d.data.category,
-        price: d.data.price,
         sampleSize: String(d.data.sampleSize || "14"),
         silhouette: d.data.silhouette || "A-Line",
         neckline: d.data.neckline || "Sweetheart",
-        features: Array.isArray(d.data.tags) ? d.data.tags : ["Romantic Lace"],
+        features: titleCasedFeatures,
         image: d.data.image,
         imageDetail: d.data.imageDetail,
         gallery: cleanGallery,
@@ -196,7 +205,7 @@ const dynamicFeatures = Array.from(new Set(dressesList.flatMap((d: any) => d.fea
     </div>
   </section>
 
-  <!-- 4. CONTEXTUAL DRESS FAQS (Pulled from faqs.json & passed to Schema.org) -->
+  <!-- 4. CONTEXTUAL DRESS FAQS -->
   <section class="py-16 sm:py-24 px-6 max-w-4xl mx-auto">
     <div class="text-center mb-10">
       <p class="text-[10px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Helpful Guidance</p>

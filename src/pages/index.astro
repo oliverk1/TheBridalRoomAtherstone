@@ -14,14 +14,39 @@ import faqsData from '../content/settings/faqs.json';
 const PHONE_NUMBER = "01827 946 098";
 const PHONE_HREF = "tel:01827946098";
 
-// Query all featured dresses from Decap markdown (Astro 5 uses dress.id)
+// Helper: Formats feature tags into luxury Title Case
+function toTitleCase(str: string): string {
+  if (!str) return '';
+  return str
+    .trim()
+    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase())
+    .replace(/\b3d\b/gi, '3D')
+    .replace(/\s+&\s+/g, ' & ');
+}
+
+// Query all featured dresses from Decap markdown
 const allDresses = await getCollection('dresses');
 const featuredDresses = allDresses
   .filter((dress) => dress.data.featured)
-  .map((dress) => ({
-    id: dress.id,
-    ...dress.data,
-  }));
+  .map((dress) => {
+    const rawTags = Array.isArray(dress.data.tags) ? dress.data.tags : [];
+    return {
+      id: dress.id,
+      title: dress.data.title,
+      designer: dress.data.designer,
+      category: dress.data.category,
+      sampleSize: String(dress.data.sampleSize || "14"),
+      silhouette: dress.data.silhouette || "A-Line",
+      neckline: dress.data.neckline || "Sweetheart",
+      features: rawTags.map(toTitleCase).filter(Boolean),
+      image: dress.data.image,
+      imageDetail: dress.data.imageDetail,
+      gallery: Array.isArray(dress.data.gallery)
+        ? dress.data.gallery.map((g: any) => typeof g === 'string' ? g : g?.photo).filter(Boolean)
+        : [],
+      description: dress.body || ""
+    };
+  });
 
 const consultationTiers = tiersData.tiers;
 const homepageFaqs = faqsData.homepageFaqs;
@@ -77,7 +102,7 @@ const homepageFaqs = faqsData.homepageFaqs;
     </div>
   </section>
 
-  <!-- 2. REASSURANCE TICKER (Data from ticker.json) -->
+  <!-- 2. REASSURANCE TICKER -->
   <TickerCarousel items={tickerData.items} />
 
   <!-- 3. BOUTIQUE EXPERIENCE SECTION -->
@@ -117,7 +142,7 @@ const homepageFaqs = faqsData.homepageFaqs;
             href="/about"
             class="text-xs uppercase tracking-[0.18em] text-stone-600 hover:text-stone-950 underline underline-offset-4 py-2"
           >
-            Meet Vicky & Sam
+            Meet Vicky &amp; Sam
           </a>
         </div>
       </div>
@@ -175,7 +200,7 @@ const homepageFaqs = faqsData.homepageFaqs;
         ))}
       </div>
 
-      <!-- Mobile Indicators for Featured Dresses (Center dot active by default) -->
+      <!-- Mobile Indicators for Featured Dresses -->
       <div class="flex md:hidden justify-center items-center gap-2 mt-4" id="home-dresses-dots">
         {featuredDresses.map((_, i) => (
           <button
@@ -191,20 +216,20 @@ const homepageFaqs = faqsData.homepageFaqs;
           href="/dresses"
           class="inline-block border border-stone-800 bg-stone-900 text-white px-8 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-transparent hover:text-stone-900 transition-colors"
         >
-          Browse All Collections & Designers
+          Browse All Collections &amp; Designers
         </a>
       </div>
     </div>
   </section>
 
-  <!-- 5. CONSULTATION TIERS (Starts at Center VIB Suite on Mobile, Unclipped Badge) -->
+  <!-- 5. CONSULTATION TIERS -->
   <section class="py-20 px-6 lg:px-12 bg-ivory-50 max-w-6xl mx-auto overflow-hidden">
     <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-14">
       <p class="text-[11px] tracking-[0.3em] uppercase text-stone-600 font-light mb-2">Private Appointments</p>
       <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 font-light uppercase">Choose Your Appointment Style</h2>
     </div>
 
-    <!-- Tiers Track with pt-7 so floating badge is never cut off by overflow-x -->
+    <!-- Tiers Track -->
     <div
       id="tiers-carousel-track"
       class="flex md:grid md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pt-7 pb-6 -mx-6 px-8 md:mx-0 md:px-0 items-stretch"
@@ -257,7 +282,7 @@ const homepageFaqs = faqsData.homepageFaqs;
       ))}
     </div>
 
-    <!-- Mobile Indicator Dots for Consultation Tiers (Center dot active by default) -->
+    <!-- Mobile Indicator Dots for Consultation Tiers -->
     <div class="flex md:hidden justify-center items-center gap-2 mt-2" id="tiers-carousel-dots">
       {consultationTiers.map((_, i) => (
         <button
@@ -323,7 +348,6 @@ const homepageFaqs = faqsData.homepageFaqs;
 </BaseLayout>
 
 <script>
-  // Pure Horizontal Centering (No vertical window jump)
   function centerTrackChild(track: HTMLElement | null, childIndex: number) {
     if (!track || window.innerWidth >= 1024) return;
     const child = track.children[childIndex] as HTMLElement;
@@ -371,7 +395,7 @@ const homepageFaqs = faqsData.homepageFaqs;
     });
   }
 
-  // 2. Consultation Tiers Mobile Carousel (Center on VIB Suite)
+  // 2. Consultation Tiers Mobile Carousel
   const tiersTrack = document.getElementById('tiers-carousel-track');
   const tiersDots = document.querySelectorAll('#tiers-carousel-dots button');
 

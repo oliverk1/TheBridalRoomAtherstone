@@ -5,7 +5,6 @@ interface Props {
   title: string;
   designer: string;
   category: string;
-  price: string;
   sampleSize?: string;
   silhouette: string;
   neckline?: string;
@@ -21,7 +20,6 @@ const {
   title,
   designer,
   category,
-  price,
   sampleSize = "14",
   silhouette,
   neckline = "Sweetheart",
@@ -32,7 +30,7 @@ const {
   description = ""
 } = Astro.props;
 
-const isSampleSale = category.toLowerCase().includes("sample") || price.toLowerCase().includes("sample");
+const isSampleSale = category.toLowerCase().includes("sample");
 
 // Clean gallery photos array
 const allCardImages = [image];
@@ -56,7 +54,6 @@ const searchText = `${title} ${designer} ${category} ${silhouette} ${neckline} s
   data-features={JSON.stringify(features)}
   data-gallery={JSON.stringify(allCardImages)}
   data-title={title}
-  data-price={price}
   data-image={image}
   data-image-detail={imageDetail || ""}
   data-description={description}
@@ -133,17 +130,17 @@ const searchText = `${title} ${designer} ${category} ${silhouette} ${neckline} s
       >
         {title}
       </h3>
-      <div class="flex items-center justify-center gap-2 text-xs text-stone-700 mb-2.5">
-        <span class="font-medium text-sage-900">{price}</span>
-        <span class="text-stone-300">•</span>
-        <span class="text-stone-500 text-[11px]">Size {sampleSize}</span>
+      
+      <!-- Sample Size Indicator (Price Removed) -->
+      <div class="flex items-center justify-center gap-1.5 text-xs text-stone-600 mb-2.5">
+        <span class="text-[11px] uppercase tracking-wider text-stone-500 font-light">In-Store Sample Size {sampleSize}</span>
       </div>
 
-      <!-- Feature Tags on Card (Shows bride top details like Pockets, Lace, etc.) -->
+      <!-- Feature Tags on Card (Clean Title Case Display) -->
       {features.length > 0 && (
         <div class="flex flex-wrap items-center justify-center gap-1 mb-3.5">
           {features.slice(0, 3).map((f) => (
-            <span class="inline-block bg-white border border-stone-200/90 text-[9px] uppercase tracking-wider text-stone-600 px-2 py-0.5 rounded-2xs font-light">
+            <span class="inline-block bg-white border border-stone-200/90 text-[10px] tracking-wide text-stone-700 px-2 py-0.5 rounded-2xs font-light">
               {f}
             </span>
           ))}
@@ -194,7 +191,6 @@ const searchText = `${title} ${designer} ${category} ${silhouette} ${neckline} s
         id: card.dataset.id,
         title: card.dataset.title,
         designer: card.dataset.designer,
-        price: card.dataset.price,
         image: card.dataset.image,
         category: card.dataset.category
       };
@@ -230,7 +226,6 @@ const searchText = `${title} ${designer} ${category} ${silhouette} ${neckline} s
         id: card.dataset.id,
         title: card.dataset.title,
         designer: card.dataset.designer,
-        price: card.dataset.price,
         sampleSize: card.dataset.sampleSize,
         silhouette: card.dataset.silhouette,
         neckline: card.dataset.neckline,

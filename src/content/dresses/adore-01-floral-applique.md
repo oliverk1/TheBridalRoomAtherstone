@@ -2,7 +2,6 @@
 title: Floral Applique Mermaid
 designer: Adore by Justin Alexander
 category: Sample Sale Rail (£250 - £900)
-price: £695 (RRP £1,450)
 sampleSize: "14"
 silhouette: Fit and Flare / Mermaid
 neckline: Sweetheart

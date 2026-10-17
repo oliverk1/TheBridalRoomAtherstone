@@ -212,7 +212,7 @@ const categories = [
 
   </div>
 
-  <!-- ROW 4: ACTIVE FILTER CHIPS (Shows active categories, dropdowns, and search term) -->
+  <!-- ROW 4: ACTIVE FILTER CHIPS -->
   <div id="active-chips-container" class="hidden flex flex-wrap items-center gap-2 pt-1 text-xs">
     <span class="text-[10px] uppercase tracking-wider text-stone-500 font-medium">Active:</span>
     <div id="chips-list" class="flex flex-wrap gap-1.5"></div>
@@ -373,16 +373,15 @@ const categories = [
   // ==========================================
   function evaluateFilters(resetPage = true) {
     if (resetPage) {
-      visibleLimit = PAGE_SIZE; // Reset back to first 18 when filters or search change
+      visibleLimit = PAGE_SIZE;
     }
 
     const term = activeSearchTerm.trim().toLowerCase();
     const matchingCards: HTMLElement[] = [];
 
-    // Step 1: Find all dresses that match all active criteria
+    // Step 1: Find all dresses that match all active criteria (Price free)
     cards.forEach(card => {
       const cardCategory = (card.dataset.category || "").toLowerCase();
-      const cardPrice = (card.dataset.price || "").toLowerCase();
       const cardDesigner = card.dataset.designer || "";
       const cardSilhouette = card.dataset.silhouette || "";
       const cardNeckline = card.dataset.neckline || "";
@@ -393,12 +392,12 @@ const categories = [
       // Check search query across all fields
       const matchesSearch = !term || cardSearchText.includes(term);
 
-      // Check rail type
+      // Check rail type purely by category
       let matchesRail = true;
       if (activeRail === "made-to-order") {
-        matchesRail = cardCategory.includes("made") || (!cardCategory.includes("sample") && !cardPrice.includes("sample"));
+        matchesRail = cardCategory.includes("made") || !cardCategory.includes("sample");
       } else if (activeRail === "sample-sale") {
-        matchesRail = cardCategory.includes("sample") || cardPrice.includes("sample");
+        matchesRail = cardCategory.includes("sample");
       } else if (activeRail === "accessories") {
         matchesRail = cardCategory.includes("access");
       }
@@ -466,8 +465,8 @@ const categories = [
 
   // Load More Button Click
   loadMoreBtn?.addEventListener('click', () => {
-    visibleLimit += PAGE_SIZE; // Advance by next 18
-    evaluateFilters(false);    // Do not reset pagination limit
+    visibleLimit += PAGE_SIZE;
+    evaluateFilters(false);
   });
 
   // Search Input Listener

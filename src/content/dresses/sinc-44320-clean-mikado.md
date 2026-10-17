@@ -2,7 +2,6 @@
 title: "Clean Mikado Ballgown"
 designer: "Sincerity Bridal"
 category: "Made to Order (£1,200 - £2,500)"
-price: "£1,395"
 sampleSize: "12"
 silhouette: "Clean & Modern"
 featured: true

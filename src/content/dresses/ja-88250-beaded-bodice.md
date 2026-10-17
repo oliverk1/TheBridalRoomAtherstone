@@ -2,7 +2,6 @@
 title: "Romantic Beaded Bodice"
 designer: "Justin Alexander"
 category: "Made to Order (£1,200 - £2,500)"
-price: "£1,650"
 sampleSize: "14"
 silhouette: "A-Line"
 featured: true
