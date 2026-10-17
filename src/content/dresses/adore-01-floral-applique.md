@@ -16,4 +16,4 @@ image: /images/dress-3.webp
 imageDetail: /images/uploads/88439_kai_ff_justin-alexander.jpg
 isSampleSale: true
 ---
-Ex-showroom sample in pristine condition. Featuring 3D floral lace vines hugging the hips into a sheer flared skirt. Ready to purchase off-the-peg and take home today.
+**Ex-Showroom Sample (Pristine Condition):** Featuring 3D floral lace vines hugging the hips into a sheer flared skirt. *Ready to purchase off-the-peg and take home today.*

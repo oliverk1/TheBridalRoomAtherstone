@@ -83,18 +83,19 @@
           <span id="lightbox-sample-size" class="text-xs text-stone-500 font-light">Sample Size in Store</span>
         </div>
 
-        <!-- SPECIAL FEATURES CHIP TRAY (Shows all tagged details inside lightbox) -->
+        <!-- SPECIAL FEATURES CHIP TRAY -->
         <div id="lightbox-features-box" class="mb-4 hidden">
           <span class="text-[9px] uppercase tracking-[0.15em] text-stone-400 font-medium block mb-1.5">Gown Features:</span>
           <div id="lightbox-features-list" class="flex flex-wrap gap-1.5"></div>
         </div>
 
-        <!-- Custom Description from Decap CMS -->
+        <!-- Custom Description from Decap CMS (Markdown-Supported Container) -->
         <div class="space-y-3 text-xs text-stone-600 font-light leading-relaxed mb-6">
-          <p id="lightbox-desc" class="whitespace-pre-line leading-relaxed text-stone-700">
-            Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.
-          </p>
-          <ul class="space-y-1.5 text-[11px] text-stone-500 pt-2 border-t border-stone-100">
+          <div id="lightbox-desc" class="space-y-2 leading-relaxed text-stone-700 text-xs font-light">
+            <p>Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.</p>
+          </div>
+
+          <ul class="space-y-1.5 text-[11px] text-stone-500 pt-3 border-t border-stone-100">
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-sage-800"></span>
               1-to-1 styling session with Vicky &amp; Sam
@@ -162,6 +163,79 @@
   const wishlistText = document.getElementById('lightbox-wishlist-text');
   const galleryBar = document.getElementById('lightbox-gallery-bar');
 
+  // ==========================================
+  // LIGHTWEIGHT ZERO-DEPENDENCY MARKDOWN PARSER
+  // ==========================================
+  function renderMarkdown(raw: string): string {
+    if (!raw || !raw.trim()) {
+      return '<p class="leading-relaxed">Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.</p>';
+    }
+
+    // 1. Normalize line breaks and escape raw HTML for safety
+    let text = raw.trim().replace(/\r\n/g, '\n');
+    text = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // 2. Headings (###, ##, #)
+    text = text.replace(/^###\s+(.+)$/gm, '<h4 class="font-serif text-sm uppercase tracking-wider text-stone-900 font-medium mt-3 mb-1.5">$1</h4>');
+    text = text.replace(/^##\s+(.+)$/gm, '<h3 class="font-serif text-base uppercase tracking-wider text-stone-900 font-medium mt-3 mb-1.5">$1</h3>');
+    text = text.replace(/^#\s+(.+)$/gm, '<h2 class="font-serif text-lg uppercase tracking-wider text-stone-900 font-medium mt-4 mb-2">$1</h2>');
+
+    // 3. Bold & Italic
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong class="font-medium text-stone-900">$1</strong>');
+    text = text.replace(/__(.+?)__/g, '<strong class="font-medium text-stone-900">$1</strong>');
+    text = text.replace(/\*(.+?)\*/g, '<em class="italic">$1</em>');
+    text = text.replace(/_(.+?)_/g, '<em class="italic">$1</em>');
+
+    // 4. Links [text](url)
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-stone-900 underline underline-offset-2 hover:text-sage-900">$1</a>');
+
+    // 5. Blockquotes (> quote)
+    text = text.replace(/^&gt;\s+(.+)$/gm, '<blockquote class="border-l-2 border-sage-800 pl-3 italic text-stone-600 my-2">$1</blockquote>');
+
+    // 6. Split by double newlines into blocks to handle lists and paragraphs
+    const blocks = text.split(/\n\n+/);
+    const htmlBlocks = blocks.map(block => {
+      const trimmed = block.trim();
+      if (!trimmed) return '';
+
+      // Skip blocks that are already structural elements
+      if (trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
+        return trimmed;
+      }
+
+      const lines = trimmed.split('\n');
+
+      // Unordered list: lines starting with -, *, or bullet
+      const isBulletList = lines.every(line => /^[-*•]\s+/.test(line.trim()));
+      if (isBulletList) {
+        const items = lines.map(line => {
+          const content = line.trim().replace(/^[-*•]\s+/, '');
+          return `<li class="leading-relaxed">${content}</li>`;
+        }).join('');
+        return `<ul class="list-disc pl-4 space-y-1 my-2 marker:text-sage-800">${items}</ul>`;
+      }
+
+      // Ordered list: lines starting with 1., 2., etc.
+      const isNumberedList = lines.every(line => /^\d+\.\s+/.test(line.trim()));
+      if (isNumberedList) {
+        const items = lines.map(line => {
+          const content = line.trim().replace(/^\d+\.\s+/, '');
+          return `<li class="leading-relaxed">${content}</li>`;
+        }).join('');
+        return `<ol class="list-decimal pl-4 space-y-1 my-2 marker:text-sage-800">${items}</ol>`;
+      }
+
+      // Standard Paragraph: convert internal single line breaks to <br />
+      const withLineBreaks = lines.join('<br />');
+      return `<p class="leading-relaxed mb-2">${withLineBreaks}</p>`;
+    });
+
+    return htmlBlocks.join('');
+  }
+
   function setMainImageByIndex(idx: number) {
     if (!mainImg || currentGalleryImages.length === 0) return;
     activeImageIndex = (idx + currentGalleryImages.length) % currentGalleryImages.length;
@@ -183,11 +257,9 @@
     activeDress = dress;
     activeImageIndex = 0;
 
-    // 1. Populate Custom Description
+    // 1. Populate Custom Description (Markdown Formatted)
     if (descEl) {
-      descEl.textContent = dress.description && dress.description.trim() 
-        ? dress.description 
-        : "Experience this gown in your own private boudoir styling suite at 65 Station Street, Atherstone.";
+      descEl.innerHTML = renderMarkdown(dress.description);
     }
 
     // 2. Populate Special Features Badges

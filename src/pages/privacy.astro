@@ -1,0 +1,161 @@
+---
+// src/pages/privacy.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const LAST_UPDATED = "October 2026";
+const COMPANY_NAME = "THE BRIDAL OUTLET ATHERSTONE LTD";
+const TRADING_NAME = "The Bridal Room Atherstone";
+const COMPANY_NUMBER = "13997073";
+const REGISTERED_ADDRESS = "Rose Cottage, 2a Grove Road, Atherstone, Warwickshire, England, CV9 1DP";
+const BOUTIQUE_ADDRESS = "65 Station Street, Atherstone, Warwickshire, England, CV9 1DB";
+const CONTACT_EMAIL = "info@thebridalroomatherstone.com";
+const CONTACT_PHONE = "01827 946 098";
+const PHONE_HREF = "tel:01827946098";
+---
+
+<BaseLayout
+  title="Privacy Policy | The Bridal Room Atherstone"
+  description="Privacy Policy for The Bridal Room Atherstone (THE BRIDAL OUTLET ATHERSTONE LTD). Information on how we collect, store, and protect your data."
+>
+  <!-- 1. EDITORIAL HEADER -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        Legal &amp; Compliance
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-3">
+        Privacy Policy
+      </h1>
+      <p class="font-serif italic text-base sm:text-lg text-stone-600 max-w-xl mx-auto leading-relaxed">
+        How we handle and protect your personal information when scheduling fittings, ordering gowns, or visiting our boutique.
+      </p>
+      <p class="mt-4 text-[10px] uppercase tracking-widest text-stone-400 font-light">
+        Last Updated &bull; {LAST_UPDATED}
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. EDITORIAL ARTICLE -->
+  <section class="py-16 sm:py-24 px-6 lg:px-12 bg-ivory-50">
+    <div class="max-w-3xl mx-auto space-y-12 text-stone-600 text-xs sm:text-sm font-light leading-relaxed">
+
+      <!-- 1. Data Controller -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          1. Who We Are
+        </h2>
+        <p class="mb-3">
+          This Privacy Policy explains how <strong>{COMPANY_NAME}</strong>, trading as <strong>{TRADING_NAME}</strong> ("we", "us", or "our"), processes and protects personal information collected through our website (<a href="/" class="text-stone-900 underline underline-offset-4 hover:text-sage-900">thebridalroomatherstone.co.uk</a>), native booking engine, and flagship showroom.
+        </p>
+        <p class="text-[12px] text-stone-500">
+          Company Registration Number: {COMPANY_NUMBER} (England &amp; Wales)<br />
+          Registered Office: {REGISTERED_ADDRESS}<br />
+          Showroom &amp; Postal Address: {BOUTIQUE_ADDRESS}<br />
+          Contact: <a href={`mailto:${CONTACT_EMAIL}`} class="underline text-stone-800">{CONTACT_EMAIL}</a> | <a href={PHONE_HREF} class="underline text-stone-800">{CONTACT_PHONE}</a>
+        </p>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 2. Information We Collect -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          2. Information We Collect
+        </h2>
+        <p class="mb-3">
+          We collect only the personal information required to arrange private styling consultations, fulfill bridal gown orders, and maintain a secure environment:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>Contact &amp; Booking Details:</strong> Name, email address, telephone number, wedding date, guest numbers, dietary notes, and styling preferences submitted via our booking engine.</li>
+          <li><strong>In-Store Orders &amp; Measurements:</strong> Body measurements (bust, waist, hip), sizing sign-offs, and signed sales contracts when purchasing a made-to-order or sample gown.</li>
+          <li><strong>Lookbook Shortlist:</strong> Saved gowns are stored locally on your device via browser <code class="text-stone-800 bg-stone-200/60 px-1 py-0.5 rounded-2xs">localStorage</code> and are only transmitted to us if you choose to attach them to an appointment.</li>
+          <li><strong>Payment Information:</strong> VIB appointment deposits (£50) are processed directly by Stripe. We never collect or store your card numbers on our servers.</li>
+          <li><strong>CCTV Footage:</strong> Closed-circuit television images captured in the communal areas of the boutique for safety, security, and crime prevention. CCTV is never operated in private fitting or dressing areas.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 3. Lawful Basis -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          3. How We Use Your Data &amp; Lawful Bases
+        </h2>
+        <p class="mb-3">
+          Under the UK GDPR, we process your personal data on the following grounds:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>Contractual Necessity:</strong> To host your consultation, process booking deposits, order made-to-order gowns with designers, and handle alterations.</li>
+          <li><strong>Legitimate Interests:</strong> To manage appointment scheduling, temporarily hold slots for 10 minutes to prevent double-booking, operate boutique security CCTV in communal areas, and answer customer enquiries.</li>
+          <li><strong>Legal &amp; Tax Obligations:</strong> To maintain statutory accounting and sales records required by HMRC and UK company law.</li>
+          <li><strong>Consent:</strong> For non-essential analytics cookies and telemetry, which only activate after your confirmation.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 4. Third-Party Processors & Analytics -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          4. Service Providers &amp; Tracking
+        </h2>
+        <p class="mb-3">
+          We do not sell or share personal data with external marketers. We work with trusted processors to operate our digital platform:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>Stripe:</strong> Secure, PCI-compliant processing of booking deposits.</li>
+          <li><strong>Google Workspace &amp; Calendar:</strong> Slot scheduling and appointment management.</li>
+          <li><strong>Resend:</strong> Delivery of automated booking confirmations and inquiry receipts.</li>
+          <li><strong>Cloudflare:</strong> Website hosting, edge security, and temporary hold locking.</li>
+          <li><strong>Google Analytics 4 &amp; Microsoft Clarity:</strong> Subject to your cookie preferences, we use anonymized analytics and user interaction tracking to improve site navigation. Microsoft Clarity is configured to mask all sensitive form inputs automatically.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 5. Data Retention -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          5. Data Retention
+        </h2>
+        <p class="mb-3">
+          We retain your information only as long as necessary:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>Appointment Records:</strong> Held until your wedding date has passed, or deleted earlier upon request.</li>
+          <li><strong>Temporary Hold Locks:</strong> Automatically wiped after 10 minutes.</li>
+          <li><strong>CCTV Recordings:</strong> Overwritten automatically every 30 days unless required for an ongoing inquiry.</li>
+          <li><strong>Purchase &amp; Financial Records:</strong> Retained for 6 years in accordance with UK statutory tax and accounting regulations.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 6. Your Rights -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          6. Your Rights
+        </h2>
+        <p class="mb-3">
+          Under the UK GDPR, you have the right to request access to the personal data we hold about you, request corrections, or ask for your details to be deleted (subject to our legal record-keeping obligations).
+        </p>
+        <p>
+          To exercise any of these rights, please contact us at <a href={`mailto:${CONTACT_EMAIL}`} class="text-stone-900 underline underline-offset-4 hover:text-sage-900">{CONTACT_EMAIL}</a>. If you have unresolved concerns, you also have the statutory right to raise the matter with the UK Information Commissioner's Office (<a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" class="text-stone-900 underline underline-offset-4 hover:text-sage-900">ico.org.uk</a>).
+        </p>
+      </div>
+
+      <!-- 7. Return Navigation -->
+      <div class="pt-8 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <a href="/" class="text-stone-600 hover:text-stone-950 underline underline-offset-4 uppercase tracking-wider">
+          &larr; Return to Boutique Home
+        </a>
+        <a href="/terms" class="text-stone-600 hover:text-stone-950 underline underline-offset-4 uppercase tracking-wider">
+          Read Boutique Terms &amp; Conditions &rarr;
+        </a>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>

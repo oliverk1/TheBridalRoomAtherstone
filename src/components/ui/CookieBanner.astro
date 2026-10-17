@@ -1,0 +1,160 @@
+---
+// src/components/ui/CookieBanner.astro
+interface Props {
+  ga4Id?: string;
+  clarityId?: string;
+}
+
+const {
+  ga4Id = import.meta.env.PUBLIC_GA4_ID || "G-XXXXXXXXXX",
+  clarityId = import.meta.env.PUBLIC_CLARITY_ID || "XXXXXXXXXX",
+} = Astro.props;
+---
+
+<!-- LUXURY IVORY & SAGE COOKIE CONSENT BANNER -->
+<aside
+  id="tbr-cookie-banner"
+  aria-label="Cookie and Privacy Consent"
+  data-ga4-id={ga4Id}
+  data-clarity-id={clarityId}
+  class="fixed bottom-4 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-ivory-50/95 backdrop-blur-md border border-stone-300 shadow-[0_16px_40px_-10px_rgba(0,0,0,0.15)] rounded-xs p-5 sm:p-6 transition-all duration-500 translate-y-8 opacity-0 pointer-events-none"
+>
+  <div class="mb-2.5">
+    <h3 class="font-serif text-sm tracking-wider uppercase text-stone-900 font-normal">
+      Privacy &amp; Cookie Choices
+    </h3>
+  </div>
+
+  <p class="text-xs text-stone-600 font-light leading-relaxed mb-4">
+    We use essential storage to power our private suite booking engine. With your permission, we also use Google Analytics 4 and Microsoft Clarity to understand how brides browse our lookbook so we can enhance the showroom experience.
+  </p>
+
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1 border-t border-stone-200">
+    <button
+      type="button"
+      id="tbr-cookie-accept"
+      class="flex-1 bg-stone-900 text-white text-[10px] uppercase tracking-[0.2em] py-2.5 px-4 hover:bg-sage-900 transition-colors font-medium text-center cursor-pointer shadow-2xs rounded-2xs"
+    >
+      Accept All
+    </button>
+    <button
+      type="button"
+      id="tbr-cookie-reject"
+      class="flex-1 border border-stone-300 bg-white text-stone-800 text-[10px] uppercase tracking-[0.2em] py-2.5 px-4 hover:border-stone-800 hover:text-stone-950 transition-colors font-medium text-center cursor-pointer shadow-2xs rounded-2xs"
+    >
+      Essential Only
+    </button>
+  </div>
+
+  <div class="mt-3 text-center">
+    <a
+      href="/privacy"
+      class="text-[10px] uppercase tracking-wider text-stone-500 hover:text-stone-900 underline underline-offset-4"
+    >
+      Read Our Full Privacy Policy &rarr;
+    </a>
+  </div>
+</aside>
+
+<script>
+  const STORAGE_KEY = 'tbr_cookie_consent';
+  const banner = document.getElementById('tbr-cookie-banner');
+  const acceptBtn = document.getElementById('tbr-cookie-accept');
+  const rejectBtn = document.getElementById('tbr-cookie-reject');
+
+  const ga4Id = banner?.dataset.ga4Id || '';
+  const clarityId = banner?.dataset.clarityId || '';
+
+  let scriptsInjected = false;
+
+  // 1. DYNAMIC COMPLIANT SCRIPT INJECTOR
+  function loadTrackingScripts() {
+    if (scriptsInjected) return;
+    scriptsInjected = true;
+
+    // GA4
+    if (ga4Id && ga4Id !== 'G-XXXXXXXXXX') {
+      const gaScript = document.createElement('script');
+      gaScript.async = true;
+      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`;
+      document.head.appendChild(gaScript);
+
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      function gtag(...args: any[]) {
+        (window as any).dataLayer.push(args);
+      }
+      gtag('js', new Date());
+      gtag('config', ga4Id, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Lax;Secure'
+      });
+    }
+
+    // CLARITY
+    if (clarityId && clarityId !== 'XXXXXXXXXX') {
+      (function (c: any, l: any, a: any, r: any, i: any, t?: any, y?: any) {
+        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+        t = l.createElement(r);
+        t.async = true;
+        t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', clarityId);
+    }
+  }
+
+  // 2. UI VISIBILITY CONTROLLERS
+  function showBanner() {
+    if (!banner) return;
+    banner.classList.remove('translate-y-8', 'opacity-0', 'pointer-events-none');
+    banner.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+  }
+
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    banner.classList.add('translate-y-8', 'opacity-0', 'pointer-events-none');
+  }
+
+  // 3. INITIALISE STATE
+  function initConsent() {
+    const savedConsent = localStorage.getItem(STORAGE_KEY);
+
+    if (savedConsent === 'accepted') {
+      loadTrackingScripts();
+    } else if (savedConsent === 'rejected') {
+      // Essential only - do not load scripts
+    } else {
+      setTimeout(showBanner, 600);
+    }
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    localStorage.setItem(STORAGE_KEY, 'accepted');
+    hideBanner();
+    loadTrackingScripts();
+  });
+
+  rejectBtn?.addEventListener('click', () => {
+    localStorage.setItem(STORAGE_KEY, 'rejected');
+    hideBanner();
+    if (scriptsInjected) {
+      window.location.reload();
+    }
+  });
+
+  function setupFooterTrigger() {
+    const footerTrigger = document.getElementById('cookie-settings-trigger');
+    footerTrigger?.addEventListener('click', (e) => {
+      e.preventDefault();
+      showBanner();
+    });
+  }
+
+  initConsent();
+  setupFooterTrigger();
+  document.addEventListener('astro:page-load', () => {
+    initConsent();
+    setupFooterTrigger();
+  });
+</script>

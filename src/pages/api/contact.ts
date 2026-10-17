@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const RESEND_KEY = import.meta.env.RESEND_API_KEY;
-    const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'thebridalroomatherstone@gmail.com';
+    const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'info@thebridalroomatherstone.com';
     const fromAddress = import.meta.env.RESEND_FROM_EMAIL || 'The Bridal Room <onboarding@resend.dev>';
 
     if (RESEND_KEY && !RESEND_KEY.includes('...')) {

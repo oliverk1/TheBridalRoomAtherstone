@@ -114,7 +114,7 @@ ${shortlist || 'None'}
     if (RESEND_KEY && !RESEND_KEY.includes('...')) {
       try {
         const fromAddress = import.meta.env.RESEND_FROM_EMAIL || 'The Bridal Room <onboarding@resend.dev>';
-        const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'thebridalroomatherstone@gmail.com';
+        const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'info@thebridalroomatherstone.com';
 
         // Import the template generator
         const { generateBookingConfirmationHtml } = await import('../../lib/emailTemplates');

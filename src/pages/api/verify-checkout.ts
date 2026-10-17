@@ -98,7 +98,7 @@ ${meta.shortlist || 'None'}
     if (RESEND_KEY && !RESEND_KEY.includes('...')) {
       try {
         const fromAddress = import.meta.env.RESEND_FROM_EMAIL || 'The Bridal Room <onboarding@resend.dev>';
-        const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'thebridalroomatherstone@gmail.com';
+        const boutiqueEmail = import.meta.env.BOUTIQUE_NOTIFICATION_EMAIL || 'info@thebridalroomatherstone.com';
 
         const emailHtml = generateBookingConfirmationHtml({
           name: meta.name,

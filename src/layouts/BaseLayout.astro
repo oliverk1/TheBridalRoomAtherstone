@@ -7,6 +7,7 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import WishlistDrawer from '../components/ui/WishlistDrawer.astro';
 import DressLightbox from '../components/ui/DressLightbox.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
 
 interface Props {
   title?: string;
@@ -16,6 +17,10 @@ interface Props {
 }
 
 const { title, description, image, faqs } = Astro.props;
+
+// Pull Analytics IDs from environment variables
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID;
+const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
 ---
 
 <!doctype html>
@@ -43,5 +48,6 @@ const { title, description, image, faqs } = Astro.props;
     <!-- Global Interactive Overlays -->
     <WishlistDrawer />
     <DressLightbox />
+    <CookieBanner ga4Id={GA4_ID} clarityId={CLARITY_ID} />
   </body>
 </html>

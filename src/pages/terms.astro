@@ -1,0 +1,168 @@
+---
+// src/pages/terms.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const LAST_UPDATED = "October 2026";
+const COMPANY_NAME = "THE BRIDAL OUTLET ATHERSTONE LTD";
+const TRADING_NAME = "The Bridal Room Atherstone";
+const COMPANY_NUMBER = "13997073";
+const REGISTERED_ADDRESS = "Rose Cottage, 2a Grove Road, Atherstone, Warwickshire, England, CV9 1DP";
+const BOUTIQUE_ADDRESS = "65 Station Street, Atherstone, Warwickshire, England, CV9 1DB";
+const CONTACT_EMAIL = "info@thebridalroomatherstone.com";
+const CONTACT_PHONE = "01827 946 098";
+const PHONE_HREF = "tel:01827946098";
+---
+
+<BaseLayout
+  title="Boutique Terms & Conditions | The Bridal Room Atherstone"
+  description="Terms and conditions for consultations, VIB upgrades, dress orders, and boutique policies at The Bridal Room Atherstone."
+>
+  <!-- 1. EDITORIAL HEADER -->
+  <section class="bg-sage-100 border-b border-sage-200 py-16 sm:py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 text-[10px] tracking-[0.35em] text-stone-600 uppercase font-light mb-3">
+        <span class="w-8 h-px bg-stone-400"></span>
+        Boutique Policies
+        <span class="w-8 h-px bg-stone-400"></span>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-5xl uppercase font-light text-stone-900 tracking-wide mb-3">
+        Terms &amp; Conditions
+      </h1>
+      <p class="font-serif italic text-base sm:text-lg text-stone-600 max-w-xl mx-auto leading-relaxed">
+        Guidance regarding appointments, VIB consultations, deposits, gown orders, and showroom etiquette.
+      </p>
+      <p class="mt-4 text-[10px] uppercase tracking-widest text-stone-400 font-light">
+        Last Updated &bull; {LAST_UPDATED}
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. EDITORIAL ARTICLE (Flowing Typography, Warm Ivory) -->
+  <section class="py-16 sm:py-24 px-6 lg:px-12 bg-ivory-50">
+    <div class="max-w-3xl mx-auto space-y-12 text-stone-600 text-xs sm:text-sm font-light leading-relaxed">
+
+      <!-- 1. Introduction -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          1. Boutique Agreement
+        </h2>
+        <p class="mb-3">
+          These Terms and Conditions govern consultations, bookings, and gown purchases with <strong>{COMPANY_NAME}</strong>, trading as <strong>{TRADING_NAME}</strong> ("we", "us", or "our"), at our boutique located at {BOUTIQUE_ADDRESS}.
+        </p>
+        <p class="text-[12px] text-stone-500">
+          Company Registration Number: {COMPANY_NUMBER} (England &amp; Wales)<br />
+          Registered Office: {REGISTERED_ADDRESS}<br />
+          Direct Inquiries: <a href={`mailto:${CONTACT_EMAIL}`} class="underline text-stone-800">{CONTACT_EMAIL}</a> | <a href={PHONE_HREF} class="underline text-stone-800">{CONTACT_PHONE}</a>
+        </p>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 2. Appointment Booking & Structure -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          2. Consultation Styles &amp; Appointment Flow
+        </h2>
+        <p class="mb-3">
+          With over 15 years of dedicated bridal experience, we have found that the optimal consultation lasts <strong>60 to 90 minutes</strong>, trying on approximately <strong>5 to 7 dresses</strong>. Trying on more than this can quickly become confusing and overwhelming:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800 mb-4">
+          <li><strong>How Your Time is Structured:</strong> The first 15 minutes are dedicated to getting to know your style and wedding plans; the next 60 minutes are spent trying on curated gowns; and the final 15 minutes are reserved for paperwork and celebratory "say yes to the dress" moments.</li>
+          <li><strong>Signature Bridal Styling (1.5 Hours):</strong> Complimentary appointment. Up to <strong>3 guests</strong> may accompany the bride.</li>
+          <li><strong>VIB Afternoon Tea Suite (2 Hours):</strong> Exclusive luxury suite hire with chilled prosecco and artisan treats. Up to <strong>4 guests</strong> may attend. A £50 booking deposit is required at reservation.</li>
+          <li><strong>Accessories &amp; Veil Styling (45 Minutes):</strong> Complimentary headpiece and veil matching. Up to <strong>2 guests</strong> may attend.</li>
+        </ul>
+        <p>
+          We work back-to-back with private appointments. It is vital that you arrive at your designated time. Early arrivals may interrupt the preceding bride, while late arrivals will unfortunately reduce your allocated fitting time.
+        </p>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 3. Upgraded VIB Appointments (£50 / £75 Credit) -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          3. Upgraded VIB Consultations &amp; Refreshments
+        </h2>
+        <p class="mb-3">
+          The following specific conditions apply to all VIB Afternoon Tea bookings:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800 mb-4">
+          <li><strong>First Consultations Only:</strong> VIB appointments can strictly only be booked for your <strong>First Initial Appointment</strong>. They cannot be booked for second visits, accessory-only fittings, or dress collection appointments.</li>
+          <li><strong>£75 Dress Credit:</strong> The £75 discount voucher is redeemable strictly toward a bridal dress purchase and is <strong>only available on the day of your appointment</strong>. It cannot be redeemed on future dates, transferred, exchanged for cash, or applied toward accessories or sample rail items alone.</li>
+          <li><strong>Dietary Requirements &amp; Food Allergens:</strong> Refreshments and sweet offerings vary by date. If you or your guests have specific dietary requirements, please notify us in advance. However, first and foremost, we are a bridal boutique. All refreshments are consumed at your own risk. If in doubt, please ask to review packaging and ingredient labels, or refrain from consuming items you are unsure of. The Bridal Room Atherstone accepts no liability for allergic reactions to items eaten or drunk on site.</li>
+          <li><strong>Alcohol Policy:</strong> Prosecco is served strictly to guests aged 18 and over. We operate a Challenge 25 policy and reserve the right to request valid photo ID. Complimentary non-alcoholic refreshments are always available.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 4. Cancellation & Rescheduling Policy -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          4. Cancellation &amp; Rescheduling Policy
+        </h2>
+        <p class="mb-3">
+          When booking our showroom, the boutique is closed exclusively for you and bespoke preparations are made:
+        </p>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>VIB Cancellations (2+ Weeks Notice):</strong> If you cancel your VIB appointment <strong>2 weeks or more</strong> prior to the appointment date, your £50 deposit will be refunded in full.</li>
+          <li><strong>Cancellations Within 72 Working Hours:</strong> There are strictly <strong>no refunds</strong> of the £50 booking fee for VIB appointments cancelled within <strong>72 hours (working days)</strong> of your scheduled appointment time.</li>
+          <li><strong>Postponements:</strong> If you need to change your date, please get in touch with Vicky or Samantha as soon as possible. We are happy to postpone and transfer your booking to a new available slot, but fee refunds remain subject to the 72-hour policy.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 5. Showroom Rules, Photography & CCTV -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          5. Boutique Rules: CCTV, Photography &amp; Gown Care
+        </h2>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>CCTV:</strong> Closed-circuit television (CCTV) is in operation throughout the communal areas of the boutique for the security and protection of our visitors, brides, and staff. CCTV is never installed inside private dressing suites or changing areas.</li>
+          <li><strong>No Photography or Videography:</strong> To protect designer copyright and ensure brides remain present in the moment, no unauthorized photography or video recording is permitted during appointments unless explicitly authorized by boutique management.</li>
+          <li><strong>Tan &amp; Makeup Care:</strong> To keep our showroom gowns in pristine condition for every bride, please refrain from applying fresh fake tan, heavy bronzers, or body oils on the day of your fitting.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 6. Made-to-Order Gown Contracts & Sizing -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          6. Made-to-Order Gowns &amp; Sizing
+        </h2>
+        <ul class="space-y-2 pl-4 list-disc marker:text-sage-800">
+          <li><strong>Standard Manufacturer Sizing:</strong> Designer dresses are ordered in standard manufacturer sizes (e.g. UK 10, 12, 14) based on the measurements taken during your appointment. They are not custom-made to individual body moulds. Alterations are virtually always required to achieve a tailored fit.</li>
+          <li><strong>Size Approval:</strong> Sizing is agreed upon and formally signed off by the bride prior to order submission. We cannot be held liable for changes in body shape or weight fluctuations following the order.</li>
+          <li><strong>Non-Refundable Deposits:</strong> Once an order has been placed with the designer (e.g. Justin Alexander, Sincerity), production begins. Under UK Consumer Contracts Regulations, personalized/made-to-order goods are exempt from 14-day cancellation rights; deposits and gown orders are strictly non-refundable.</li>
+          <li><strong>Sample Sale Rail:</strong> Gowns purchased from our ex-sample rail (£250–£900) are sold <strong>as seen and inspected</strong>. They are non-refundable, non-returnable, and cannot be exchanged once purchased.</li>
+        </ul>
+      </div>
+
+      <div class="border-t border-stone-200"></div>
+
+      <!-- 7. Alterations -->
+      <div>
+        <h2 class="font-serif text-xl sm:text-2xl uppercase font-light text-stone-900 tracking-wider mb-3">
+          7. Alterations &amp; Tailoring
+        </h2>
+        <p>
+          The cost of your gown covers the garment only and does not include alterations. We provide recommendations for independent, vetted bridal seamstresses. Alteration services are contracted directly between you and the seamstress; The Bridal Room Atherstone accepts no responsibility for independent seamstress workmanship, scheduling, or costs.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Return Navigation -->
+    <div class="mt-14 pt-8 border-t border-stone-200 text-center max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <a href="/" class="text-stone-600 hover:text-stone-950 underline underline-offset-4 uppercase tracking-wider">
+        &larr; Return to Boutique Home
+      </a>
+      <a href="/privacy" class="text-stone-600 hover:text-stone-950 underline underline-offset-4 uppercase tracking-wider">
+        Read Privacy Policy &rarr;
+      </a>
+    </div>
+  </section>
+</BaseLayout>
